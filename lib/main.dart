@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rc168/pages/category_page.dart';
+import 'package:rc168/pages/home_page.dart';
+import 'package:rc168/pages/member_page.dart';
+import 'package:rc168/pages/search_page.dart';
+import 'package:rc168/pages/shop_page.dart';
 
 var dio = Dio();
 
@@ -30,12 +35,12 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   // 底部導航項目列表
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text('首頁'),
-    Text('商品分類'),
-    Text('搜尋'),
-    Text('購物車'),
-    Text('會員中心'),
+  static List<Widget> _widgetOptions = <Widget>[
+    HomePage(),
+    CategoryPage(),
+    SearchPage(),
+    ShopPage(),
+    MemberPage(),
   ];
 
   void _onItemTapped(int index) {
