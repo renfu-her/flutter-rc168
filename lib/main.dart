@@ -8,7 +8,8 @@ import 'package:rc168/pages/search_page.dart';
 import 'package:rc168/pages/shop_page.dart';
 
 var dio = Dio();
-
+var app_url = 'https://ocapi.remember1688.com';
+var img_url = '${app_url}/image/';
 var api_key =
     'CNQ4eX5WcbgFQVkBXFKmP9AE2AYUpU2HySz2wFhwCZ3qExG6Tep7ZCSZygwzYfsF';
 
@@ -53,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter App'),
+        title: Text('公教軍警察聯合福利網'),
         backgroundColor: Colors.blue,
         actions: [
           IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: () {}),
