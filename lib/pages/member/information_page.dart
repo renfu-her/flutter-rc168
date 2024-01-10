@@ -15,7 +15,8 @@ class InformationPage extends StatefulWidget {
 }
 
 class _InformationPageState extends State<InformationPage> {
-  String htmlData = ''; // 初始化一个变量来存储HTML数据
+  String htmlData = '';
+  String htmlDateTitle = '';
 
   @override
   void initState() {
@@ -30,7 +31,8 @@ class _InformationPageState extends State<InformationPage> {
       );
       var data = response.data['informations'][0]; // 假设我们只关心第一个信息
       setState(() {
-        htmlData = data['description']; // 将HTML数据设置到状态变量中
+        htmlData = data['description'];
+        htmlDateTitle = data['title'];
       });
     } catch (e) {
       print(e);
@@ -41,7 +43,7 @@ class _InformationPageState extends State<InformationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('相關說明'),
+        title: Text('相關說明 - ${htmlDateTitle}'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
