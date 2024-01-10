@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rc168/pages/category_page.dart';
+import 'package:rc168/pages/category/category_page.dart';
 import 'package:rc168/pages/home_page.dart';
-import 'package:rc168/pages/member_page.dart';
+import 'package:rc168/pages/member/member_page.dart';
 import 'package:rc168/pages/search_page.dart';
 import 'package:rc168/pages/shop_page.dart';
 
@@ -12,6 +12,9 @@ var app_url = 'https://ocapi.remember1688.com';
 var img_url = '${app_url}/image/';
 var api_key =
     'CNQ4eX5WcbgFQVkBXFKmP9AE2AYUpU2HySz2wFhwCZ3qExG6Tep7ZCSZygwzYfsF';
+var demo_url = 'https://demo.dev-laravel.co';
+var logo_img = '';
+var category_id = '';
 
 void main() {
   runApp(MyApp());
@@ -44,18 +47,58 @@ class _MyHomePageState extends State<MyHomePage> {
     MemberPage(),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    getSetting().then((img) {
+      if (mounted) {
+        setState(() {
+          logo_img = '${img_url}' + img;
+        });
+      }
+    }).catchError((error) {
+      // 處理錯誤，例如顯示錯誤消息
+      print(error);
+    });
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  Future<String> getSetting() async {
+    try {
+      var response = await Dio().get(
+          '${app_url}/index.php?route=extension/module/api/gws_store_settings&api_key=${api_key}');
+      return response.data['settings']['config_logo'];
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('公教軍警察聯合福利網'),
+        title: logo_img != null
+            ? Image.network(
+                logo_img,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(child: CircularProgressIndicator());
+                },
+                errorBuilder: (BuildContext context, Object exception,
+                    StackTrace? stackTrace) {
+                  return SizedBox();
+                },
+              )
+            : SizedBox(),
         backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
         actions: [
           IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: () {}),
           IconButton(icon: Icon(FontAwesomeIcons.comments), onPressed: () {}),

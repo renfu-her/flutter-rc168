@@ -5,6 +5,8 @@ import 'package:rc168/main.dart';
 import 'package:rc168/pages/product_detail.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+var dio = Dio();
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -25,7 +27,7 @@ class _HomePageState extends State<HomePage> {
         if (_controller.hasClients) {
           int currentPage = _controller.page!.toInt();
           int nextPage = currentPage + 1;
-          print(nextPage);
+          // print(nextPage);
           _controller.animateToPage(
             nextPage,
             duration: Duration(milliseconds: 300),
@@ -67,7 +69,7 @@ class _HomePageState extends State<HomePage> {
               }
             },
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(16.0),
             child: Text(
               '最新商品',
@@ -106,19 +108,34 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
                             Expanded(
-                              child: AspectRatio(
-                                aspectRatio: 1, // 1:1 Aspect Ratio for Square
-                                child: Image.network(
-                                  '${img_url}' + product.thumb,
-                                  fit: BoxFit.cover, // Cover the entire space
-                                  loadingBuilder:
-                                      (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return const Center(
-                                        child: CircularProgressIndicator());
-                                  },
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(Icons.error),
+                              child: InkWell(
+                                // 使用 InkWell 包裹圖片
+                                onTap: () {
+                                  // 添加 onTap 事件
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductDetailPage(
+                                        productId: product.id,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: Image.network(
+                                    '${img_url}' + product.thumb,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    },
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(Icons.error),
+                                  ),
                                 ),
                               ),
                             ),
@@ -148,12 +165,13 @@ class _HomePageState extends State<HomePage> {
                               child: ElevatedButton(
                                 child: Text('加入購物車'),
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ProductDetailPage()),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //       builder: (context) => ProductDetailPage(
+                                  //             productId: product.id,
+                                  //           )),
+                                  // );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.blue,
