@@ -35,7 +35,6 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

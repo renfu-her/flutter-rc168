@@ -15,6 +15,11 @@ var api_key =
 var demo_url = 'https://demo.dev-laravel.co';
 var logo_img = '';
 var category_id = '';
+var email = '';
+var lastName = '';
+var firstName = '';
+var isLogin = false;
+var customerId = 0;
 
 void main() {
   runApp(MyApp());
