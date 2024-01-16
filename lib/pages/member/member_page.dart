@@ -3,6 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/member/information_page.dart';
 import 'package:rc168/pages/login/login_page.dart';
+import 'package:rc168/pages/member/profile_page.dart';
+import 'package:rc168/pages/member/order_page.dart';
+import 'package:rc168/pages/member/address_page.dart';
 
 class MemberPage extends StatefulWidget {
   @override
@@ -19,11 +22,15 @@ class _MemberPageState extends State<MemberPage> {
     if (isLogin) {
       fetchCustomer();
     }
+    print('fullName: ${fullName}');
+    print('email1: ${email}');
   }
 
   void _updateAfterLogin() {
     fetchInfo();
     fetchCustomer();
+    print('fullName: ${fullName}');
+    print('email2: ${email}');
   }
 
   void fetchInfo() async {
@@ -39,6 +46,7 @@ class _MemberPageState extends State<MemberPage> {
     }
   }
 
+  // 登入
   void fetchCustomer() async {
     try {
       var response = await Dio().get(
@@ -46,7 +54,15 @@ class _MemberPageState extends State<MemberPage> {
       );
 
       var customerData = response.data['customer'][0];
+      await UserPreferences.setLoggedIn(true);
+      await UserPreferences.setEmail(customerData['email']);
+      await UserPreferences.setFullName(
+          customerData['lastname'] + customerData['firstname']);
+      isLogin = UserPreferences.isLoggedIn();
+      email = UserPreferences.getEmail()!;
+      fullName = UserPreferences.getFullName()!;
       setState(() {
+        fullName = fullName;
         lastName = customerData['lastname'];
         firstName = customerData['firstname'];
         customerId = customerData['customer_id'];
@@ -56,8 +72,31 @@ class _MemberPageState extends State<MemberPage> {
     }
   }
 
+  Widget _listView() {
+    return ListView.builder(
+      itemCount: informations.length,
+      itemBuilder: (BuildContext context, int index) {
+        var info = informations[index];
+        return ListTile(
+          title: Text(info['title'] ?? '無標題'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => InformationPage(
+                  informationId: info['information_id'],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    isLogin = UserPreferences.isLoggedIn();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -142,25 +181,7 @@ class _MemberPageState extends State<MemberPage> {
           ),
         ),
         Expanded(
-          child: ListView.builder(
-            itemCount: informations.length,
-            itemBuilder: (BuildContext context, int index) {
-              var info = informations[index];
-              return ListTile(
-                title: Text(info['title'] ?? '無標題'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => InformationPage(
-                        informationId: info['information_id'],
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
+          child: _listView(),
         ),
       ],
     );
@@ -180,7 +201,7 @@ class _MemberPageState extends State<MemberPage> {
             : SizedBox(height: 160), // 如果 logo_img 为空，则显示一个占位符
         const SizedBox(height: 16),
         Text(
-          '${lastName}${firstName}',
+          '${fullName}',
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 2),
@@ -191,15 +212,29 @@ class _MemberPageState extends State<MemberPage> {
         const SizedBox(height: 18),
         // 我的会员资料
         _buildOptionItem(Icons.account_circle, '我的會員資料', () {
-          // 添加导航到我的会员资料页面的逻辑
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()),
+          );
         }),
         // 我的订单
         _buildOptionItem(Icons.list_alt, '我的訂單', () {
-          // 添加导航到我的订单页面的逻辑
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => OrderPage()),
+          );
         }),
         // 我的地址
         _buildOptionItem(Icons.location_on, '我的地址', () {
-          // 添加导航到我的地址页面的逻辑
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddressPage()),
+          );
+        }),
+        _buildOptionItem(Icons.logout, '登出', () async {
+          await UserPreferences.logout();
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (_) => (MyApp())));
         }),
         const SizedBox(height: 22),
         Padding(
@@ -216,25 +251,7 @@ class _MemberPageState extends State<MemberPage> {
           ),
         ),
         Expanded(
-          child: ListView.builder(
-            itemCount: informations.length,
-            itemBuilder: (BuildContext context, int index) {
-              var info = informations[index];
-              return ListTile(
-                title: Text(info['title'] ?? '無標題'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => InformationPage(
-                        informationId: info['information_id'],
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
+          child: _listView(),
         ),
       ],
     );

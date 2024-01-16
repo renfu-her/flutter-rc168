@@ -1,6 +1,11 @@
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:rc168/pages/category/category_page.dart';
 import 'package:rc168/pages/home_page.dart';
 import 'package:rc168/pages/member/member_page.dart';
@@ -8,20 +13,23 @@ import 'package:rc168/pages/search_page.dart';
 import 'package:rc168/pages/shop_page.dart';
 
 var dio = Dio();
-var app_url = 'https://ocapi.remember1688.com';
-var img_url = '${app_url}/image/';
-var api_key =
+String app_url = 'https://ocapi.remember1688.com';
+String img_url = '${app_url}/image/';
+String api_key =
     'CNQ4eX5WcbgFQVkBXFKmP9AE2AYUpU2HySz2wFhwCZ3qExG6Tep7ZCSZygwzYfsF';
-var demo_url = 'https://demo.dev-laravel.co';
-var logo_img = '';
-var category_id = '';
-var email = '';
-var lastName = '';
-var firstName = '';
-var isLogin = false;
-var customerId = 0;
+String demo_url = 'https://demo.dev-laravel.co';
+String logo_img = '';
+String category_id = '';
+String email = '';
+String lastName = '';
+String firstName = '';
+bool isLogin = false;
+int customerId = 0;
+String fullName = '';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await UserPreferences.init();
   runApp(MyApp());
 }
 
@@ -65,6 +73,16 @@ class _MyHomePageState extends State<MyHomePage> {
       // 處理錯誤，例如顯示錯誤消息
       print(error);
     });
+
+    setUserPreferences();
+  }
+
+  void setUserPreferences() async {
+    if (UserPreferences.isLoggedIn()) {
+      isLogin = UserPreferences.isLoggedIn();
+      email = UserPreferences.getEmail() ?? '預設電子郵件'; // 獲取儲存的電子郵件或使用預設值
+      fullName = UserPreferences.getFullName() ?? '預設姓名'; // 獲取儲存的全名或使用預設值
+    }
   }
 
   void _onItemTapped(int index) {
@@ -167,5 +185,39 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onItemTapped,
       ),
     );
+  }
+}
+
+class UserPreferences {
+  static SharedPreferences? _preferences;
+
+  static const _keyLoggedIn = 'loggedIn';
+  static const _keyEmail = 'email';
+  static const _keyFullName = 'fullName';
+
+  static Future init() async =>
+      _preferences = await SharedPreferences.getInstance();
+
+  static Future setLoggedIn(bool loggedIn) async =>
+      await _preferences?.setBool(_keyLoggedIn, loggedIn);
+
+  static bool isLoggedIn() => _preferences?.getBool(_keyLoggedIn) ?? false;
+
+  static Future setEmail(String email) async =>
+      await _preferences?.setString(_keyEmail, email);
+
+  static String? getEmail() => _preferences?.getString(_keyEmail);
+
+  static Future setFullName(String fullName) async =>
+      await _preferences?.setString(_keyFullName, fullName);
+
+  static String? getFullName() => _preferences?.getString(_keyFullName);
+
+  static Future logout() async {
+    await _preferences?.setBool(_keyLoggedIn, false);
+    await _preferences?.remove(_keyEmail);
+    email = '';
+    isLogin = false;
+    fullName = '';
   }
 }

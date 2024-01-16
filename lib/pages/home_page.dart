@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
       super.dispose();
     }
 
-    print(fetchBanners());
+    // print(fetchBanners());
     return Scaffold(
       // appBar: AppBar(title: Text('最新商品')),
       body: Column(
