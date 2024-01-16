@@ -80,8 +80,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void setUserPreferences() async {
     if (UserPreferences.isLoggedIn()) {
       isLogin = UserPreferences.isLoggedIn();
-      email = UserPreferences.getEmail() ?? '預設電子郵件'; // 獲取儲存的電子郵件或使用預設值
-      fullName = UserPreferences.getFullName() ?? '預設姓名'; // 獲取儲存的全名或使用預設值
+      email = UserPreferences.getEmail() ?? '預設電子郵件';
+      fullName = UserPreferences.getFullName() ?? '預設姓名';
+      customerId = UserPreferences.getCustomerId() ?? 0;
     }
   }
 
@@ -194,6 +195,9 @@ class UserPreferences {
   static const _keyLoggedIn = 'loggedIn';
   static const _keyEmail = 'email';
   static const _keyFullName = 'fullName';
+  static const _keyLastName = 'lastName';
+  static const _keyFirstName = 'firstName';
+  static const _keyCustomerId = '';
 
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();
@@ -212,6 +216,21 @@ class UserPreferences {
       await _preferences?.setString(_keyFullName, fullName);
 
   static String? getFullName() => _preferences?.getString(_keyFullName);
+
+  static Future setLastName(String lastName) async =>
+      await _preferences?.setString(_keyLastName, lastName);
+
+  static String? getLastName() => _preferences?.getString(_keyLastName);
+
+  static Future setFirstName(String firstName) async =>
+      await _preferences?.setString(_keyFirstName, firstName);
+
+  static String? getFirstName() => _preferences?.getString(_keyFirstName);
+
+  static Future setCustomerId(int customerId) async =>
+      await _preferences?.setInt(_keyCustomerId, customerId);
+
+  static int? getCustomerId() => _preferences?.getInt(_keyCustomerId);
 
   static Future logout() async {
     await _preferences?.setBool(_keyLoggedIn, false);

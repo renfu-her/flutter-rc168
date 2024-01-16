@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
@@ -6,6 +8,7 @@ import 'package:rc168/pages/login/login_page.dart';
 import 'package:rc168/pages/member/profile_page.dart';
 import 'package:rc168/pages/member/order_page.dart';
 import 'package:rc168/pages/member/address_page.dart';
+import 'package:rc168/pages/member/register_page.dart';
 
 class MemberPage extends StatefulWidget {
   @override
@@ -22,15 +25,15 @@ class _MemberPageState extends State<MemberPage> {
     if (isLogin) {
       fetchCustomer();
     }
-    print('fullName: ${fullName}');
-    print('email1: ${email}');
+    // print('fullName: ${fullName}');
+    // print('email1: ${email}');
   }
 
   void _updateAfterLogin() {
     fetchInfo();
     fetchCustomer();
-    print('fullName: ${fullName}');
-    print('email2: ${email}');
+    // print('fullName: ${fullName}');
+    // print('email2: ${email}');
   }
 
   void fetchInfo() async {
@@ -56,16 +59,21 @@ class _MemberPageState extends State<MemberPage> {
       var customerData = response.data['customer'][0];
       await UserPreferences.setLoggedIn(true);
       await UserPreferences.setEmail(customerData['email']);
+      await UserPreferences.setLastName(customerData['lastname']);
+      await UserPreferences.setFirstName(customerData['firstname']);
       await UserPreferences.setFullName(
           customerData['lastname'] + customerData['firstname']);
+      await UserPreferences.setCustomerId(
+          int.parse(customerData['customer_id']));
       isLogin = UserPreferences.isLoggedIn();
       email = UserPreferences.getEmail()!;
       fullName = UserPreferences.getFullName()!;
+      customerId = UserPreferences.getCustomerId()!;
       setState(() {
         fullName = fullName;
         lastName = customerData['lastname'];
         firstName = customerData['firstname'];
-        customerId = customerData['customer_id'];
+        customerId = customerId;
       });
     } catch (e) {
       print(e);
@@ -122,7 +130,10 @@ class _MemberPageState extends State<MemberPage> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 4.0),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RegisterPage()));
+                  },
                   child: Text('註冊'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
@@ -211,21 +222,21 @@ class _MemberPageState extends State<MemberPage> {
         ),
         const SizedBox(height: 18),
         // 我的会员资料
-        _buildOptionItem(Icons.account_circle, '我的會員資料', () {
+        _buildOptionItem(Icons.account_circle, '會員資料', () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => ProfilePage()),
           );
         }),
         // 我的订单
-        _buildOptionItem(Icons.list_alt, '我的訂單', () {
+        _buildOptionItem(Icons.list_alt, '訂單', () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => OrderPage()),
           );
         }),
         // 我的地址
-        _buildOptionItem(Icons.location_on, '我的地址', () {
+        _buildOptionItem(Icons.location_on, '地址', () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddressPage()),
