@@ -4,8 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-var dio = Dio();
-
 class ProductDetailPage extends StatefulWidget {
   final String productId;
 

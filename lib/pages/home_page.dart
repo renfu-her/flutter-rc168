@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/product_detail.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 var dio = Dio();
 
@@ -21,6 +22,38 @@ class _HomePageState extends State<HomePage> {
     int crossAxisCount = screenWidth < 600 ? 2 : 4;
     PageController _controller = PageController(initialPage: 1000); // 初始頁面
     Timer? _timer;
+
+    Widget buildBannerCarousel(List<BannerModel> banners) {
+      return CarouselSlider(
+        options: CarouselOptions(
+          height: 320.0,
+          enlargeCenterPage: false,
+          autoPlay: true,
+          autoPlayInterval: const Duration(seconds: 3),
+          autoPlayAnimationDuration: const Duration(milliseconds: 800),
+          autoPlayCurve: Curves.fastOutSlowIn,
+          pauseAutoPlayOnTouch: true,
+          aspectRatio: 2.0,
+          viewportFraction: 1.0,
+          // onPageChanged: (index, reason) {
+          //   setState(() {
+          //     _current = index; // 更新_index以使點點指示器同步
+          //   });
+          // },
+        ),
+        items: banners.map((banner) {
+          return GestureDetector(
+            onTap: () {
+              _launchURL(banner.link);
+            },
+            child: Image.network(
+              '${img_url}${banner.image}',
+              fit: BoxFit.cover,
+            ),
+          );
+        }).toList(),
+      );
+    }
 
     void _startAutoScroll() {
       _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
@@ -55,18 +88,24 @@ class _HomePageState extends State<HomePage> {
       // appBar: AppBar(title: Text('最新商品')),
       body: Column(
         children: <Widget>[
-          FutureBuilder<List<BannerModel>>(
+          FutureBuilder<dynamic>(
             future: fetchBanners(),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Text('No banners found');
-              } else {
-                return buildBannerCarousel(snapshot.data!);
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  var product = snapshot.data;
+                  var images = product; // 确保这是字符串列表
+                  return Column(
+                    children: [
+                      buildBannerCarousel(images),
+                      // ... 其余的布局代码
+                    ],
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("Error: ${snapshot.error}");
+                }
               }
+              return const Center(child: CircularProgressIndicator());
             },
           ),
           const Padding(
@@ -213,7 +252,7 @@ class _HomePageState extends State<HomePage> {
           var banner = banners[actualIndex];
           return GestureDetector(
             onTap: () {
-              _launchURL(banner.link);
+              // _launchURL(banner.link);
             },
             child: Image.network(
               '${img_url}${banner.image}',

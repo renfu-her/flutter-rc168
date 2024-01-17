@@ -19,6 +19,15 @@ class _AddressPageState extends State<AddressPage> {
     addresses = fetchAddresses();
   }
 
+  void _openAddAddressPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddressAddPage()),
+    );
+
+  }
+
+
   void _showDialog(String title, String message) {
     showDialog(
       context: context,
@@ -190,10 +199,7 @@ class _AddressPageState extends State<AddressPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: ElevatedButton(
           onPressed: () {
-            // TODO: 處理新增地址
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => AddressAddPage()),
-            );
+            _openAddAddressPage();
           },
           child: Text('增加新的地址'),
           style: ElevatedButton.styleFrom(

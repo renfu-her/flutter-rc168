@@ -8,6 +8,7 @@ class AddressAddPage extends StatefulWidget {
 }
 
 class _AddressAddPageState extends State<AddressAddPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _companyController = TextEditingController();
@@ -18,12 +19,6 @@ class _AddressAddPageState extends State<AddressAddPage> {
   final TextEditingController _customFieldController = TextEditingController();
   final TextEditingController _zoneIdController = TextEditingController();
 
-  bool _firstNameVisible = false;
-  bool _lastNameVisible = false;
-  bool _postcodeVisible = false;
-  bool _address1Visible = false;
-  bool _cityVisible = false;
-
   String _countryId = '206'; // 应该从一个下拉菜单中选择
   String _zoneId = '3139'; // 应该从一个下拉菜单中选择
   bool _isDefault = false; // 根据用户的选择设置
@@ -31,7 +26,6 @@ class _AddressAddPageState extends State<AddressAddPage> {
   List<Zone> _zones = [];
   String _selectedCountryId = '206'; // 預設值
   String _selectedZoneId = '3139'; // 預設值
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _validateAndSaveForm() {
     final form = _formKey.currentState;
@@ -64,39 +58,42 @@ class _AddressAddPageState extends State<AddressAddPage> {
 
   Future<void> addAddress() async {
     // Build the FormData
-    final formData = FormData.fromMap({
-      'firstname': _firstNameController.text,
-      'lastname': _lastNameController.text,
-      'company': _companyController.text,
-      'address_1': _address1Controller.text,
-      'address_2': _address2Controller.text,
-      'postcode': _postcodeController.text,
-      'country_id': _countryId,
-      'zone_id': _zoneId,
-      'city': _cityController.text,
-      'custom_field': {1: _customFieldController.text},
-      'default': _isDefault
-          ? '1'
-          : '0', // Assuming the API expects '1' for true and '0' for false
-    });
+    if (_formKey.currentState!.validate()) {
+      final formData = FormData.fromMap({
+        'firstname': _firstNameController.text,
+        'lastname': _lastNameController.text,
+        'company': _companyController.text,
+        'address_1': _address1Controller.text,
+        'address_2': _address2Controller.text,
+        'postcode': _postcodeController.text,
+        'country_id': _selectedCountryId.toString(),
+        'zone_id': _selectedZoneId.toString(),
+        'city': _cityController.text,
+        'custom_field': '{1: 711}',
+        'default': _isDefault
+            ? '1'
+            : '0', // Assuming the API expects '1' for true and '0' for false
+      });
 
-    // Send the POST request
-    try {
-      final response = await dio.post(
-        '${app_url}/index.php?route=extension/module/api/gws_customer_address/add&customer_id=180&api_key=${api_key}',
-        data: formData,
-      );
-
-      if (response.statusCode == 200) {
-        // Handle the successful response
-        print('Address added successfully');
-      } else {
-        // Handle the error
-        print('Failed to add address');
+      // // Send the POST request
+      try {
+        final response = await dio.post(
+          '${app_url}/index.php?route=extension/module/api/gws_customer_address/add&customer_id=${customerId}&api_key=${api_key}',
+          data: formData,
+        );
+        print(response.data);
+        if (response.statusCode == 200) {
+          // _showDialog('更新', '已經更新');
+          Navigator.pop(context);
+          Navigator.pop(context);
+        } else {
+          // Handle the error
+          print('Failed to add address');
+        }
+      } catch (e) {
+        // Handle any exceptions
+        print('Error occurred: $e');
       }
-    } catch (e) {
-      // Handle any exceptions
-      print('Error occurred: $e');
     }
   }
 
@@ -181,76 +178,104 @@ class _AddressAddPageState extends State<AddressAddPage> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              controller: _lastNameController,
-              obscureText: !_lastNameVisible,
-              decoration: InputDecoration(
-                labelText: '姓名*',
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                controller: _lastNameController,
+                decoration: InputDecoration(
+                  labelText: '名字 *',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '請輸入名字';
+                  }
+                  return null;
+                },
               ),
-            ),
-            TextFormField(
-              controller: _firstNameController,
-              obscureText: !_firstNameVisible,
-              decoration: InputDecoration(
-                labelText: '姓氏 *',
+              TextFormField(
+                controller: _firstNameController,
+                decoration: InputDecoration(
+                  labelText: '姓式 *',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '請輸入姓氏';
+                  }
+                  return null;
+                },
               ),
-            ),
-            TextField(
-              controller: _companyController,
-              decoration: InputDecoration(
-                labelText: '公司/服務單位',
+              TextFormField(
+                controller: _companyController,
+                decoration: InputDecoration(
+                  labelText: '公司/服務單位',
+                ),
               ),
-            ),
-            TextField(
-              controller: _address1Controller,
-              obscureText: !_address1Visible,
-              decoration: InputDecoration(
-                labelText: '地址1 *',
+              TextFormField(
+                controller: _address1Controller,
+                decoration: InputDecoration(
+                  labelText: '地址1 *',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '請輸入地址1';
+                  }
+                  return null;
+                },
               ),
-            ),
-            TextField(
-              controller: _address2Controller,
-              decoration: InputDecoration(
-                labelText: '地址2',
+              TextFormField(
+                controller: _address2Controller,
+                decoration: InputDecoration(
+                  labelText: '地址2',
+                ),
               ),
-            ),
-            TextField(
-              controller: _postcodeController,
-              obscureText: !_postcodeVisible,
-              decoration: InputDecoration(
-                labelText: '郵遞區號 *',
+              TextFormField(
+                controller: _postcodeController,
+                decoration: InputDecoration(
+                  labelText: '郵遞區號 *',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '請輸入郵遞區號';
+                  }
+                  return null;
+                },
               ),
-            ),
-            TextField(
-              controller: _cityController,
-              obscureText: !_cityVisible,
-              decoration: InputDecoration(
-                labelText: '區/鄉/鎮 *',
+              TextFormField(
+                controller: _cityController,
+                decoration: InputDecoration(
+                  labelText: '區/鄉/鎮 *',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '請輸入區/鄉/鎮';
+                  }
+                  return null;
+                },
               ),
-            ),
-            DropdownButtonFormField<String>(
-              value: _selectedCountryId,
-              items: _countries.map((Country country) {
-                return DropdownMenuItem<String>(
-                  value: country.id,
-                  child: Text(country.name),
-                );
-              }).toList(),
-              onChanged: (value) => _onCountrySelected(value!),
-            ),
-            DropdownButtonFormField<String>(
-              value: _selectedZoneId,
-              items: _zones.map((Zone zone) {
-                return DropdownMenuItem<String>(
-                  value: zone.id,
-                  child: Text(zone.name),
-                );
-              }).toList(),
-              onChanged: (value) => setState(() => _selectedZoneId = value!),
-            ),
-          ],
+              DropdownButtonFormField<String>(
+                value: _selectedCountryId,
+                items: _countries.map((Country country) {
+                  return DropdownMenuItem<String>(
+                    value: country.id,
+                    child: Text(country.name),
+                  );
+                }).toList(),
+                onChanged: (value) => _onCountrySelected(value!),
+              ),
+              DropdownButtonFormField<String>(
+                value: _selectedZoneId,
+                items: _zones.map((Zone zone) {
+                  return DropdownMenuItem<String>(
+                    value: zone.id,
+                    child: Text(zone.name),
+                  );
+                }).toList(),
+                onChanged: (value) => setState(() => _selectedZoneId = value!),
+              ),
+            ],
+          ),
         ),
       ),
       bottomSheet: Container(
@@ -261,8 +286,9 @@ class _AddressAddPageState extends State<AddressAddPage> {
           child: ElevatedButton(
             onPressed: () {
               if (_validateAndSaveForm()) {
+                addAddress();
               } else {
-                _showDialog('提示', '請填寫必填的密碼欄位。');
+                _showDialog('錯誤', '請填寫必填欄位。');
               }
             },
             child: Text('增加新地址'),
