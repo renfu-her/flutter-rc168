@@ -7,7 +7,7 @@ import 'package:rc168/pages/member/information_page.dart';
 import 'package:rc168/pages/login/login_page.dart';
 import 'package:rc168/pages/member/profile_page.dart';
 import 'package:rc168/pages/member/order_page.dart';
-import 'package:rc168/pages/member/address_page.dart';
+import 'package:rc168/pages/member/address/address_page.dart';
 import 'package:rc168/pages/member/register_page.dart';
 
 class MemberPage extends StatefulWidget {

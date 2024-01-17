@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
-import 'package:rc168/pages/member/address_add_page.dart';
+import 'package:rc168/pages/member/address/address_add_page.dart';
 
 class AddressPage extends StatefulWidget {
   @override
