@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
+import 'package:rc168/pages/member/address_add_page.dart';
 
 class AddressPage extends StatefulWidget {
   @override
@@ -75,6 +78,33 @@ class _AddressPageState extends State<AddressPage> {
     }
   }
 
+  Future<bool> deleteAddress(String customerId, String addressId) async {
+    final response = await dio.get(
+        '${app_url}/index.php?route=extension/module/api/gws_customer_address/remove&customer_id=${customerId}&address_id=${addressId}&api_key=${api_key}');
+
+    if (response.statusCode == 200) {
+      var res = response.data;
+
+      // 检查响应是否包含 message 键
+      if (res.containsKey('message')) {
+        var message = res['message'];
+
+        // 判断 message 是否是一个数组，且第一个元素的 msg_status 是否为 true
+        if (message is List &&
+            message.isNotEmpty &&
+            message[0]['msg_status'] == true) {
+          return true; // 删除成功
+        } else if (message.containsKey('error')) {
+          return false; // 删除失败
+        }
+      }
+    } else {
+      throw Exception('Failed to load country name');
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,15 +151,25 @@ class _AddressPageState extends State<AddressPage> {
                                 // 在这里处理编辑按钮的点击事件
                                 // 例如，打开一个编辑表单或导航到另一个页面
                                 // Navigator.of(context).push(...);
-                                _showDialog('刪除', '地址已經刪除。');
+                                _showDialog('編輯', '更新成功。');
                               },
                             ),
                             IconButton(
                               icon: Icon(Icons.delete),
-                              onPressed: () {
-                                // 在这里处理删除按钮的点击事件
-                                // 可以显示确认对话框或直接删除条目
-                                // 然后可能需要调用setState来更新列表视图
+                              onPressed: () async {
+                                var deleteAddressRes = await deleteAddress(
+                                    '${address.customerId}',
+                                    '${address.addressId}');
+
+                                if (!deleteAddressRes) {
+                                  _showDialog('刪除', '地址目前沒有此 ID。');
+                                } else {
+                                  // 从列表中移除该地址
+                                  setState(() {
+                                    snapshot.data!.removeAt(index);
+                                  });
+                                  _showDialog('刪除', '地址已經刪除。');
+                                }
                               },
                             ),
                           ],
@@ -150,12 +190,10 @@ class _AddressPageState extends State<AddressPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: ElevatedButton(
           onPressed: () {
-            // // TODO: 處理密碼保存
-            // if (_validateAndSaveForm()) {
-            //   _changePassword();
-            // } else {
-            //   _showDialog('提示', '請填寫必填的密碼欄位。');
-            // }
+            // TODO: 處理新增地址
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AddressAddPage()),
+            );
           },
           child: Text('增加新的地址'),
           style: ElevatedButton.styleFrom(
