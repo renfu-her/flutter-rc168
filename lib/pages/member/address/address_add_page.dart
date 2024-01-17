@@ -27,6 +27,40 @@ class _AddressAddPageState extends State<AddressAddPage> {
   String _countryId = '206'; // 应该从一个下拉菜单中选择
   String _zoneId = '3139'; // 应该从一个下拉菜单中选择
   bool _isDefault = false; // 根据用户的选择设置
+  List<Country> _countries = [];
+  List<Zone> _zones = [];
+  String _selectedCountryId = '206'; // 預設值
+  String _selectedZoneId = '3139'; // 預設值
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool _validateAndSaveForm() {
+    final form = _formKey.currentState;
+    if (form != null && form.validate()) {
+      form.save(); // Save the form if it's valid
+      return true;
+    }
+    return false;
+  }
+
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future<void> addAddress() async {
     // Build the FormData
@@ -81,11 +115,69 @@ class _AddressAddPageState extends State<AddressAddPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _loadCountries();
+    _onCountrySelected("206");
+  }
+
+  Future<void> _loadCountries() async {
+    try {
+      final response = await dio.get(
+          '${app_url}/index.php?route=extension/module/api/gws_country&api_key=${api_key}');
+      if (response.statusCode == 200) {
+        setState(() {
+          _countries = List<Country>.from(response.data['country']
+              .map((country) => Country.fromJson(country)));
+        });
+      }
+    } catch (e) {
+      // 錯誤處理
+    }
+  }
+
+  Future<void> _loadZones(String countryId) async {
+    try {
+      final response = await dio.get(
+          '${app_url}/index.php?route=extension/module/api/gws_zone&country_id=$countryId&api_key=${api_key}');
+      if (response.statusCode == 200) {
+        setState(() {
+          _zones = List<Zone>.from(
+              response.data['zones'].map((zone) => Zone.fromJson(zone)));
+
+          if (_zones.isNotEmpty) {
+            // 選擇列表中的第一個地區作為預設選擇
+            _selectedZoneId = _zones.first.id;
+          }
+        });
+      }
+    } catch (e) {
+      // 錯誤處理
+    }
+  }
+
+  // 更新選定國家並加載對應的地區
+  void _onCountrySelected(String value) {
+    setState(() {
+      _selectedCountryId = value;
+      _selectedZoneId = '0'; // 將 _selectedZoneId 設為 null
+      _zones = []; // 清空地區列表
+    });
+    _loadZones(value);
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Build your form widget here using TextFormFields and a submit button
     return Scaffold(
       appBar: AppBar(
-        title: Text('增加新的地址'),
+        title: Text('增加新地址'),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -138,6 +230,26 @@ class _AddressAddPageState extends State<AddressAddPage> {
                 labelText: '區/鄉/鎮 *',
               ),
             ),
+            DropdownButtonFormField<String>(
+              value: _selectedCountryId,
+              items: _countries.map((Country country) {
+                return DropdownMenuItem<String>(
+                  value: country.id,
+                  child: Text(country.name),
+                );
+              }).toList(),
+              onChanged: (value) => _onCountrySelected(value!),
+            ),
+            DropdownButtonFormField<String>(
+              value: _selectedZoneId,
+              items: _zones.map((Zone zone) {
+                return DropdownMenuItem<String>(
+                  value: zone.id,
+                  child: Text(zone.name),
+                );
+              }).toList(),
+              onChanged: (value) => setState(() => _selectedZoneId = value!),
+            ),
           ],
         ),
       ),
@@ -147,8 +259,13 @@ class _AddressAddPageState extends State<AddressAddPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
           child: ElevatedButton(
-            onPressed: addAddress,
-            child: Text('增加新的地址'),
+            onPressed: () {
+              if (_validateAndSaveForm()) {
+              } else {
+                _showDialog('提示', '請填寫必填的密碼欄位。');
+              }
+            },
+            child: Text('增加新地址'),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
               foregroundColor: Colors.white, // 文本颜色为白色
@@ -160,6 +277,36 @@ class _AddressAddPageState extends State<AddressAddPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Country {
+  String id;
+  String name;
+
+  Country({required this.id, required this.name});
+
+  // 從 JSON 數據中解析 Country 對象
+  factory Country.fromJson(Map<String, dynamic> json) {
+    return Country(
+      id: json['country_id'].toString(),
+      name: json['name'],
+    );
+  }
+}
+
+class Zone {
+  String id;
+  String name;
+
+  Zone({required this.id, required this.name});
+
+  // 從 JSON 數據中解析 Zone 對象
+  factory Zone.fromJson(Map<String, dynamic> json) {
+    return Zone(
+      id: json['zone_id'].toString(),
+      name: json['name'],
     );
   }
 }

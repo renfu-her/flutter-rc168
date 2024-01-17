@@ -25,15 +25,11 @@ class _MemberPageState extends State<MemberPage> {
     if (isLogin) {
       fetchCustomer();
     }
-    // print('fullName: ${fullName}');
-    // print('email1: ${email}');
   }
 
   void _updateAfterLogin() {
     fetchInfo();
     fetchCustomer();
-    // print('fullName: ${fullName}');
-    // print('email2: ${email}');
   }
 
   void fetchInfo() async {
