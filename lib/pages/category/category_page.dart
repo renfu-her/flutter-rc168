@@ -19,8 +19,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   Future<List<Category>> fetchCategories() async {
     // try {
-    var response = await dio.get(
-        '${appUrl}/index.php?route=extension/module/api/gws_categories&api_key=${apiKey}');
+    var response = await dio.get('${appUri}/gws_categories&api_key=${apiKey}');
 
     if (response.statusCode == 200) {
       List<dynamic> categoryJson = response.data['categories'];

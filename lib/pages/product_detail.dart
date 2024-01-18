@@ -48,7 +48,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Future<dynamic> getProductDetail() async {
     try {
       var response =
-          await dio.get('${demo_url}/api/product/detail/${widget.productId}');
+          await dio.get('${demoUrl}/api/product/detail/${widget.productId}');
       // print(widget.productId);
       if (response.statusCode == 200) {
         return response.data['data'];

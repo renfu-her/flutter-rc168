@@ -61,7 +61,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
 
     try {
       var response = await Dio().get(
-        '${appUrl}/index.php?route=extension/module/api/gws_products&category_id=${widget.categoryId}&api_key=${apiKey}&order=$orderParam&sort=$sortParam',
+        '${appUri}/gws_products&category_id=${widget.categoryId}&api_key=${apiKey}&order=$orderParam&sort=$sortParam',
       );
       var data = response.data['products'] as List;
       setState(() {

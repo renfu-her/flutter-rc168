@@ -11,11 +11,12 @@ import 'package:rc168/pages/shop_page.dart';
 
 var dio = Dio();
 String appUrl = 'https://ocapi.remember1688.com';
+String appUri = '${appUrl}/index.php?route=extension/module/api';
 String imgUrl = '${appUrl}/image/';
 String apiKey =
     'CNQ4eX5WcbgFQVkBXFKmP9AE2AYUpU2HySz2wFhwCZ3qExG6Tep7ZCSZygwzYfsF';
-String demo_url = 'https://demo.dev-laravel.co';
-String logo_img = '';
+String demoUrl = 'https://demo.dev-laravel.co';
+String logoImg = '';
 String category_id = '';
 String email = '';
 String lastName = '';
@@ -63,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
     getSetting().then((img) {
       if (mounted) {
         setState(() {
-          logo_img = '${imgUrl}' + img;
+          logoImg = '${imgUrl}' + img;
         });
       }
     }).catchError((error) {
@@ -91,12 +92,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<String> getSetting() async {
     try {
-      var response = await Dio().get(
-          '${appUrl}/index.php?route=extension/module/api/gws_store_settings&api_key=${apiKey}');
+      var response =
+          await Dio().get('${appUri}/gws_store_settings&api_key=${apiKey}');
       return response.data['settings']['config_logo'];
     } catch (e) {
       print(e);
-      throw e;
+      throw (e);
     }
   }
 
@@ -104,9 +105,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: logo_img != null
+        title: logoImg != null
             ? Image.network(
-                logo_img,
+                logoImg,
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) return child;

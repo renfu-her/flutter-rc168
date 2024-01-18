@@ -35,7 +35,7 @@ class _MemberPageState extends State<MemberPage> {
   void fetchInfo() async {
     try {
       var response = await Dio().get(
-        '${appUrl}/index.php?route=extension/module/api/gws_information&api_key=${apiKey}',
+        '${appUri}/gws_information&api_key=${apiKey}',
       );
       setState(() {
         informations = response.data['informations'];
@@ -49,7 +49,7 @@ class _MemberPageState extends State<MemberPage> {
   void fetchCustomer() async {
     try {
       var response = await Dio().get(
-        '${appUrl}/index.php?route=extension/module/api/gws_customer&email=${email}&api_key=${apiKey}',
+        '${appUri}/gws_customer&email=${email}&api_key=${apiKey}',
       );
 
       var customerData = response.data['customer'][0];
@@ -200,12 +200,12 @@ class _MemberPageState extends State<MemberPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         const SizedBox(height: 20),
-        logo_img.isNotEmpty
+        logoImg.isNotEmpty
             ? Image.network(
-                logo_img,
+                logoImg,
                 width: 160,
               )
-            : SizedBox(height: 160), // 如果 logo_img 为空，则显示一个占位符
+            : SizedBox(height: 160), // 如果 logoImg 为空，则显示一个占位符
         const SizedBox(height: 16),
         Text(
           '${fullName}',

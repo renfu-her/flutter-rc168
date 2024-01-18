@@ -44,7 +44,7 @@ class _AddressPageState extends State<AddressPage> {
 
   Future<List<CustomerAddress>> fetchAddresses() async {
     final response = await dio.get(
-        '${appUrl}/index.php?route=extension/module/api/gws_customer_address&customer_id=${customerId}&api_key=${apiKey}');
+        '${appUri}/gws_customer_address&customer_id=${customerId}&api_key=${apiKey}');
 
     if (response.statusCode == 200) {
       var responseData = response.data;
@@ -75,8 +75,8 @@ class _AddressPageState extends State<AddressPage> {
   }
 
   Future<String> fetchCountryName(String countryId) async {
-    final response = await dio.get(
-        '${appUrl}/index.php?route=extension/module/api/gws_country&country_id=${countryId}&api_key=${apiKey}');
+    final response = await dio
+        .get('${appUri}/gws_country&country_id=${countryId}&api_key=${apiKey}');
     if (response.statusCode == 200) {
       // 解析響應，獲取country名稱
       return response.data['country'][0]['name'];
@@ -87,7 +87,7 @@ class _AddressPageState extends State<AddressPage> {
 
   Future<bool> deleteAddress(String customerId, String addressId) async {
     final response = await dio.get(
-        '${appUrl}/index.php?route=extension/module/api/gws_customer_address/remove&customer_id=${customerId}&address_id=${addressId}&api_key=${apiKey}');
+        '${appUri}/gws_customer_address/remove&customer_id=${customerId}&address_id=${addressId}&api_key=${apiKey}');
 
     if (response.statusCode == 200) {
       var res = response.data;
@@ -277,7 +277,7 @@ Future<String> fetchZoneName(String countryId, String zoneId) async {
   final dio = Dio(); // 创建 Dio 实例
   try {
     final response = await dio.get(
-        '${appUrl}/index.php?route=extension/module/api/gws_zone&country_id=${countryId}&api_key=${apiKey}'); // 使用 Dio 发送 GET 请求
+        '${appUri}/gws_zone&country_id=${countryId}&api_key=${apiKey}'); // 使用 Dio 发送 GET 请求
     if (response.statusCode == 200) {
       List zones = response.data['zones'];
 
@@ -304,7 +304,7 @@ Future<String> fetchCountryName(String countryId) async {
   final dio = Dio(); // 创建 Dio 实例
   try {
     final response = await dio.get(
-        '${appUrl}/index.php?route=extension/module/api/gws_country&country_id=${countryId}&api_key=${apiKey}'); // 使用 Dio 发送 GET 请求
+        '${appUri}/gws_country&country_id=${countryId}&api_key=${apiKey}'); // 使用 Dio 发送 GET 请求
     if (response.statusCode == 200) {
       // 解析响应并返回国家名称
       return response.data['country'][0]['name'];

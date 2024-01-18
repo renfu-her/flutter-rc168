@@ -261,8 +261,8 @@ class _HomePageState extends State<HomePage> {
 
 Future<List<Product>> fetchProducts() async {
   try {
-    var response = await Dio().get(
-        '${appUrl}/index.php?route=extension/module/api/gws_products_latest&api_key=${apiKey}');
+    var response =
+        await Dio().get('${appUri}/gws_products_latest&api_key=${apiKey}');
     return (response.data['latest_products'] as List)
         .map((p) => Product.fromJson(p))
         .toList();
@@ -273,8 +273,8 @@ Future<List<Product>> fetchProducts() async {
 }
 
 Future<List<BannerModel>> fetchBanners() async {
-  final response = await dio.get(
-      '${appUrl}/index.php?route=extension/module/api/gws_banner&banner_id=12&api_key=${apiKey}');
+  final response =
+      await dio.get('${appUri}/gws_banner&banner_id=12&api_key=${apiKey}');
 
   if (response.statusCode == 200) {
     List<dynamic> bannersJson = response.data['banner'];
