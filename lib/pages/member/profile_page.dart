@@ -72,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _changePassword() async {
     final String apiUrl =
-        "${app_url}/index.php?route=extension/module/api/gws_customer/change_password&api_key=${api_key}";
+        "${appUrl}/index.php?route=extension/module/api/gws_customer/change_password&api_key=${apiKey}";
 
     dio.options.headers['content-Type'] = 'application/x-www-form-urlencoded';
     dio.options.headers["accept"] = "application/json";

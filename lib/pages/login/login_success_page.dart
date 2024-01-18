@@ -20,7 +20,7 @@ class _LoginSuccessPageState extends State<LoginSuccessPage> {
     getSetting().then((img) {
       if (mounted) {
         setState(() {
-          logo_img = '${img_url}' + img; // 假设 img_url 是已定义的图片基础 URL
+          logo_img = '${imgUrl}' + img; // 假设 imgUrl 是已定义的图片基础 URL
         });
       }
     }).catchError((error) {
@@ -31,7 +31,7 @@ class _LoginSuccessPageState extends State<LoginSuccessPage> {
   void fetchInfo() async {
     try {
       var response = await Dio().get(
-        '${app_url}/index.php?route=extension/module/api/gws_information&api_key=${api_key}',
+        '${appUrl}/index.php?route=extension/module/api/gws_information&api_key=${apiKey}',
       );
       setState(() {
         informations = response.data['informations'];
@@ -44,7 +44,7 @@ class _LoginSuccessPageState extends State<LoginSuccessPage> {
   void fetchCustomer() async {
     try {
       var response = await Dio().get(
-        '${app_url}/index.php?route=extension/module/api/gws_customer&email=${email}&api_key=${api_key}',
+        '${appUrl}/index.php?route=extension/module/api/gws_customer&email=${email}&api_key=${apiKey}',
       );
 
       var customerData = response.data['customer'][0];
@@ -61,7 +61,7 @@ class _LoginSuccessPageState extends State<LoginSuccessPage> {
   Future<String> getSetting() async {
     try {
       var response = await Dio().get(
-        '${app_url}/index.php?route=extension/module/api/gws_store_settings&api_key=${api_key}',
+        '${appUrl}/index.php?route=extension/module/api/gws_store_settings&api_key=${apiKey}',
       );
       return response.data['settings']['config_logo'];
     } catch (e) {

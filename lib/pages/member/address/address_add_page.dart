@@ -78,7 +78,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
       // // Send the POST request
       try {
         final response = await dio.post(
-          '${app_url}/index.php?route=extension/module/api/gws_customer_address/add&customer_id=${customerId}&api_key=${api_key}',
+          '${appUrl}/index.php?route=extension/module/api/gws_customer_address/add&customer_id=${customerId}&api_key=${apiKey}',
           data: formData,
         );
         print(response.data);
@@ -121,7 +121,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
   Future<void> _loadCountries() async {
     try {
       final response = await dio.get(
-          '${app_url}/index.php?route=extension/module/api/gws_country&api_key=${api_key}');
+          '${appUrl}/index.php?route=extension/module/api/gws_country&api_key=${apiKey}');
       if (response.statusCode == 200) {
         setState(() {
           _countries = List<Country>.from(response.data['country']
@@ -136,7 +136,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
   Future<void> _loadZones(String countryId) async {
     try {
       final response = await dio.get(
-          '${app_url}/index.php?route=extension/module/api/gws_zone&country_id=$countryId&api_key=${api_key}');
+          '${appUrl}/index.php?route=extension/module/api/gws_zone&country_id=$countryId&api_key=${apiKey}');
       if (response.statusCode == 200) {
         setState(() {
           _zones = List<Zone>.from(

@@ -24,9 +24,7 @@ class _AddressPageState extends State<AddressPage> {
       context,
       MaterialPageRoute(builder: (context) => AddressAddPage()),
     );
-
   }
-
 
   void _showDialog(String title, String message) {
     showDialog(
@@ -46,7 +44,7 @@ class _AddressPageState extends State<AddressPage> {
 
   Future<List<CustomerAddress>> fetchAddresses() async {
     final response = await dio.get(
-        '${app_url}/index.php?route=extension/module/api/gws_customer_address&customer_id=${customerId}&api_key=${api_key}');
+        '${appUrl}/index.php?route=extension/module/api/gws_customer_address&customer_id=${customerId}&api_key=${apiKey}');
 
     if (response.statusCode == 200) {
       var responseData = response.data;
@@ -67,7 +65,7 @@ class _AddressPageState extends State<AddressPage> {
   }
 
   Future<String> fetchZoneName(String zoneId) async {
-    final response = await dio.get('${app_url}/zones/$zoneId');
+    final response = await dio.get('${appUrl}/zones/$zoneId');
     if (response.statusCode == 200) {
       // 解析響應，獲取zone名稱
       return response.data['name'];
@@ -78,7 +76,7 @@ class _AddressPageState extends State<AddressPage> {
 
   Future<String> fetchCountryName(String countryId) async {
     final response = await dio.get(
-        '${app_url}/index.php?route=extension/module/api/gws_country&country_id=${countryId}&api_key=${api_key}');
+        '${appUrl}/index.php?route=extension/module/api/gws_country&country_id=${countryId}&api_key=${apiKey}');
     if (response.statusCode == 200) {
       // 解析響應，獲取country名稱
       return response.data['country'][0]['name'];
@@ -89,7 +87,7 @@ class _AddressPageState extends State<AddressPage> {
 
   Future<bool> deleteAddress(String customerId, String addressId) async {
     final response = await dio.get(
-        '${app_url}/index.php?route=extension/module/api/gws_customer_address/remove&customer_id=${customerId}&address_id=${addressId}&api_key=${api_key}');
+        '${appUrl}/index.php?route=extension/module/api/gws_customer_address/remove&customer_id=${customerId}&address_id=${addressId}&api_key=${apiKey}');
 
     if (response.statusCode == 200) {
       var res = response.data;
@@ -279,7 +277,7 @@ Future<String> fetchZoneName(String countryId, String zoneId) async {
   final dio = Dio(); // 创建 Dio 实例
   try {
     final response = await dio.get(
-        '${app_url}/index.php?route=extension/module/api/gws_zone&country_id=${countryId}&api_key=${api_key}'); // 使用 Dio 发送 GET 请求
+        '${appUrl}/index.php?route=extension/module/api/gws_zone&country_id=${countryId}&api_key=${apiKey}'); // 使用 Dio 发送 GET 请求
     if (response.statusCode == 200) {
       List zones = response.data['zones'];
 
@@ -306,7 +304,7 @@ Future<String> fetchCountryName(String countryId) async {
   final dio = Dio(); // 创建 Dio 实例
   try {
     final response = await dio.get(
-        '${app_url}/index.php?route=extension/module/api/gws_country&country_id=${countryId}&api_key=${api_key}'); // 使用 Dio 发送 GET 请求
+        '${appUrl}/index.php?route=extension/module/api/gws_country&country_id=${countryId}&api_key=${apiKey}'); // 使用 Dio 发送 GET 请求
     if (response.statusCode == 200) {
       // 解析响应并返回国家名称
       return response.data['country'][0]['name'];

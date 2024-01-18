@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       var response = await dio.post(
-        '${app_url}/index.php?route=extension/module/api/gws_customer/login&api_key=${api_key}', // 替换为您的API端点
+        '${appUrl}/index.php?route=extension/module/api/gws_customer/login&api_key=${apiKey}', // 替换为您的API端点
         data: formData,
       );
 

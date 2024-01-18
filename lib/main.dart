@@ -10,9 +10,9 @@ import 'package:rc168/pages/search_page.dart';
 import 'package:rc168/pages/shop_page.dart';
 
 var dio = Dio();
-String app_url = 'https://ocapi.remember1688.com';
-String img_url = '${app_url}/image/';
-String api_key =
+String appUrl = 'https://ocapi.remember1688.com';
+String imgUrl = '${appUrl}/image/';
+String apiKey =
     'CNQ4eX5WcbgFQVkBXFKmP9AE2AYUpU2HySz2wFhwCZ3qExG6Tep7ZCSZygwzYfsF';
 String demo_url = 'https://demo.dev-laravel.co';
 String logo_img = '';
@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
     getSetting().then((img) {
       if (mounted) {
         setState(() {
-          logo_img = '${img_url}' + img;
+          logo_img = '${imgUrl}' + img;
         });
       }
     }).catchError((error) {
@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<String> getSetting() async {
     try {
       var response = await Dio().get(
-          '${app_url}/index.php?route=extension/module/api/gws_store_settings&api_key=${api_key}');
+          '${appUrl}/index.php?route=extension/module/api/gws_store_settings&api_key=${apiKey}');
       return response.data['settings']['config_logo'];
     } catch (e) {
       print(e);

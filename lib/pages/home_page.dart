@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
               _launchURL(banner.link);
             },
             child: Image.network(
-              '${img_url}${banner.image}',
+              '${imgUrl}${banner.image}',
               fit: BoxFit.cover,
             ),
           );
@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                                 child: AspectRatio(
                                   aspectRatio: 1,
                                   child: Image.network(
-                                    '${img_url}' + product.thumb,
+                                    '${imgUrl}' + product.thumb,
                                     fit: BoxFit.cover,
                                     loadingBuilder:
                                         (context, child, loadingProgress) {
@@ -239,7 +239,7 @@ class _HomePageState extends State<HomePage> {
               // _launchURL(banner.link);
             },
             child: Image.network(
-              '${img_url}${banner.image}',
+              '${imgUrl}${banner.image}',
               fit: BoxFit.cover,
             ),
           );
@@ -262,7 +262,7 @@ class _HomePageState extends State<HomePage> {
 Future<List<Product>> fetchProducts() async {
   try {
     var response = await Dio().get(
-        '${app_url}/index.php?route=extension/module/api/gws_products_latest&api_key=${api_key}');
+        '${appUrl}/index.php?route=extension/module/api/gws_products_latest&api_key=${apiKey}');
     return (response.data['latest_products'] as List)
         .map((p) => Product.fromJson(p))
         .toList();
@@ -274,7 +274,7 @@ Future<List<Product>> fetchProducts() async {
 
 Future<List<BannerModel>> fetchBanners() async {
   final response = await dio.get(
-      '${app_url}/index.php?route=extension/module/api/gws_banner&banner_id=12&api_key=${api_key}');
+      '${appUrl}/index.php?route=extension/module/api/gws_banner&banner_id=12&api_key=${apiKey}');
 
   if (response.statusCode == 200) {
     List<dynamic> bannersJson = response.data['banner'];

@@ -27,7 +27,7 @@ class _InformationPageState extends State<InformationPage> {
   Future<void> fetchInformation() async {
     try {
       var response = await dio.get(
-        '${app_url}/index.php?route=extension/module/api/gws_information&information_id=${widget.informationId}&api_key=${api_key}',
+        '${appUrl}/index.php?route=extension/module/api/gws_information&information_id=${widget.informationId}&api_key=${apiKey}',
       );
       var data = response.data['informations'][0]; // 假设我们只关心第一个信息
       setState(() {

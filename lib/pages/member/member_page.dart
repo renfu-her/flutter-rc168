@@ -35,7 +35,7 @@ class _MemberPageState extends State<MemberPage> {
   void fetchInfo() async {
     try {
       var response = await Dio().get(
-        '${app_url}/index.php?route=extension/module/api/gws_information&api_key=${api_key}',
+        '${appUrl}/index.php?route=extension/module/api/gws_information&api_key=${apiKey}',
       );
       setState(() {
         informations = response.data['informations'];
@@ -49,7 +49,7 @@ class _MemberPageState extends State<MemberPage> {
   void fetchCustomer() async {
     try {
       var response = await Dio().get(
-        '${app_url}/index.php?route=extension/module/api/gws_customer&email=${email}&api_key=${api_key}',
+        '${appUrl}/index.php?route=extension/module/api/gws_customer&email=${email}&api_key=${apiKey}',
       );
 
       var customerData = response.data['customer'][0];

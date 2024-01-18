@@ -20,7 +20,7 @@ class _CategoryPageState extends State<CategoryPage> {
   Future<List<Category>> fetchCategories() async {
     // try {
     var response = await dio.get(
-        '${app_url}/index.php?route=extension/module/api/gws_categories&api_key=${api_key}');
+        '${appUrl}/index.php?route=extension/module/api/gws_categories&api_key=${apiKey}');
 
     if (response.statusCode == 200) {
       print(response.data['categories']);
@@ -55,7 +55,7 @@ class _CategoryPageState extends State<CategoryPage> {
               itemBuilder: (context, index) {
                 var category = snapshot.data![index];
                 var imagePath = category.image.isNotEmpty
-                    ? '${img_url}' + category.image
+                    ? '${imgUrl}' + category.image
                     : 'assets/images/no_image.png';
 
                 return ListTile(
