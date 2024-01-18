@@ -66,7 +66,6 @@ class _LoginSuccessPageState extends State<LoginSuccessPage> {
       return response.data['settings']['config_logo'];
     } catch (e) {
       print(e);
-      throw e;
     }
   }
 

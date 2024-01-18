@@ -42,11 +42,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       element.replaceWith(dom.Text('• ${element.text}\n'));
     });
 
-    // 处理其他需要的转换
-    // ...
-
-    // 返回处理后的文本，不包括img标签
-
     return document.body!.text;
   }
 
@@ -64,21 +59,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       throw Exception('Failed to load product detail');
     }
   }
-
-  // Future<void> getProductContent() async {
-  //   try {
-  //     final response =
-  //         await dio.get('${demo_url}/product/content/${widget.productId}');
-  //     if (response.statusCode == 200) {
-  //       // 假設response.data就是您需要的字符串
-  //       return response.data;
-  //     } else {
-  //       throw Exception('Failed to load product content');
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Failed to load product content: $e');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -99,10 +79,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             if (snapshot.hasData) {
               var product = snapshot.data;
               var productDescription = '';
-              print(product['meta_description']);
-              // if (product['description'] != null) {
-              //   productDescription = product['description'];
-              // }
+
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -281,7 +258,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget buildIndicator(int currentIndex, int itemCount) {
-    print(itemCount);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(

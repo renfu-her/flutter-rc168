@@ -92,7 +92,6 @@ class _ProfilePageState extends State<ProfilePage> {
         // 可以在这里显示成功的提示或执行其他操作
       } else {
         // 如果 msg_status 为 false
-        print("密码更新失败: ${response.data['message'][0]['msg']}");
         _showDialog('修改密碼失敗', '更新失敗。');
         // 显示失败的原因
       }

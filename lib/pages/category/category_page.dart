@@ -23,7 +23,6 @@ class _CategoryPageState extends State<CategoryPage> {
         '${appUrl}/index.php?route=extension/module/api/gws_categories&api_key=${apiKey}');
 
     if (response.statusCode == 200) {
-      print(response.data['categories']);
       List<dynamic> categoryJson = response.data['categories'];
       return categoryJson.map((json) => Category.fromJson(json)).toList();
     } else {

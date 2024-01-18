@@ -81,7 +81,6 @@ class _AddressAddPageState extends State<AddressAddPage> {
           '${appUrl}/index.php?route=extension/module/api/gws_customer_address/add&customer_id=${customerId}&api_key=${apiKey}',
           data: formData,
         );
-        print(response.data);
         if (response.statusCode == 200) {
           // _showDialog('更新', '已經更新');
           Navigator.pop(context);
