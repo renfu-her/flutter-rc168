@@ -21,12 +21,11 @@ class _HomePageState extends State<HomePage> {
     final double screenHeight = MediaQuery.of(context).size.height;
     int crossAxisCount = screenWidth < 600 ? 2 : 4;
     PageController _controller = PageController(initialPage: 1000); // 初始頁面
-    Timer? _timer;
 
     Widget buildBannerCarousel(List<BannerModel> banners) {
       return CarouselSlider(
         options: CarouselOptions(
-          height: 320.0,
+          height: 210.0,
           enlargeCenterPage: false,
           autoPlay: true,
           autoPlayInterval: const Duration(seconds: 3),
@@ -55,31 +54,13 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    void _startAutoScroll() {
-      _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
-        if (_controller.hasClients) {
-          int currentPage = _controller.page!.toInt();
-          int nextPage = currentPage + 1;
-          // print(nextPage);
-          _controller.animateToPage(
-            nextPage,
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeIn,
-          );
-        }
-      });
-    }
-
     @override
     void initState() {
       super.initState();
-      _startAutoScroll();
     }
 
     @override
     void dispose() {
-      _timer?.cancel(); // 取消定時器
-      _controller.dispose(); // 釋放控制器資源
       super.dispose();
     }
 
@@ -202,7 +183,10 @@ class _HomePageState extends State<HomePage> {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8.0),
                               child: ElevatedButton(
-                                child: Text('加入購物車'),
+                                child: Text(
+                                  '加入購物車',
+                                  style: TextStyle(fontSize: 18),
+                                ),
                                 onPressed: () {
                                   // Navigator.push(
                                   //   context,
@@ -265,10 +249,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _launchURL(String url) async {
-    if (url.isNotEmpty && await canLaunch(url)) {
-      await launch(url);
+    final Uri uri = Uri.parse(url);
+
+    if (url.isNotEmpty && await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
-      throw 'Could not launch $url';
+      print('Could not launch');
     }
   }
 }

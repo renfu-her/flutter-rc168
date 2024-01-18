@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
 import 'package:dio/dio.dart';
+import 'package:rc168/pages/product_detail.dart';
 
 class CategoryDetailPage extends StatefulWidget {
   final String categoryId;
@@ -146,7 +147,14 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                // 跳轉到產品詳情頁面的邏輯
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductDetailPage(
+                                      productId: category.id,
+                                    ),
+                                  ),
+                                );
                               },
                               child: Image.network(
                                 category.thumb,
@@ -177,7 +185,10 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8.0),
                             child: ElevatedButton(
-                              child: Text('加入購物車'),
+                              child: Text(
+                                '加入購物車',
+                                style: TextStyle(fontSize: 18),
+                              ),
                               onPressed: () {
                                 // 加入購物車的邏輯
                               },

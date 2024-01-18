@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
-import 'package:dio/dio.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:html/parser.dart' as html_parser;
+import 'package:html/dom.dart' as dom;
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -24,6 +25,29 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     super.initState();
     productDetail = getProductDetail();
     // productContent = getProductContent();
+  }
+
+  String convertHtmlToString(String htmlContent) {
+    var document = html_parser.parse(htmlContent);
+
+    document.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((element) {
+      element.replaceWith(dom.Text('${element.text}\n'));
+    });
+
+    document.querySelectorAll('p').forEach((element) {
+      element.replaceWith(dom.Text('${element.text}\n'));
+    });
+    // // 将li标签替换为点
+    document.querySelectorAll('li').forEach((element) {
+      element.replaceWith(dom.Text('• ${element.text}\n'));
+    });
+
+    // 处理其他需要的转换
+    // ...
+
+    // 返回处理后的文本，不包括img标签
+
+    return document.body!.text;
   }
 
   Future<dynamic> getProductDetail() async {
@@ -75,7 +99,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             if (snapshot.hasData) {
               var product = snapshot.data;
               var productDescription = '';
-              print(product['description']);
+              print(product['meta_description']);
               // if (product['description'] != null) {
               //   productDescription = product['description'];
               // }
@@ -139,6 +163,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                           Column(
                             children: [
+                              IconButton(
+                                icon: const Icon(Icons.share), // 使用分享图标
+                                onPressed: () {
+                                  Share.share('商品: ${product['name']}');
+                                },
+                              ),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 5.0,
@@ -162,14 +192,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 6),
-                              QuantitySelector(quantity: 1), // 自定義的數量選擇器小部件
+                              const SizedBox(height: 6),
+                              const QuantitySelector(
+                                  quantity: 1), // 自定義的數量選擇器小部件
                             ],
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -179,7 +210,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(product['meta_description'],
+                                Text(
+                                    convertHtmlToString(product['description']),
                                     style: const TextStyle(fontSize: 18)),
                               ],
                             ),
@@ -187,19 +219,31 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Container(
-                      color: Colors
-                          .blue, // Change this to your desired background color.
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment
-                            .center, // Centers the rating widget horizontally.
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          RatingStarWidget(rating: product['rating']),
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.blue, // 设定背景颜色
+                                borderRadius:
+                                    BorderRadius.circular(6.0), // 这里设置圆角大小
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  RatingStarWidget(rating: product['rating'])
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    // Add more fields as needed
+                    const SizedBox(height: 160),
                   ],
                 ),
               );
@@ -210,6 +254,28 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           // By default, show a loading spinner.
           return const Center(child: CircularProgressIndicator());
         },
+      ),
+      bottomSheet: Container(
+        color: Colors.white,
+        width: double.infinity, // 容器宽度占满整个屏幕宽度
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+          child: ElevatedButton(
+            onPressed: () {},
+            child: Text(
+              '加入購物車',
+              style: TextStyle(fontSize: 18),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
+              foregroundColor: Colors.white, // 文本颜色为白色
+              minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

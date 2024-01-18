@@ -291,7 +291,10 @@ class _AddressAddPageState extends State<AddressAddPage> {
                 _showDialog('錯誤', '請填寫必填欄位。');
               }
             },
-            child: Text('增加新地址'),
+            child: Text(
+              '增加新地址',
+              style: TextStyle(fontSize: 18),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
               foregroundColor: Colors.white, // 文本颜色为白色
