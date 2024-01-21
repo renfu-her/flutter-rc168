@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/pages/product_detail.dart';
+import 'package:rc168/pages/shop_page.dart';
 
 class CategoryDetailPage extends StatefulWidget {
   final String categoryId;
@@ -17,6 +18,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
   List<Category> categories = [];
   bool isLoading = true;
   SortOption currentSortOption = SortOption.defaultSort;
+  int _selectedQuantity = 1;
 
   @override
   void initState() {
@@ -189,8 +191,15 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                                 '加入購物車',
                                 style: TextStyle(fontSize: 18),
                               ),
-                              onPressed: () {
-                                // 加入購物車的邏輯
+                              onPressed: () async {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductDetailPage(
+                                      productId: category.id,
+                                    ),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.blue,
@@ -247,3 +256,31 @@ enum SortOption {
   modelAsc,
   modelDesc
 }
+
+Future<void> addToCart(String productId, int quantity) async {
+  final formData = FormData.fromMap({
+    'product_id': productId,
+    'quantity': quantity,
+  });
+
+  print(productId);
+  print(quantity);
+
+  final addCartUrl =
+      '${appUri}/gws_customer_cart/add&customer_id=${customerId}&api_key=${apiKey}';
+  try {
+    var response = await dio.post(
+      addCartUrl,
+      data: formData,
+    );
+
+    // 检查响应或进行后续操作
+    if (response.data['message'][0]['msg_status'] == true) {
+      // 成功添加后的操作
+    }
+  } on DioException catch (e) {
+    // 错误处理
+    print(e);
+  }
+}
+

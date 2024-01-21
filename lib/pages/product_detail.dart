@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -16,15 +17,26 @@ class ProductDetailPage extends StatefulWidget {
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   late Future<dynamic> productDetail;
+  Map<String, String> selectedOptionValues = {};
   // late Future<void> productContent;
   final CarouselController _controller = CarouselController();
   int _current = 0;
+  int _selectedQuantity = 1;
 
   @override
   void initState() {
     super.initState();
-    productDetail = getProductDetail();
-    // productContent = getProductContent();
+    productDetail = getProductDetail().then((data) {
+      var options = data['options'] as List<ProductOption>;
+      for (var option in options) {
+        if (option.values.isNotEmpty) {
+          // 為每個選項設置預設值，如果已經有值則不覆蓋
+          selectedOptionValues[option.id] =
+              selectedOptionValues[option.id] ?? option.values.first.id;
+        }
+      }
+      return data;
+    });
   }
 
   String convertHtmlToString(String htmlContent) {
@@ -49,9 +61,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     try {
       var response =
           await dio.get('${demoUrl}/api/product/detail/${widget.productId}');
-      // print(widget.productId);
+      print(widget.productId);
       if (response.statusCode == 200) {
-        return response.data['data'];
+        var productOptions = response.data['data']['options'] as List;
+        var productOptionsParsed =
+            productOptions.map((json) => ProductOption.fromJson(json)).toList();
+        return {
+          'details': response.data['data'],
+          'options': productOptionsParsed,
+        };
       } else {
         throw Exception('Failed to load product detail');
       }
@@ -77,8 +95,47 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-              var product = snapshot.data;
-              var productDescription = '';
+              var product = snapshot.data['details'];
+              var options = snapshot.data['options'] as List<ProductOption>;
+
+              List<Widget> optionWidgets = options.map((option) {
+                return ListTile(
+                  title: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(option.name),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            hint: Text('請選擇'),
+                            isExpanded: true,
+                            value: selectedOptionValues[option.id],
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                if (newValue != null) {
+                                  selectedOptionValues[option.id] = newValue;
+                                }
+                              });
+                            },
+                            items: option.values.map((OptionValue value) {
+                              return DropdownMenuItem<String>(
+                                value: value.id,
+                                child: value.price == 0
+                                    ? Text("${value.name}")
+                                    : Text(
+                                        "${value.name}\n${value.pricePrefix}NT\$${value.price.toString()}"),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList();
 
               return SingleChildScrollView(
                 child: Column(
@@ -170,11 +227,26 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 ),
                               ),
                               const SizedBox(height: 6),
-                              const QuantitySelector(
-                                  quantity: 1), // 自定義的數量選擇器小部件
+                              QuantitySelector(
+                                quantity: _selectedQuantity,
+                                onQuantityChanged: (newQuantity) {
+                                  setState(() {
+                                    _selectedQuantity = newQuantity;
+                                  });
+                                },
+                              ), // 自定義的數量選擇器小部件
                             ],
                           ),
                         ],
+                      ),
+                    ),
+                    ...optionWidgets,
+                    const SizedBox(height: 6),
+                    const Center(
+                      child: Text(
+                        '商品說明',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -238,7 +310,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () async {
+              await addToCart(widget.productId, _selectedQuantity);
+            },
             child: Text(
               '加入購物車',
               style: TextStyle(fontSize: 18),
@@ -280,7 +354,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
 class QuantitySelector extends StatefulWidget {
   final int quantity;
-  const QuantitySelector({Key? key, required this.quantity}) : super(key: key);
+  final Function(int) onQuantityChanged;
+
+  const QuantitySelector(
+      {Key? key, required this.quantity, required this.onQuantityChanged})
+      : super(key: key);
 
   @override
   _QuantitySelectorState createState() => _QuantitySelectorState();
@@ -298,6 +376,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
   void incrementQuantity() {
     setState(() {
       currentQuantity++;
+      widget.onQuantityChanged(currentQuantity);
     });
   }
 
@@ -305,6 +384,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
     if (currentQuantity > 1) {
       setState(() {
         currentQuantity--;
+        widget.onQuantityChanged(currentQuantity);
       });
     }
   }
@@ -383,5 +463,84 @@ class RatingStarWidget extends StatelessWidget {
     });
 
     return Row(children: stars);
+  }
+}
+
+Future<void> addToCart(String productId, int quantity) async {
+  final formData = FormData.fromMap({
+    'product_id': productId,
+    'quantity': quantity,
+  });
+
+  print(productId);
+  print(quantity);
+
+  final addCartUrl =
+      '${appUri}/gws_customer_cart/add&customer_id=${customerId}&api_key=${apiKey}';
+  try {
+    var response = await dio.post(
+      addCartUrl,
+      data: formData,
+    );
+
+    // 检查响应或进行后续操作
+    if (response.data['message'][0]['msg_status'] == true) {
+      // 成功添加后的操作
+    }
+  } on DioException catch (e) {
+    // 错误处理
+    print(e);
+  }
+}
+
+// 這是從API響應解析選項的模型
+class ProductOption {
+  final String id;
+  final String name;
+  final List<OptionValue> values;
+
+  ProductOption({required this.id, required this.name, required this.values});
+
+  factory ProductOption.fromJson(Map<String, dynamic> json) {
+    var list = json['product_option_value'] as List;
+    List<OptionValue> optionValues =
+        list.map((i) => OptionValue.fromJson(i)).toList();
+
+    return ProductOption(
+      id: json['product_option_id'],
+      name: json['name'],
+      values: optionValues,
+    );
+  }
+}
+
+// 這是單個選項值的模型
+class OptionValue {
+  final String id;
+  final String name;
+  final int price;
+  final String pricePrefix;
+  final String priceName;
+
+  OptionValue(
+      {required this.id,
+      required this.name,
+      required this.price,
+      required this.pricePrefix,
+      required this.priceName});
+
+  factory OptionValue.fromJson(Map<String, dynamic> json) {
+    double priceDouble = double.tryParse(json['price']) ?? 0.0;
+    int priceInt = (priceDouble).toInt();
+
+    String priceName = priceInt == 0 ? '' : "NTD${priceInt.toString()}";
+
+    return OptionValue(
+      id: json['product_option_value_id'],
+      name: json['name'],
+      price: priceInt,
+      pricePrefix: json['price_prefix'],
+      priceName: priceName,
+    );
   }
 }

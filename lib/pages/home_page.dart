@@ -5,6 +5,7 @@ import 'package:rc168/main.dart';
 import 'package:rc168/pages/product_detail.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:rc168/pages/shop_page.dart';
 
 var dio = Dio();
 
@@ -14,6 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedQuantity = 1;
+
   @override
   Widget build(BuildContext context) {
     // 檢測屏幕寬度以決定欄位數
@@ -187,14 +190,15 @@ class _HomePageState extends State<HomePage> {
                                   '加入購物車',
                                   style: TextStyle(fontSize: 18),
                                 ),
-                                onPressed: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) => ProductDetailPage(
-                                  //             productId: product.id,
-                                  //           )),
-                                  // );
+                                onPressed: () async {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductDetailPage(
+                                        productId: product.id,
+                                      ),
+                                    ),
+                                  );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.blue,
@@ -328,5 +332,32 @@ class BannerModel {
       link: json['link'],
       image: json['image'],
     );
+  }
+}
+
+Future<void> addToCart(String productId, int quantity) async {
+  final formData = FormData.fromMap({
+    'product_id': productId,
+    'quantity': quantity,
+  });
+
+  print(productId);
+  print(quantity);
+
+  final addCartUrl =
+      '${appUri}/gws_customer_cart/add&customer_id=${customerId}&api_key=${apiKey}';
+  try {
+    var response = await dio.post(
+      addCartUrl,
+      data: formData,
+    );
+
+    // 检查响应或进行后续操作
+    if (response.data['message'][0]['msg_status'] == true) {
+      // 成功添加后的操作
+    }
+  } on DioException catch (e) {
+    // 错误处理
+    print(e);
   }
 }
