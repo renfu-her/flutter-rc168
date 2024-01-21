@@ -114,105 +114,139 @@ class _ShopPageState extends State<ShopPage> {
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        '商品總計',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+          : products.isEmpty // 如果產品列表為空
+              ? Center(
+                  // 顯示購物車空的提示畫面
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.shopping_cart,
+                        size: 80,
+                        color: Colors.grey[400],
                       ),
                       Text(
-                        'NT\$${totalAmount.toStringAsFixed(0)}',
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                        '您的購物車是空的!',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.grey[400],
+                        ),
                       ),
+                      SizedBox(height: 20),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     // 這裡添加按鈕的行為，例如返回商店頁面
+                      //   },
+                      //   child: Text('開始選購'),
+                      //   style: ElevatedButton.styleFrom(
+                      //     foregroundColor: Theme.of(context).primaryColor,
+                      //   ),
+                      // )
                     ],
                   ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: products.length,
-                    padding: EdgeInsets.only(bottom: 100.0),
-                    itemBuilder: (context, index) {
-                      final product = products[index];
-                      return ListTile(
-                        leading: Image.network('${imgUrl}' + product.thumbUrl),
-                        title: Text(
-                            product.name + "\nNT\$" + product.price.toString()),
-                        subtitle: Row(
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.remove),
-                              onPressed: () async {
-                                if (product.quantity == 1) {
-                                  // 當數量為1時，顯示確認對話框
-                                  final confirmDelete = await showDialog<bool>(
-                                    context: context, // 這裡需要提供BuildContext
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text('確認'),
-                                        content: Text('是否要刪除該項目？'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: Text('取消'),
-                                            onPressed: () =>
-                                                Navigator.of(context)
-                                                    .pop(false), // 不刪除
-                                          ),
-                                          TextButton(
-                                            child: Text('確定刪除'),
-                                            onPressed: () =>
-                                                Navigator.of(context)
-                                                    .pop(true), // 確認刪除
-                                          ),
-                                        ],
+                )
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            '商品總計',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'NT\$${totalAmount.toStringAsFixed(0)}',
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: products.length,
+                        padding: EdgeInsets.only(bottom: 100.0),
+                        itemBuilder: (context, index) {
+                          final product = products[index];
+                          return ListTile(
+                            leading:
+                                Image.network('${imgUrl}' + product.thumbUrl),
+                            title: Text(product.name +
+                                "\nNT\$" +
+                                product.price.toString()),
+                            subtitle: Row(
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.remove),
+                                  onPressed: () async {
+                                    if (product.quantity == 1) {
+                                      // 當數量為1時，顯示確認對話框
+                                      final confirmDelete =
+                                          await showDialog<bool>(
+                                        context: context, // 這裡需要提供BuildContext
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text('確認'),
+                                            content: Text('是否要刪除該項目？'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                child: Text('取消'),
+                                                onPressed: () =>
+                                                    Navigator.of(context)
+                                                        .pop(false), // 不刪除
+                                              ),
+                                              TextButton(
+                                                child: Text('確定刪除'),
+                                                onPressed: () =>
+                                                    Navigator.of(context)
+                                                        .pop(true), // 確認刪除
+                                              ),
+                                            ],
+                                          );
+                                        },
                                       );
-                                    },
-                                  );
 
-                                  if (confirmDelete ?? false) {
-                                    await updateQuantity(product.cartId, 0);
-                                  }
-                                } else {
-                                  // 若數量不為1，正常增加數量
-                                  setState(() {
-                                    product.decrementQuantity();
-                                  });
-                                  await updateQuantity(
-                                      product.cartId, product.quantity);
-                                }
-                              },
+                                      if (confirmDelete ?? false) {
+                                        await updateQuantity(product.cartId, 0);
+                                      }
+                                    } else {
+                                      // 若數量不為1，正常增加數量
+                                      setState(() {
+                                        product.decrementQuantity();
+                                      });
+                                      await updateQuantity(
+                                          product.cartId, product.quantity);
+                                    }
+                                  },
+                                ),
+                                Text('数量: ${product.quantity}'),
+                                IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () async {
+                                      // 若數量不為1，正常增加數量
+                                      setState(() {
+                                        product.incrementQuantity();
+                                      });
+                                      await updateQuantity(
+                                          product.cartId, product.quantity);
+                                    }),
+                              ],
                             ),
-                            Text('数量: ${product.quantity}'),
-                            IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () async {
-                                  // 若數量不為1，正常增加數量
-                                  setState(() {
-                                    product.incrementQuantity();
-                                  });
-                                  await updateQuantity(
-                                      product.cartId, product.quantity);
-                                }),
-                          ],
-                        ),
-                        trailing: Text(
-                          '小計 NT\$' +
-                              (product.price * product.quantity).toString(),
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    },
-                  ),
+                            trailing: Text(
+                              '小計 NT\$' +
+                                  (product.price * product.quantity).toString(),
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
       bottomSheet: Container(
         color: Colors.white,
         width: double.infinity, // 容器宽度占满整个屏幕宽度
@@ -220,10 +254,15 @@ class _ShopPageState extends State<ShopPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
           child: ElevatedButton(
             onPressed: () {},
-            child: Text(
-              '結 帳',
-              style: TextStyle(fontSize: 18),
-            ),
+            child: isLoading
+                ? const Text(
+                    '結 帳',
+                    style: TextStyle(fontSize: 18),
+                  )
+                : const Text(
+                    '逛逛賣場',
+                    style: TextStyle(fontSize: 18),
+                  ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
               foregroundColor: Colors.white, // 文本颜色为白色
