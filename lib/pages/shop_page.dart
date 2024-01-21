@@ -22,7 +22,7 @@ class _ShopPageState extends State<ShopPage> {
     final customerCartUrl =
         '${appUri}/gws_customer_cart&customer_id=${customerId}&api_key=${apiKey}';
     final productDetailBaseUrl = '${appUri}/gws_product&product_id=';
-    print('${customerId}');
+    // print('${customerId}');
 
     setState(() {
       products.clear();
@@ -113,7 +113,7 @@ class _ShopPageState extends State<ShopPage> {
         title: Text('購物車'),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : products.isEmpty // 如果產品列表為空
               ? Center(
                   // 顯示購物車空的提示畫面
@@ -164,6 +164,11 @@ class _ShopPageState extends State<ShopPage> {
                           ),
                         ],
                       ),
+                    ),
+                    const Divider(
+                      color: Colors.grey, // 您可以選擇線的顏色
+                      thickness: 1, // 線的厚度
+                      height: 20, // 與其他元素的間距
                     ),
                     Expanded(
                       child: ListView.builder(
@@ -252,26 +257,61 @@ class _ShopPageState extends State<ShopPage> {
         width: double.infinity, // 容器宽度占满整个屏幕宽度
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-          child: ElevatedButton(
-            onPressed: () {},
-            child: isLoading
-                ? const Text(
+          child: isLoading
+              ? ElevatedButton(
+                  onPressed: () {
+                    // 这里可以添加一些逻辑，比如禁止用户点击或显示加载中
+                  },
+                  child: const Text(
                     '結 帳',
                     style: TextStyle(fontSize: 18),
-                  )
-                : const Text(
-                    '逛逛賣場',
-                    style: TextStyle(fontSize: 18),
                   ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
-              foregroundColor: Colors.white, // 文本颜色为白色
-              minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
-              ),
-            ),
-          ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey, // 按钮背景颜色为灰色
+                    foregroundColor: Colors.white, // 文本颜色为白色
+                    minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
+                    ),
+                  ),
+                )
+              : products.isEmpty
+                  ? ElevatedButton(
+                      onPressed: () {
+                        // 当购物车为空时，跳转到逛逛賣場
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => MyApp()));
+                      },
+                      child: const Text(
+                        '逛逛賣場',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
+                        foregroundColor: Colors.white, // 文本颜色为白色
+                        minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
+                        ),
+                      ),
+                    )
+                  : ElevatedButton(
+                      onPressed: () {
+                        // 这里添加结账逻辑
+                      },
+                      child: const Text(
+                        '結 帳',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
+                        foregroundColor: Colors.white, // 文本颜色为白色
+                        minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
+                        ),
+                      ),
+                    ),
         ),
       ),
     );
