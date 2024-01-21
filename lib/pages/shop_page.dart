@@ -70,22 +70,39 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   Future<void> updateQuantity(String cartId, int quantity) async {
-    final formData = FormData.fromMap({
-      'quantity': quantity,
-    });
+    if (quantity == 0) {
+      // 当数量为0时，调用删除API
+      try {
+        var response = await dio.get(
+          '${appUri}/gws_customer_cart/remove&customer_id=${customerId}&cart_id=$cartId&api_key=${apiKey}',
+        );
 
-    try {
-      var response = await dio.post(
-        '${appUri}/gws_customer_cart/edit&customer_id=${customerId}&cart_id=$cartId&api_key=${apiKey}',
-        data: formData,
-      );
-
-      if (response.data['message'][0]['msg_status'] == true) {
-        fetchCartItems(); // 重新获取购物车数据
+        if (response.data['message'][0]['msg_status'] == true) {
+          fetchCartItems(); // 重新获取购物车数据
+        }
+      } on DioException catch (e) {
+        // 处理错误
+        print(e);
       }
-    } on DioError catch (e) {
-      // 处理错误
-      print(e);
+    } else {
+      // 当数量不为0时，更新购物车中的项目数量
+      final formData = FormData.fromMap({
+        'quantity': quantity,
+      });
+
+      try {
+        var response = await dio.post(
+          '${appUri}/gws_customer_cart/edit&customer_id=${customerId}&cart_id=$cartId&api_key=${apiKey}',
+          data: formData,
+        );
+
+        if (response.data['message'][0]['msg_status'] == true) {
+          fetchCartItems(); // 重新获取购物车数据
+        }
+      } on DioException catch (e) {
+        // 处理错误
+        print(e);
+      }
     }
   }
 
@@ -132,24 +149,56 @@ class _ShopPageState extends State<ShopPage> {
                             IconButton(
                               icon: Icon(Icons.remove),
                               onPressed: () async {
-                                setState(() {
-                                  product.decrementQuantity();
-                                });
-                                await updateQuantity(
-                                    product.cartId, product.quantity);
+                                if (product.quantity == 1) {
+                                  // 當數量為1時，顯示確認對話框
+                                  final confirmDelete = await showDialog<bool>(
+                                    context: context, // 這裡需要提供BuildContext
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('確認'),
+                                        content: Text('是否要刪除該項目？'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: Text('取消'),
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(false), // 不刪除
+                                          ),
+                                          TextButton(
+                                            child: Text('確定刪除'),
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(true), // 確認刪除
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+
+                                  if (confirmDelete ?? false) {
+                                    await updateQuantity(product.cartId, 0);
+                                  }
+                                } else {
+                                  // 若數量不為1，正常增加數量
+                                  setState(() {
+                                    product.decrementQuantity();
+                                  });
+                                  await updateQuantity(
+                                      product.cartId, product.quantity);
+                                }
                               },
                             ),
                             Text('数量: ${product.quantity}'),
                             IconButton(
-                              icon: Icon(Icons.add),
-                              onPressed: () async {
-                                setState(() {
-                                  product.incrementQuantity();
-                                });
-                                await updateQuantity(
-                                    product.cartId, product.quantity);
-                              },
-                            ),
+                                icon: Icon(Icons.add),
+                                onPressed: () async {
+                                  // 若數量不為1，正常增加數量
+                                  setState(() {
+                                    product.incrementQuantity();
+                                  });
+                                  await updateQuantity(
+                                      product.cartId, product.quantity);
+                                }),
                           ],
                         ),
                         trailing: Text(
@@ -203,7 +252,7 @@ class Product {
   }
 
   void decrementQuantity() {
-    if (quantity > 1) {
+    if (quantity > 0) {
       quantity--;
     }
   }

@@ -98,6 +98,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               var product = snapshot.data['details'];
               var options = snapshot.data['options'] as List<ProductOption>;
 
+              List<Widget> contentWidgets = [];
+
+              if (options.isNotEmpty) {
+                contentWidgets.add(
+                  const Center(
+                    child: Text(
+                      '商品選項',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  ),
+                );
+              }
+
               List<Widget> optionWidgets = options.map((option) {
                 return ListTile(
                   title: Row(
@@ -240,6 +254,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ],
                       ),
                     ),
+                    ...contentWidgets,
                     ...optionWidgets,
                     const SizedBox(height: 6),
                     const Center(
@@ -471,9 +486,6 @@ Future<void> addToCart(String productId, int quantity) async {
     'product_id': productId,
     'quantity': quantity,
   });
-
-  print(productId);
-  print(quantity);
 
   final addCartUrl =
       '${appUri}/gws_customer_cart/add&customer_id=${customerId}&api_key=${apiKey}';
