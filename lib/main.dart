@@ -29,6 +29,7 @@ String fullName = '';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserPreferences.init();
+
   runApp(MyApp());
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
