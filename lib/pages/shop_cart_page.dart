@@ -241,7 +241,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                     ),
                     const Divider(
                       color: Colors.grey, // 您可以選擇線的顏色
-                      thickness: 1, // 線的厚度
+                      thickness: 0.5, // 線的厚度
                       height: 20, // 與其他元素的間距
                     ),
                     if (customerAddress != null)
