@@ -328,8 +328,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           child: ElevatedButton(
             onPressed: () async {
               await addToCart(widget.productId, _selectedQuantity);
+              selectedIndex = 3;
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => ShopPage()));
+                  .push(MaterialPageRoute(builder: (context) => MyApp()));
             },
             child: Text(
               '加入購物車',

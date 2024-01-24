@@ -25,6 +25,7 @@ String firstName = '';
 bool isLogin = false;
 int customerId = 0;
 String fullName = '';
+int selectedIndex = 0;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,8 +54,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
-
   // 底部導航項目列表
   static List<Widget> _widgetOptions = <Widget>[
     HomePage(),
@@ -92,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
   }
 
@@ -160,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: _widgetOptions.elementAt(selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -186,7 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
             label: '會員中心',
           ),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         onTap: _onItemTapped,
       ),
     );

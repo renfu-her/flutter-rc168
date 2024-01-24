@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
-import 'package:rc168/pages/shop_cart_page.dart';
 
-class ShopPage extends StatefulWidget {
+class ShopCartPage extends StatefulWidget {
   @override
-  _ShopPageState createState() => _ShopPageState();
+  _ShopCartPageState createState() => _ShopCartPageState();
 }
 
-class _ShopPageState extends State<ShopPage> {
+class _ShopCartPageState extends State<ShopCartPage> {
   List<Product> products = [];
   bool isLoading = true;
   double totalAmount = 0.0;
+  Map<String, dynamic>? customerAddress;
 
   @override
   void initState() {
     super.initState();
     fetchCartItems();
+    fetchCustomerAddress();
   }
 
   Future<void> fetchCartItems() async {
@@ -107,12 +108,84 @@ class _ShopPageState extends State<ShopPage> {
     }
   }
 
+  Future<void> fetchCustomerAddress() async {
+    try {
+      // Fetch customer data
+      var customerResponse = await dio.get('${appUri}/gws_customer',
+          queryParameters: {'customer_id': customerId, 'api_key': apiKey});
+      var customerData = customerResponse.data;
+
+      // Determine which address to fetch
+      String addressId = customerData['default_address_id'] ?? '';
+      Response addressResponse;
+      if (addressId.isNotEmpty) {
+        // Fetch specific address
+        addressResponse = await dio.get('$appUri/gws_customer_address',
+            queryParameters: {
+              'customer_id': customerId,
+              'address_id': addressId,
+              'api_key': apiKey
+            });
+      } else {
+        // Fetch first address from address list
+        addressResponse = await dio.get('${appUri}/gws_customer_address',
+            queryParameters: {'customer_id': customerId, 'api_key': apiKey});
+      }
+
+      var addressData = addressResponse.data;
+
+      setState(() {
+        customerAddress = addressData['customer_address'][0];
+
+        // print(customerAddress);
+      });
+    } catch (e) {
+      print(e);
+      // Handle exceptions or show error messages
+    }
+  }
+
+  Future<Map<String, dynamic>?> fetchCountryAndZoneDetails(
+      String countryId) async {
+    try {
+      // 獲取國家信息
+      var countryResponse = await dio.get('$appUri/gws_country',
+          queryParameters: {'country_id': countryId, 'api_key': apiKey});
+      var countryData = countryResponse.data;
+
+      // 檢查國家信息是否成功獲取
+      if (countryData['message'][0]['msg_status'] == true) {
+        // 獲取區域列表
+        var zoneResponse = await dio.get('$appUri/gws_zone',
+            queryParameters: {'country_id': countryId, 'api_key': apiKey});
+        var zoneData = zoneResponse.data;
+
+        // 檢查區域信息是否成功獲取
+        if (zoneData['message'][0]['msg_status'] == true) {
+          // 假定您需要第一個區域的信息
+          var firstZone =
+              zoneData['zones'].isNotEmpty ? zoneData['zones'][0] : null;
+
+          if (firstZone != null) {
+            // 返回國家和區域的詳細信息
+            return {'country': countryData['country'][0], 'zone': firstZone};
+          }
+        }
+      }
+    } on DioException catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('購物車'),
-      // ),
+      appBar: AppBar(
+        title: Text('購物車'),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+      ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : products.isEmpty // 如果產品列表為空
@@ -170,6 +243,72 @@ class _ShopPageState extends State<ShopPage> {
                       color: Colors.grey, // 您可以選擇線的顏色
                       thickness: 1, // 線的厚度
                       height: 20, // 與其他元素的間距
+                    ),
+                    if (customerAddress != null)
+                      FutureBuilder<Map<String, dynamic>?>(
+                        future: fetchCountryAndZoneDetails(
+                            customerAddress!['country_id']),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<Map<String, dynamic>?> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else if (snapshot.hasData) {
+                            final countryDetails = snapshot.data!['country'];
+                            final zoneDetails = snapshot.data!['zone'];
+                            return ListTile(
+                              title: Text(
+                                '收貨地址',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                '${customerAddress!['firstname']} ${customerAddress!['lastname']} \n'
+                                '${customerAddress!['address_1']} ${customerAddress!['address_2']} \n'
+                                '${zoneDetails['name']}, ${countryDetails['name']} \n'
+                                '${customerAddress!['postcode']}',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () {
+                                  // 當編輯按鈕被點擊時的行為
+                                  // 這裡可以導航到一個新頁面，或者顯示一個表單對話框讓用戶更新地址
+                                },
+                              ),
+                            );
+                          } else {
+                            return Text('No data');
+                          }
+                        },
+                      ),
+                    const Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment.start, // 將 Row 內的元件對齊到右側
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '商品總計',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        // 這裡可以添加更多的 Column 子元件
+                      ],
                     ),
                     Expanded(
                       child: ListView.builder(
@@ -261,11 +400,10 @@ class _ShopPageState extends State<ShopPage> {
           child: isLoading
               ? ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ShopCartPage()));
+                    // 这里可以添加一些逻辑，比如禁止用户点击或显示加载中
                   },
                   child: const Text(
-                    '結 帳',
+                    '確定下訂單',
                     style: TextStyle(fontSize: 18),
                   ),
                   style: ElevatedButton.styleFrom(
@@ -300,11 +438,9 @@ class _ShopPageState extends State<ShopPage> {
                   : ElevatedButton(
                       onPressed: () {
                         // 这里添加结账逻辑
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ShopCartPage()));
                       },
                       child: const Text(
-                        '結 帳',
+                        '確定下訂單',
                         style: TextStyle(fontSize: 18),
                       ),
                       style: ElevatedButton.styleFrom(

@@ -119,7 +119,7 @@ class _MemberPageState extends State<MemberPage> {
           '請登入會員帳號',
           style: TextStyle(fontSize: 18),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Row(
           children: <Widget>[
             Expanded(
@@ -158,7 +158,6 @@ class _MemberPageState extends State<MemberPage> {
                         fetchCustomer();
                       });
                     });
-                    ;
                   },
                   child: Text('登入'),
                   style: ElevatedButton.styleFrom(
@@ -173,9 +172,9 @@ class _MemberPageState extends State<MemberPage> {
             ),
           ],
         ),
-        SizedBox(height: 18),
-        Padding(
-          padding: const EdgeInsets.only(left: 16.0),
+        const SizedBox(height: 18),
+        const Padding(
+          padding: EdgeInsets.only(left: 16.0),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -211,7 +210,7 @@ class _MemberPageState extends State<MemberPage> {
           '${fullName}',
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 2),
+        const SizedBox(height: 2),
         Text(
           email,
           style: const TextStyle(fontSize: 14),
@@ -244,8 +243,8 @@ class _MemberPageState extends State<MemberPage> {
               .pushReplacement(MaterialPageRoute(builder: (_) => (MyApp())));
         }),
         const SizedBox(height: 22),
-        Padding(
-          padding: const EdgeInsets.only(left: 16.0),
+        const Padding(
+          padding: EdgeInsets.only(left: 16.0),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
