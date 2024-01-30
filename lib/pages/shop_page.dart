@@ -178,8 +178,10 @@ class _ShopPageState extends State<ShopPage> {
                         itemBuilder: (context, index) {
                           final product = products[index];
                           return ListTile(
-                            leading:
-                                Image.network('${imgUrl}' + product.thumbUrl),
+                            leading: Image.network(
+                              '${imgUrl}' + product.thumbUrl,
+                              width: 80,
+                            ),
                             title: Text(product.name +
                                 "\nNT\$" +
                                 product.price.toString()),

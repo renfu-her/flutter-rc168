@@ -9,22 +9,43 @@ class ShopCartPage extends StatefulWidget {
 
 class _ShopCartPageState extends State<ShopCartPage> {
   List<Product> products = [];
+  Map<String, dynamic>? customerData;
   bool isLoading = true;
   double totalAmount = 0.0;
   Map<String, dynamic>? customerAddress;
+  int? _selectedShippingMethodCode;
 
   @override
   void initState() {
     super.initState();
     fetchCartItems();
-    fetchCustomerAddress();
+    getCustomerDataAndFetchAddress();
+    // fetchShippingMethods();
+  }
+
+  Future<void> getCustomerDataAndFetchAddress() async {
+    try {
+      // 從 gws_customer 獲取用戶資料
+      var customerResponse = await dio.get('${appUri}/gws_customer',
+          queryParameters: {'customer_id': customerId, 'api_key': apiKey});
+      var customer = customerResponse.data;
+
+      // 提取 default_address_id
+      String defaultAddressId =
+          customer['customer'][0]['default_address_id'] ?? '';
+      customerData = customer;
+      // 使用提取的 default_address_id 調用 fetchCustomerAddress
+      await fetchCustomerAddress(defaultAddressId: defaultAddressId);
+    } catch (e) {
+      print(e);
+      // 處理異常或顯示錯誤信息
+    }
   }
 
   Future<void> fetchCartItems() async {
     final customerCartUrl =
         '${appUri}/gws_customer_cart&customer_id=${customerId}&api_key=${apiKey}';
     final productDetailBaseUrl = '${appUri}/gws_product&product_id=';
-    // print('${customerId}');
 
     setState(() {
       products.clear();
@@ -108,15 +129,19 @@ class _ShopCartPageState extends State<ShopCartPage> {
     }
   }
 
-  Future<void> fetchCustomerAddress() async {
+  Future<void> fetchCustomerAddress({String defaultAddressId = ''}) async {
     try {
-      // Fetch customer data
-      var customerResponse = await dio.get('${appUri}/gws_customer',
-          queryParameters: {'customer_id': customerId, 'api_key': apiKey});
-      var customerData = customerResponse.data;
+      // 如果有提供 defaultAddressId，則直接使用
+      String addressId = defaultAddressId;
 
-      // Determine which address to fetch
-      String addressId = customerData['default_address_id'] ?? '';
+      if (addressId.isEmpty) {
+        // 如果沒有提供 defaultAddressId，則從 gws_customer 獲取
+        var customerResponse = await dio.get('${appUri}/gws_customer',
+            queryParameters: {'customer_id': customerId, 'api_key': apiKey});
+        var customerData = customerResponse.data;
+        addressId = customerData['default_address_id'] ?? '';
+      }
+
       Response addressResponse;
       if (addressId.isNotEmpty) {
         // Fetch specific address
@@ -135,7 +160,13 @@ class _ShopCartPageState extends State<ShopCartPage> {
       var addressData = addressResponse.data;
 
       setState(() {
-        customerAddress = addressData['customer_address'][0];
+        // 根據 status 決定如何處理地址
+        if (addressData['message'][0]['msg_status']) {
+          customerAddress = addressData['customer_address'][0];
+        } else {
+          // 如果 status 為 false，選擇最新地址或其他邏輯
+          // ... (這裡加入您的邏輯)
+        }
 
         // print(customerAddress);
       });
@@ -178,6 +209,119 @@ class _ShopCartPageState extends State<ShopCartPage> {
     return null;
   }
 
+  Widget buildShippingMethodList(List<ShippingMethod> methods) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
+          child: const Text(
+            '物流方式', // 標題
+            style: TextStyle(
+              fontSize: 20.0, // 字體大小
+              fontWeight: FontWeight.bold, // 字體加粗
+            ),
+          ),
+        ),
+        ...methods.map((method) {
+          return ListTile(
+            leading: Radio<int>(
+              value: method.sortOrder!,
+              groupValue: _selectedShippingMethodCode,
+              onChanged: (int? value) {
+                setState(() {
+                  _selectedShippingMethodCode = value!;
+                });
+              },
+            ),
+            title: Text(
+              method.title, // 物流選項標題
+              style: const TextStyle(
+                fontSize: 16.0, // 字體大小
+              ),
+            ),
+            trailing: Text(
+              'NT\$${method.cost}', // 費用
+              style: const TextStyle(
+                fontSize: 16.0, // 字體大小
+                fontWeight: FontWeight.bold, // 字體加粗
+              ),
+            ),
+            onTap: () {
+              setState(() {
+                _selectedShippingMethodCode = method.sortOrder;
+              });
+            },
+          );
+        }).toList(),
+      ],
+    );
+  }
+
+  Future<List<ShippingMethod>> fetchShippingMethods() async {
+    final response = await dio.get(
+      '${appUri}/gws_taxshippingestimate',
+      queryParameters: {
+        'country_id': 206,
+        'zone_id': 3136,
+        'api_key': apiKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = Map<String, dynamic>.from(response.data['shipping_method']);
+      List<ShippingMethod> shippingMethods = data.entries.map((e) {
+        // 解析每個物流方式並返回 ShippingMethod 對象
+        return ShippingMethod.fromJson(e.value);
+      }).where((method) {
+        // 確保 sortOrder 是正數並且沒有錯誤
+        return method.sortOrder! > 0 && !method.error;
+      }).toList();
+      return shippingMethods;
+    } else {
+      throw Exception('Failed to load shipping methods');
+    }
+  }
+
+  Future<void> submitOrder() async {
+    // 构建请求体数据
+    final orderData = {
+      'address_id': customerAddress!['address_id'],
+      'customer': customerData!['customer'],
+      'products': products.map((product) {
+        return {
+          'product_id': product.productId,
+          'quantity': product.quantity,
+          'price': product.price,
+          'total': product.price * product.quantity,
+        };
+      }).toList(),
+      'shipping_sort_order': _selectedShippingMethodCode,
+    };
+
+    print(orderData);
+
+    try {
+      // 发送POST请求
+      final response = await dio.post(
+        '${demoUrl}/api/product/submit',
+        data: orderData,
+      );
+
+      if (response.statusCode == 200) {
+        print(response.data);
+        print('Order submitted successfully');
+        // 可能需要根据响应做进一步处理
+      } else {
+        // 处理其他状态码的情况
+        print('Failed to submit order: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      // 处理请求错误
+      print('Error submitting order: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,16 +350,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                           color: Colors.grey[400],
                         ),
                       ),
-                      SizedBox(height: 20),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     // 這裡添加按鈕的行為，例如返回商店頁面
-                      //   },
-                      //   child: Text('開始選購'),
-                      //   style: ElevatedButton.styleFrom(
-                      //     foregroundColor: Theme.of(context).primaryColor,
-                      //   ),
-                      // )
+                      const SizedBox(height: 20),
                     ],
                   ),
                 )
@@ -244,149 +379,154 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       thickness: 0.5, // 線的厚度
                       height: 20, // 與其他元素的間距
                     ),
-                    if (customerAddress != null)
-                      FutureBuilder<Map<String, dynamic>?>(
-                        future: fetchCountryAndZoneDetails(
-                            customerAddress!['country_id']),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<Map<String, dynamic>?> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return CircularProgressIndicator();
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          } else if (snapshot.hasData) {
-                            final countryDetails = snapshot.data!['country'];
-                            final zoneDetails = snapshot.data!['zone'];
-                            return ListTile(
-                              title: Text(
-                                '收貨地址',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text(
-                                '${customerAddress!['firstname']} ${customerAddress!['lastname']} \n'
-                                '${customerAddress!['address_1']} ${customerAddress!['address_2']} \n'
-                                '${zoneDetails['name']}, ${countryDetails['name']} \n'
-                                '${customerAddress!['postcode']}',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: () {
-                                  // 當編輯按鈕被點擊時的行為
-                                  // 這裡可以導航到一個新頁面，或者顯示一個表單對話框讓用戶更新地址
-                                },
-                              ),
-                            );
-                          } else {
-                            return Text('No data');
-                          }
-                        },
-                      ),
-                    const Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.start, // 將 Row 內的元件對齊到右側
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '商品總計',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        // 這裡可以添加更多的 Column 子元件
-                      ],
-                    ),
                     Expanded(
                       child: ListView.builder(
-                        itemCount: products.length,
+                        itemCount: products.length + 2, // 添加1是为了显示地址信息
                         padding: EdgeInsets.only(bottom: 100.0),
                         itemBuilder: (context, index) {
-                          final product = products[index];
-                          return ListTile(
-                            leading:
-                                Image.network('${imgUrl}' + product.thumbUrl),
-                            title: Text(product.name +
-                                "\nNT\$" +
-                                product.price.toString()),
-                            subtitle: Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.remove),
-                                  onPressed: () async {
-                                    if (product.quantity == 1) {
-                                      // 當數量為1時，顯示確認對話框
-                                      final confirmDelete =
-                                          await showDialog<bool>(
-                                        context: context, // 這裡需要提供BuildContext
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: Text('確認'),
-                                            content: Text('是否要刪除該項目？'),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                child: Text('取消'),
-                                                onPressed: () =>
-                                                    Navigator.of(context)
-                                                        .pop(false), // 不刪除
-                                              ),
-                                              TextButton(
-                                                child: Text('確定刪除'),
-                                                onPressed: () =>
-                                                    Navigator.of(context)
-                                                        .pop(true), // 確認刪除
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-
-                                      if (confirmDelete ?? false) {
-                                        await updateQuantity(product.cartId, 0);
-                                      }
-                                    } else {
-                                      // 若數量不為1，正常增加數量
-                                      setState(() {
-                                        product.decrementQuantity();
-                                      });
-                                      await updateQuantity(
-                                          product.cartId, product.quantity);
-                                    }
-                                  },
-                                ),
-                                Text('数量: ${product.quantity}'),
-                                IconButton(
-                                    icon: Icon(Icons.add),
+                          if (index == 0 && customerAddress != null) {
+                            // 在列表的最上方显示地址信息
+                            return FutureBuilder<Map<String, dynamic>?>(
+                              future: fetchCountryAndZoneDetails(
+                                  customerAddress!['country_id']),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<Map<String, dynamic>?>
+                                      snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else if (snapshot.hasData) {
+                                  final countryDetails =
+                                      snapshot.data!['country'];
+                                  final zoneDetails = snapshot.data!['zone'];
+                                  return ListTile(
+                                    title: const Text(
+                                      '收貨地址',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    subtitle: Text(
+                                      '${customerAddress!['firstname']} ${customerAddress!['lastname']} \n'
+                                      '${customerAddress!['address_1']} ${customerAddress!['address_2']} \n'
+                                      '${zoneDetails['name']}, ${countryDetails['name']} \n'
+                                      '${customerAddress!['postcode']}',
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      onPressed: () {
+                                        // 編輯地址的邏輯
+                                      },
+                                    ),
+                                  );
+                                } else {
+                                  return const Text('No data');
+                                }
+                              },
+                            );
+                          } else if (index == products.length + 1) {
+                            // 显示物流信息
+                            return FutureBuilder<List<ShippingMethod>>(
+                              future: fetchShippingMethods(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else if (snapshot.hasData) {
+                                  // 使用上面的 buildShippingMethodList 方法构建界面
+                                  return buildShippingMethodList(
+                                      snapshot.data!);
+                                } else {
+                                  return const Text(
+                                      'No shipping methods available');
+                                }
+                              },
+                            );
+                          } else {
+                            // 显示商品列表
+                            final product = products[index - 1]; // 调整索引以获取正确的商品
+                            return ListTile(
+                              leading: Image.network(
+                                '${imgUrl}' + product.thumbUrl,
+                                width: 80,
+                              ),
+                              title: Text(product.name +
+                                  "\nNT\$" +
+                                  product.price.toString()),
+                              subtitle: Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.remove),
                                     onPressed: () async {
-                                      // 若數量不為1，正常增加數量
-                                      setState(() {
-                                        product.incrementQuantity();
-                                      });
-                                      await updateQuantity(
-                                          product.cartId, product.quantity);
-                                    }),
-                              ],
-                            ),
-                            trailing: Text(
-                              '小計 NT\$' +
-                                  (product.price * product.quantity).toString(),
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                          );
+                                      if (product.quantity == 1) {
+                                        // 當數量為1時，顯示確認對話框
+                                        final confirmDelete =
+                                            await showDialog<bool>(
+                                          context:
+                                              context, // 這裡需要提供BuildContext
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text('確認'),
+                                              content: Text('是否要刪除該項目？'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: Text('取消'),
+                                                  onPressed: () =>
+                                                      Navigator.of(context)
+                                                          .pop(false), // 不刪除
+                                                ),
+                                                TextButton(
+                                                  child: Text('確定刪除'),
+                                                  onPressed: () =>
+                                                      Navigator.of(context)
+                                                          .pop(true), // 確認刪除
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+
+                                        if (confirmDelete ?? false) {
+                                          await updateQuantity(
+                                              product.cartId, 0);
+                                        }
+                                      } else {
+                                        // 若數量不為1，正常增加數量
+                                        setState(() {
+                                          product.decrementQuantity();
+                                        });
+                                        await updateQuantity(
+                                            product.cartId, product.quantity);
+                                      }
+                                    },
+                                  ),
+                                  Text('数量: ${product.quantity}'),
+                                  IconButton(
+                                      icon: Icon(Icons.add),
+                                      onPressed: () async {
+                                        // 若數量不為1，正常增加數量
+                                        setState(() {
+                                          product.incrementQuantity();
+                                        });
+                                        await updateQuantity(
+                                            product.cartId, product.quantity);
+                                      }),
+                                ],
+                              ),
+                              trailing: Text(
+                                '小計 NT\$' +
+                                    (product.price * product.quantity)
+                                        .toString(),
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            );
+                          }
                         },
                       ),
                     ),
@@ -400,7 +540,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
           child: isLoading
               ? ElevatedButton(
                   onPressed: () {
-                    // 这里可以添加一些逻辑，比如禁止用户点击或显示加载中
+                    submitOrder();
                   },
                   child: const Text(
                     '確定下訂單',
@@ -437,7 +577,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                     )
                   : ElevatedButton(
                       onPressed: () {
-                        // 这里添加结账逻辑
+                        submitOrder();
                       },
                       child: const Text(
                         '確定下訂單',
@@ -495,6 +635,40 @@ class Product {
           int.parse(combinedJson['price'].replaceAll(RegExp(r'[^0-9\.]'), '')),
       quantity: int.parse(combinedJson['quantity']),
       cartId: combinedJson['cart_id'],
+    );
+  }
+}
+
+class ShippingMethod {
+  String title;
+  String costText;
+  String code;
+  int? cost;
+  bool error;
+  int? sortOrder;
+
+  ShippingMethod({
+    required this.title,
+    required this.costText,
+    required this.code,
+    required this.cost,
+    required this.error,
+    required this.sortOrder,
+  });
+
+  factory ShippingMethod.fromJson(Map<String, dynamic> json) {
+    var sortOrderString = json['sort_order']?.toString();
+    int? sortOrder = int.tryParse(sortOrderString ?? '0');
+    var costString = json['quote'].values.first['cost']?.toString();
+    int? cost = int.tryParse(costString ?? '0');
+
+    return ShippingMethod(
+      title: json['title'],
+      costText: json['quote'].values.first['text'],
+      code: json['quote'].values.first['code'],
+      cost: cost ?? 0,
+      error: json['error'],
+      sortOrder: sortOrder ?? 0,
     );
   }
 }
