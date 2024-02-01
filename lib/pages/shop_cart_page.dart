@@ -14,6 +14,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
   double totalAmount = 0.0;
   Map<String, dynamic>? customerAddress;
   int? _selectedShippingMethodCode;
+  String? _selectedPaymentMethod;
 
   @override
   void initState() {
@@ -89,43 +90,6 @@ class _ShopCartPageState extends State<ShopCartPage> {
       setState(() {
         isLoading = false;
       });
-    }
-  }
-
-  Future<void> updateQuantity(String cartId, int quantity) async {
-    if (quantity == 0) {
-      // 当数量为0时，调用删除API
-      try {
-        var response = await dio.get(
-          '${appUri}/gws_customer_cart/remove&customer_id=${customerId}&cart_id=$cartId&api_key=${apiKey}',
-        );
-
-        if (response.data['message'][0]['msg_status'] == true) {
-          fetchCartItems(); // 重新获取购物车数据
-        }
-      } on DioException catch (e) {
-        // 处理错误
-        print(e);
-      }
-    } else {
-      // 当数量不为0时，更新购物车中的项目数量
-      final formData = FormData.fromMap({
-        'quantity': quantity,
-      });
-
-      try {
-        var response = await dio.post(
-          '${appUri}/gws_customer_cart/edit&customer_id=${customerId}&cart_id=$cartId&api_key=${apiKey}',
-          data: formData,
-        );
-
-        if (response.data['message'][0]['msg_status'] == true) {
-          fetchCartItems(); // 重新获取购物车数据
-        }
-      } on DioException catch (e) {
-        // 处理错误
-        print(e);
-      }
     }
   }
 
@@ -294,6 +258,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
           'quantity': product.quantity,
           'price': product.price,
           'total': product.price * product.quantity,
+          'name': product.name
         };
       }).toList(),
       'shipping_sort_order': _selectedShippingMethodCode,
@@ -326,7 +291,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('購物車'),
+        title: const Text('購物車'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
@@ -379,10 +344,63 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       thickness: 0.5, // 線的厚度
                       height: 20, // 與其他元素的間距
                     ),
+                    const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '付款方式',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        ListTile(
+                          leading: Radio<String>(
+                            value: 'bank_transfer',
+                            groupValue: _selectedPaymentMethod,
+                            onChanged: (String? value) {
+                              setState(() {
+                                _selectedPaymentMethod = value;
+                              });
+                            },
+                          ),
+                          title: const Text('銀行轉帳'),
+                        ),
+                        ListTile(
+                          leading: Radio<String>(
+                            value: 'linepay_sainent',
+                            groupValue: _selectedPaymentMethod,
+                            onChanged: (String? value) {
+                              setState(() {
+                                _selectedPaymentMethod = value;
+                              });
+                            },
+                          ),
+                          title: const Text('Line Pay'),
+                        ),
+                        ListTile(
+                          leading: Radio<String>(
+                            value: 'ecpaypayment',
+                            groupValue: _selectedPaymentMethod,
+                            onChanged: (String? value) {
+                              setState(() {
+                                _selectedPaymentMethod = value;
+                              });
+                            },
+                          ),
+                          title: const Text('綠界金流'),
+                        ),
+                      ],
+                    ),
                     Expanded(
                       child: ListView.builder(
                         itemCount: products.length + 2, // 添加1是为了显示地址信息
-                        padding: EdgeInsets.only(bottom: 100.0),
+                        padding: const EdgeInsets.only(bottom: 100.0),
                         itemBuilder: (context, index) {
                           if (index == 0 && customerAddress != null) {
                             // 在列表的最上方显示地址信息
@@ -394,7 +412,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                       snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
+                                  return const CircularProgressIndicator();
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else if (snapshot.hasData) {
@@ -460,69 +478,14 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                   product.price.toString()),
                               subtitle: Row(
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.remove),
-                                    onPressed: () async {
-                                      if (product.quantity == 1) {
-                                        // 當數量為1時，顯示確認對話框
-                                        final confirmDelete =
-                                            await showDialog<bool>(
-                                          context:
-                                              context, // 這裡需要提供BuildContext
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: Text('確認'),
-                                              content: Text('是否要刪除該項目？'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  child: Text('取消'),
-                                                  onPressed: () =>
-                                                      Navigator.of(context)
-                                                          .pop(false), // 不刪除
-                                                ),
-                                                TextButton(
-                                                  child: Text('確定刪除'),
-                                                  onPressed: () =>
-                                                      Navigator.of(context)
-                                                          .pop(true), // 確認刪除
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-
-                                        if (confirmDelete ?? false) {
-                                          await updateQuantity(
-                                              product.cartId, 0);
-                                        }
-                                      } else {
-                                        // 若數量不為1，正常增加數量
-                                        setState(() {
-                                          product.decrementQuantity();
-                                        });
-                                        await updateQuantity(
-                                            product.cartId, product.quantity);
-                                      }
-                                    },
-                                  ),
                                   Text('数量: ${product.quantity}'),
-                                  IconButton(
-                                      icon: Icon(Icons.add),
-                                      onPressed: () async {
-                                        // 若數量不為1，正常增加數量
-                                        setState(() {
-                                          product.incrementQuantity();
-                                        });
-                                        await updateQuantity(
-                                            product.cartId, product.quantity);
-                                      }),
                                 ],
                               ),
                               trailing: Text(
                                 '小計 NT\$' +
                                     (product.price * product.quantity)
                                         .toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                             );
