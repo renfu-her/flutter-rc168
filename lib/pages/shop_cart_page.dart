@@ -267,7 +267,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
           );
         },
       );
-      return; // 直接返回，不执行后面的代码
+      return;
     }
 
     // 构建请求体数据
@@ -406,7 +406,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                 _selectedPaymentMethod = value;
                               });
                             },
-                            hint: Text('選擇付款方式'),
+                            hint: const Text('選擇付款方式'),
                           ),
                         ),
                       ],
