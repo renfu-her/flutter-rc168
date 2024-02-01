@@ -248,6 +248,28 @@ class _ShopCartPageState extends State<ShopCartPage> {
   }
 
   Future<void> submitOrder() async {
+    if (_selectedPaymentMethod == null || _selectedShippingMethodCode == null) {
+      // 使用Flutter的showDialog函数来显示警告对话框
+      showDialog(
+        context: context, // 确保你有一个BuildContext实例名为context
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('錯誤'),
+            content: const Text('付款方式 或者 物流方式沒有選擇'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('確定'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // 关闭对话框
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return; // 直接返回，不执行后面的代码
+    }
+
     // 构建请求体数据
     final orderData = {
       'address_id': customerAddress!['address_id'],
@@ -262,9 +284,8 @@ class _ShopCartPageState extends State<ShopCartPage> {
         };
       }).toList(),
       'shipping_sort_order': _selectedShippingMethodCode,
+      'payment_method': _selectedPaymentMethod
     };
-
-    print(orderData);
 
     try {
       // 发送POST请求
@@ -344,56 +365,49 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       thickness: 0.5, // 線的厚度
                       height: 20, // 與其他元素的間距
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(
                             '付款方式',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        ListTile(
-                          leading: Radio<String>(
-                            value: 'bank_transfer',
-                            groupValue: _selectedPaymentMethod,
-                            onChanged: (String? value) {
-                              setState(() {
-                                _selectedPaymentMethod = value;
-                              });
-                            },
-                          ),
-                          title: const Text('銀行轉帳'),
                         ),
-                        ListTile(
-                          leading: Radio<String>(
-                            value: 'linepay_sainent',
-                            groupValue: _selectedPaymentMethod,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: DropdownButtonFormField<String>(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              isDense: true, // Reduces the dropdown's height
+                            ),
+                            isExpanded: true,
+                            value: _selectedPaymentMethod,
+                            items: const [
+                              DropdownMenuItem(
+                                value: 'bank_transfer',
+                                child: Text('銀行轉帳'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'linepay_sainent',
+                                child: Text('Line Pay'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'ecpaypayment',
+                                child: Text('綠界金流'),
+                              ),
+                            ],
                             onChanged: (String? value) {
                               setState(() {
                                 _selectedPaymentMethod = value;
                               });
                             },
+                            hint: Text('選擇付款方式'),
                           ),
-                          title: const Text('Line Pay'),
-                        ),
-                        ListTile(
-                          leading: Radio<String>(
-                            value: 'ecpaypayment',
-                            groupValue: _selectedPaymentMethod,
-                            onChanged: (String? value) {
-                              setState(() {
-                                _selectedPaymentMethod = value;
-                              });
-                            },
-                          ),
-                          title: const Text('綠界金流'),
                         ),
                       ],
                     ),
