@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
+import 'package:rc168/pages/shop/shop_payment_page.dart';
 
 class ShopCartPage extends StatefulWidget {
   @override
@@ -15,6 +18,8 @@ class _ShopCartPageState extends State<ShopCartPage> {
   Map<String, dynamic>? customerAddress;
   int? _selectedShippingMethodCode;
   String? _selectedPaymentMethod;
+  double _selectedShippingCost = 0.0;
+  double _tempTotalAmount = 0.0;
 
   @override
   void initState() {
@@ -79,6 +84,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
             setState(() {
               products.add(product);
               totalAmount += product.price * product.quantity;
+              _tempTotalAmount += product.price * product.quantity;
             });
           }
         }
@@ -195,6 +201,9 @@ class _ShopCartPageState extends State<ShopCartPage> {
               onChanged: (int? value) {
                 setState(() {
                   _selectedShippingMethodCode = value!;
+                  _selectedShippingCost = method.cost?.toDouble() ?? 0.0;
+                  totalAmount = _tempTotalAmount;
+                  totalAmount = totalAmount + _selectedShippingCost;
                 });
               },
             ),
@@ -214,6 +223,9 @@ class _ShopCartPageState extends State<ShopCartPage> {
             onTap: () {
               setState(() {
                 _selectedShippingMethodCode = method.sortOrder;
+                _selectedShippingCost = method.cost?.toDouble() ?? 0.0;
+                totalAmount = _tempTotalAmount;
+                totalAmount = totalAmount + _selectedShippingCost;
               });
             },
           );
@@ -284,7 +296,8 @@ class _ShopCartPageState extends State<ShopCartPage> {
         };
       }).toList(),
       'shipping_sort_order': _selectedShippingMethodCode,
-      'payment_method': _selectedPaymentMethod
+      'payment_method': _selectedPaymentMethod,
+      'shipping_cost': _selectedShippingCost
     };
 
     try {
@@ -295,15 +308,20 @@ class _ShopCartPageState extends State<ShopCartPage> {
       );
 
       if (response.statusCode == 200) {
-        print(response.data);
-        print('Order submitted successfully');
-        // 可能需要根据响应做进一步处理
+        final responseData = response.data['data'];
+        final htmlUrl =
+            '${demoUrl}/api/product/payment?customerId=${customerId}&orderId=' +
+                responseData['order']['order_id'];
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ShopPaymentPage(htmlUrl: htmlUrl)),
+        );
       } else {
-        // 处理其他状态码的情况
         print('Failed to submit order: ${response.statusCode}');
       }
     } on DioException catch (e) {
-      // 处理请求错误
       print('Error submitting order: $e');
     }
   }
@@ -424,12 +442,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                               builder: (BuildContext context,
                                   AsyncSnapshot<Map<String, dynamic>?>
                                       snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else if (snapshot.hasData) {
+                                if (snapshot.hasData) {
                                   final countryDetails =
                                       snapshot.data!['country'];
                                   final zoneDetails = snapshot.data!['zone'];
@@ -464,12 +477,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                             return FutureBuilder<List<ShippingMethod>>(
                               future: fetchShippingMethods(),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else if (snapshot.hasData) {
+                                if (snapshot.hasData) {
                                   // 使用上面的 buildShippingMethodList 方法构建界面
                                   return buildShippingMethodList(
                                       snapshot.data!);

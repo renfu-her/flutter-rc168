@@ -21,6 +21,8 @@ dependencies:
   share_plus: ^7.2.1
   shared_preferences: ^2.2.2
   url_launcher: ^6.2.2
+  webview_flutter: ^2.0.13
+  webview_flutter_web: ^0.2.2+4
 
 dev_dependencies:
   flutter_test:
@@ -28,7 +30,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter_icons:
-  android: "launcher_icon" 
+  android: "launcher_icon"
   ios: true
   remove_alpah_ios: true
   image_path: "assets/icon.png"
@@ -39,4 +41,3 @@ flutter:
   assets:
     - assets/images/
     - .env
-

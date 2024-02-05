@@ -5,7 +5,7 @@ import 'package:rc168/main.dart';
 import 'package:rc168/pages/product_detail.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:rc168/pages/shop_page.dart';
+import 'package:rc168/pages/shop/shop_page.dart';
 
 var dio = Dio();
 

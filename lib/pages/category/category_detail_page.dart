@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/pages/product_detail.dart';
-import 'package:rc168/pages/shop_page.dart';
+import 'package:rc168/pages/shop/shop_page.dart';
 
 class CategoryDetailPage extends StatefulWidget {
   final String categoryId;

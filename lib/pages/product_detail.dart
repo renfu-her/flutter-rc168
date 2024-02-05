@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
-import 'package:rc168/pages/shop_page.dart';
+import 'package:rc168/pages/shop/shop_page.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:html/parser.dart' as html_parser;

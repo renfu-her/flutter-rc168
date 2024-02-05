@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
-import 'package:rc168/pages/shop_cart_page.dart';
+import 'package:rc168/pages/shop/shop_cart_page.dart';
 
 class ShopPage extends StatefulWidget {
   @override
