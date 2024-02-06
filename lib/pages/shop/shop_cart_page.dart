@@ -297,7 +297,8 @@ class _ShopCartPageState extends State<ShopCartPage> {
       }).toList(),
       'shipping_sort_order': _selectedShippingMethodCode,
       'payment_method': _selectedPaymentMethod,
-      'shipping_cost': _selectedShippingCost
+      'shipping_cost': _selectedShippingCost,
+      'amount': totalAmount,
     };
 
     try {
