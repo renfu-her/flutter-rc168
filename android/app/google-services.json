@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "119927273750",
+    "project_id": "my-keep-371508",
+    "storage_bucket": "my-keep-371508.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:119927273750:android:8dce1d9a7c97530f0af837",
+        "android_client_info": {
+          "package_name": "com.example.rc168"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "119927273750-3p97vv2gi6cff3lo06668gv5jdp0gvm6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdP5niXKv-_Jj_L-JAi8w-37moZdVjUsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "119927273750-3p97vv2gi6cff3lo06668gv5jdp0gvm6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
