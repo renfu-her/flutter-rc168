@@ -44,38 +44,38 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA8jSn2n5NwQkqH9pfFWOjbzYqLqqbXPNk',
-    appId: '1:119927273750:web:79219854e99d13b20af837',
-    messagingSenderId: '119927273750',
-    projectId: 'my-keep-371508',
-    authDomain: 'my-keep-371508.firebaseapp.com',
-    storageBucket: 'my-keep-371508.appspot.com',
-    measurementId: 'G-C2N4Q3YF66',
+    apiKey: 'AIzaSyCzLX9TQQjQulaTFBJhS5yUVnO9Y10Ar5Y',
+    appId: '1:841434982717:web:2fc38bd8ee9cc1d568bd54',
+    messagingSenderId: '841434982717',
+    projectId: 'test-fcm-72314',
+    authDomain: 'test-fcm-72314.firebaseapp.com',
+    storageBucket: 'test-fcm-72314.appspot.com',
+    measurementId: 'G-DL9S3Z3ZDG',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAdP5niXKv-_Jj_L-JAi8w-37moZdVjUsI',
-    appId: '1:119927273750:android:8dce1d9a7c97530f0af837',
-    messagingSenderId: '119927273750',
-    projectId: 'my-keep-371508',
-    storageBucket: 'my-keep-371508.appspot.com',
+    apiKey: 'AIzaSyD-RpwJ3DdvwbvT180rn4kfmCk7TkG0ZvA',
+    appId: '1:841434982717:android:51e176a492d5e9b968bd54',
+    messagingSenderId: '841434982717',
+    projectId: 'test-fcm-72314',
+    storageBucket: 'test-fcm-72314.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCZ8DQkfyjzHp1gsY09ag4rqN-S7X1ITgo',
-    appId: '1:119927273750:ios:d4f0a6885fd3007f0af837',
-    messagingSenderId: '119927273750',
-    projectId: 'my-keep-371508',
-    storageBucket: 'my-keep-371508.appspot.com',
+    apiKey: 'AIzaSyDF2pg89FWBJ_4A8VfEZ-hBoLwkSQ9obSI',
+    appId: '1:841434982717:ios:f0c7fb71712479fc68bd54',
+    messagingSenderId: '841434982717',
+    projectId: 'test-fcm-72314',
+    storageBucket: 'test-fcm-72314.appspot.com',
     iosBundleId: 'com.example.rc168',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCZ8DQkfyjzHp1gsY09ag4rqN-S7X1ITgo',
-    appId: '1:119927273750:ios:4429e2881f5395780af837',
-    messagingSenderId: '119927273750',
-    projectId: 'my-keep-371508',
-    storageBucket: 'my-keep-371508.appspot.com',
+    apiKey: 'AIzaSyDF2pg89FWBJ_4A8VfEZ-hBoLwkSQ9obSI',
+    appId: '1:841434982717:ios:b897a36c9f98753968bd54',
+    messagingSenderId: '841434982717',
+    projectId: 'test-fcm-72314',
+    storageBucket: 'test-fcm-72314.appspot.com',
     iosBundleId: 'com.example.rc168.RunnerTests',
   );
 }

@@ -9,6 +9,7 @@ import 'package:rc168/pages/home_page.dart';
 import 'package:rc168/pages/member/member_page.dart';
 import 'package:rc168/pages/search_page.dart';
 import 'package:rc168/pages/shop/shop_page.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 var dio = Dio();
 String appUrl = 'https://ocapi.remember1688.com';

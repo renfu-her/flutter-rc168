@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "119927273750",
-    "project_id": "my-keep-371508",
-    "storage_bucket": "my-keep-371508.appspot.com"
+    "project_number": "841434982717",
+    "project_id": "test-fcm-72314",
+    "storage_bucket": "test-fcm-72314.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:119927273750:android:8dce1d9a7c97530f0af837",
+        "mobilesdk_app_id": "1:841434982717:android:51e176a492d5e9b968bd54",
         "android_client_info": {
           "package_name": "com.example.rc168"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "119927273750-3p97vv2gi6cff3lo06668gv5jdp0gvm6.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAdP5niXKv-_Jj_L-JAi8w-37moZdVjUsI"
+          "current_key": "AIzaSyD-RpwJ3DdvwbvT180rn4kfmCk7TkG0ZvA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "119927273750-3p97vv2gi6cff3lo06668gv5jdp0gvm6.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
