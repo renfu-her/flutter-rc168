@@ -9,7 +9,14 @@ import 'package:rc168/pages/home_page.dart';
 import 'package:rc168/pages/member/member_page.dart';
 import 'package:rc168/pages/search_page.dart';
 import 'package:rc168/pages/shop/shop_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:rc168/firebase_options.dart';
+
+// 创建一个全局的通知插件实例
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 var dio = Dio();
 String appUrl = 'https://ocapi.remember1688.com';
@@ -19,7 +26,7 @@ String apiKey =
     'CNQ4eX5WcbgFQVkBXFKmP9AE2AYUpU2HySz2wFhwCZ3qExG6Tep7ZCSZygwzYfsF';
 String demoUrl = 'https://demo.dev-laravel.co';
 String logoImg = '';
-String category_id = '';
+String categoryId = '';
 String email = '';
 String lastName = '';
 String firstName = '';
@@ -32,11 +39,48 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserPreferences.init();
 
+  // 初始化设置
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher'); // 使用应用图标
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
   runApp(MyApp());
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+}
+
+// 通知類
+Future<void> showOrderPlacedNotification() async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+    'order_channel', // 频道ID
+    'Order Notifications', // 频道名称
+    channelDescription: 'Notification channel for order updates', // 频道描述
+    importance: Importance.max,
+    priority: Priority.high,
+    ticker: 'Order Placed',
+  );
+  const NotificationDetails platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+  await flutterLocalNotificationsPlugin.show(
+    0, // 通知ID
+    '訂單通知', // 通知标题
+    '訂單通知 - 已經訂購完成.', // 通知内容
+    platformChannelSpecifics,
+  );
+}
+
+Future<void> showOrderCompletedNotification() async {
+  // 类似于 showOrderPlacedNotification，修改为订单完成的相关信息
+}
+
+Future<void> showOrderCancelledNotification() async {
+  // 类似于 showOrderPlacedNotification，修改为订单取消的相关信息
 }
 
 class MyApp extends StatelessWidget {
@@ -67,6 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    // showOrderPlacedNotification();
     getSetting().then((img) {
       if (mounted) {
         setState(() {
