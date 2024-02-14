@@ -55,7 +55,7 @@ void main() async {
 }
 
 // 通知類
-Future<void> showOrderPlacedNotification() async {
+Future<void> showOrderPlacedNotification(String orderId) async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
     'order_channel', // 频道ID
@@ -70,7 +70,7 @@ Future<void> showOrderPlacedNotification() async {
   await flutterLocalNotificationsPlugin.show(
     0, // 通知ID
     '訂單通知', // 通知标题
-    '訂單通知 - 已經訂購完成.', // 通知内容
+    '訂單編號：${orderId}，已經訂購完成.', // 通知内容
     platformChannelSpecifics,
   );
 }
@@ -81,6 +81,23 @@ Future<void> showOrderCompletedNotification() async {
 
 Future<void> showOrderCancelledNotification() async {
   // 类似于 showOrderPlacedNotification，修改为订单取消的相关信息
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+    'order_channel', // 频道ID
+    'Order Notifications', // 频道名称
+    channelDescription: 'Notification channel for order updates', // 频道描述
+    importance: Importance.max,
+    priority: Priority.high,
+    ticker: 'Order Placed',
+  );
+  const NotificationDetails platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+  await flutterLocalNotificationsPlugin.show(
+    0, // 通知ID
+    '訂單通知', // 通知标题
+    '訂單通知 - 訂單已經取消.', // 通知内容
+    platformChannelSpecifics,
+  );
 }
 
 class MyApp extends StatelessWidget {
