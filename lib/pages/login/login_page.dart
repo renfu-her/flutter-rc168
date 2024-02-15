@@ -131,7 +131,9 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             ElevatedButton(
-              onPressed: _login,
+              onPressed: () {
+                authenticateWithFingerprint();
+              },
               child: Text(
                 '使用指紋登入',
                 style: TextStyle(fontSize: 18),
