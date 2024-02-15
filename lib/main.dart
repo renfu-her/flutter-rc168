@@ -9,10 +9,8 @@ import 'package:rc168/pages/home_page.dart';
 import 'package:rc168/pages/member/member_page.dart';
 import 'package:rc168/pages/search_page.dart';
 import 'package:rc168/pages/shop/shop_page.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:rc168/firebase_options.dart';
+import 'package:local_auth/local_auth.dart';
 
 // 创建一个全局的通知插件实例
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -39,12 +37,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserPreferences.init();
 
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  final bool useFingerprint = prefs.getBool('useFingerprint') ?? false;
+  print(isLoggedIn);
+  print(useFingerprint);
+
   // 初始化设置
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher'); // 使用应用图标
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
   );
+
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   runApp(MyApp());
@@ -52,52 +57,6 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-}
-
-// 通知類
-Future<void> showOrderPlacedNotification(String orderId) async {
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
-    'order_channel', // 频道ID
-    'Order Notifications', // 频道名称
-    channelDescription: 'Notification channel for order updates', // 频道描述
-    importance: Importance.max,
-    priority: Priority.high,
-    ticker: 'Order Placed',
-  );
-  const NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
-  await flutterLocalNotificationsPlugin.show(
-    0, // 通知ID
-    '訂單通知', // 通知标题
-    '訂單編號：${orderId}，已經訂購完成.', // 通知内容
-    platformChannelSpecifics,
-  );
-}
-
-Future<void> showOrderCompletedNotification() async {
-  // 类似于 showOrderPlacedNotification，修改为订单完成的相关信息
-}
-
-Future<void> showOrderCancelledNotification() async {
-  // 类似于 showOrderPlacedNotification，修改为订单取消的相关信息
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
-    'order_channel', // 频道ID
-    'Order Notifications', // 频道名称
-    channelDescription: 'Notification channel for order updates', // 频道描述
-    importance: Importance.max,
-    priority: Priority.high,
-    ticker: 'Order Placed',
-  );
-  const NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
-  await flutterLocalNotificationsPlugin.show(
-    0, // 通知ID
-    '訂單通知', // 通知标题
-    '訂單通知 - 訂單已經取消.', // 通知内容
-    platformChannelSpecifics,
-  );
 }
 
 class MyApp extends StatelessWidget {
@@ -304,5 +263,66 @@ class UserPreferences {
     email = '';
     isLogin = false;
     fullName = '';
+  }
+}
+
+// 通知類
+Future<void> showOrderPlacedNotification(String orderId) async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+    'order_channel', // 频道ID
+    'Order Notifications', // 频道名称
+    channelDescription: 'Notification channel for order updates', // 频道描述
+    importance: Importance.max,
+    priority: Priority.high,
+    ticker: 'Order Placed',
+  );
+  const NotificationDetails platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+  await flutterLocalNotificationsPlugin.show(
+    0, // 通知ID
+    '訂單通知', // 通知标题
+    '訂單編號：${orderId}，已經訂購完成.', // 通知内容
+    platformChannelSpecifics,
+  );
+}
+
+Future<void> showOrderCompletedNotification() async {
+  // 类似于 showOrderPlacedNotification，修改为订单完成的相关信息
+}
+
+Future<void> showOrderCancelledNotification() async {
+  // 类似于 showOrderPlacedNotification，修改为订单取消的相关信息
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+    'order_channel', // 频道ID
+    'Order Notifications', // 频道名称
+    channelDescription: 'Notification channel for order updates', // 频道描述
+    importance: Importance.max,
+    priority: Priority.high,
+    ticker: 'Order Placed',
+  );
+  const NotificationDetails platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+  await flutterLocalNotificationsPlugin.show(
+    0, // 通知ID
+    '訂單通知', // 通知标题
+    '訂單通知 - 訂單已經取消.', // 通知内容
+    platformChannelSpecifics,
+  );
+}
+
+// 指紋辨識
+Future<void> authenticateWithFingerprint() async {
+  final LocalAuthentication auth = LocalAuthentication();
+  final bool didAuthenticate = await auth.authenticate(
+    localizedReason: '請使用指紋登入',
+    options: const AuthenticationOptions(biometricOnly: true),
+  );
+
+  if (didAuthenticate) {
+    // 認證成功，進入主界面
+  } else {
+    // 認證失敗，處理方式根據需求定
   }
 }

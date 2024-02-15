@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   final Function onLoginSuccess;
@@ -52,6 +53,8 @@ class _LoginPageState extends State<LoginPage> {
         email = _emailController.text;
         isLogin = true;
         widget.onLoginSuccess();
+        saveLoginState(isLogin);
+
         Navigator.pop(context);
       } else {
         _showDialog('登入失敗', '帳號密碼輸入錯誤。');
@@ -147,4 +150,14 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+Future<void> saveLoginState(bool isLoggedIn) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('isLoggedIn', isLoggedIn);
+}
+
+Future<void> saveFingerprintOption(bool useFingerprint) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('useFingerprint', useFingerprint);
 }

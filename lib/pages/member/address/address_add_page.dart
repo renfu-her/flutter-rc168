@@ -30,7 +30,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
   bool _validateAndSaveForm() {
     final form = _formKey.currentState;
     if (form != null && form.validate()) {
-      form.save(); // Save the form if it's valid
+      form.save();
       return true;
     }
     return false;
@@ -175,14 +175,14 @@ class _AddressAddPageState extends State<AddressAddPage> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
               TextFormField(
                 controller: _lastNameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '名字 *',
                 ),
                 validator: (value) {
@@ -194,7 +194,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
               ),
               TextFormField(
                 controller: _firstNameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '姓式 *',
                 ),
                 validator: (value) {
@@ -206,13 +206,13 @@ class _AddressAddPageState extends State<AddressAddPage> {
               ),
               TextFormField(
                 controller: _companyController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '公司/服務單位',
                 ),
               ),
               TextFormField(
                 controller: _address1Controller,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '地址1 *',
                 ),
                 validator: (value) {
@@ -224,13 +224,13 @@ class _AddressAddPageState extends State<AddressAddPage> {
               ),
               TextFormField(
                 controller: _address2Controller,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '地址2',
                 ),
               ),
               TextFormField(
                 controller: _postcodeController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '郵遞區號 *',
                 ),
                 validator: (value) {
@@ -242,7 +242,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
               ),
               TextFormField(
                 controller: _cityController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '區/鄉/鎮 *',
                 ),
                 validator: (value) {
@@ -291,7 +291,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
             },
             child: Text(
               '增加新地址',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
