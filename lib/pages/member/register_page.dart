@@ -157,7 +157,6 @@ class _RegisterPageState extends State<RegisterPage> {
       } else {
         // Handle the error
         _showDialog('註冊失敗', '請確認 E-mail 是否已經註冊。');
-        print('Failed to register');
       }
     } catch (e) {
       // Handle any exceptions
