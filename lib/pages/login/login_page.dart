@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:rc168/pages/fingerprint.dart';
 
 class LoginPage extends StatefulWidget {
   final Function onLoginSuccess;
@@ -134,7 +135,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                authenticateWithFingerprint();
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => FingerprintPage()));
               },
               child: Text(
                 '使用指紋登入',
