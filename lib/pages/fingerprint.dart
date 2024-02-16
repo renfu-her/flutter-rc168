@@ -5,109 +5,262 @@ import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 
 class FingerprintPage extends StatefulWidget {
+  const FingerprintPage({Key? key}) : super(key: key);
+
   @override
-  _FingerprintPageState createState() => _FingerprintPageState();
+  State<FingerprintPage> createState() => _FingerprintPageState();
 }
 
 class _FingerprintPageState extends State<FingerprintPage> {
-  /// 本地认证框架
   final LocalAuthentication auth = LocalAuthentication();
-
-  /// 是否有可用的生物识别技术
+  _SupportState _supportState = _SupportState.unknown;
   bool? _canCheckBiometrics;
-
-  /// 生物识别技术列表
   List<BiometricType>? _availableBiometrics;
+  String _authorized = 'Not Authorized';
+  bool _isAuthenticating = false;
 
-  /// 识别结果
-  String _authorized = '验证失败';
+  @override
+  void initState() {
+    super.initState();
+    auth.isDeviceSupported().then(
+          (bool isSupported) => setState(() => _supportState = isSupported
+              ? _SupportState.supported
+              : _SupportState.unsupported),
+        );
+  }
 
-  /// 检查是否有可用的生物识别技术
   Future<void> _checkBiometrics() async {
-    bool? canCheckBiometrics;
+    late bool canCheckBiometrics;
     try {
       canCheckBiometrics = await auth.canCheckBiometrics;
     } on PlatformException catch (e) {
+      canCheckBiometrics = false;
       print(e);
     }
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     setState(() {
       _canCheckBiometrics = canCheckBiometrics;
     });
   }
 
-  /// 获取生物识别技术列表
   Future<void> _getAvailableBiometrics() async {
-    List<BiometricType>? availableBiometrics;
+    late List<BiometricType> availableBiometrics;
     try {
       availableBiometrics = await auth.getAvailableBiometrics();
     } on PlatformException catch (e) {
+      availableBiometrics = <BiometricType>[];
       print(e);
     }
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     setState(() {
       _availableBiometrics = availableBiometrics;
     });
   }
 
-  /// 生物识别
+  // Future<void> _authenticate() async {
+  //   bool authenticated = false;
+  //   try {
+  //     setState(() {
+  //       _isAuthenticating = true;
+  //       _authorized = 'Authenticating';
+  //     });
+  //     authenticated = await auth.authenticate(
+  //       localizedReason: 'Let OS determine authentication method',
+  //       options: const AuthenticationOptions(
+  //         stickyAuth: true,
+  //       ),
+  //     );
+  //     setState(() {
+  //       _isAuthenticating = false;
+  //     });
+  //   } on PlatformException catch (e) {
+  //     print(e);
+  //     setState(() {
+  //       _isAuthenticating = false;
+  //       _authorized = 'Error - ${e.message}';
+  //     });
+  //     return;
+  //   }
+  //   if (!mounted) {
+  //     return;
+  //   }
+
+  //   setState(
+  //       () => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
+  // }
+
   Future<void> _authenticate() async {
     bool authenticated = false;
     try {
+      setState(() {
+        _isAuthenticating = true; // 更新狀態為正在認證
+        _authorized = '正在進行身份認證';
+      });
+
+      // 調用local_auth的authenticate方法
       authenticated = await auth.authenticate(
-        localizedReason: '掃描指紋進行身份驗證',
+        localizedReason: '請掃描您的指紋進行認證', // 在彈窗中顯示的提示信息
         options: const AuthenticationOptions(
-          biometricOnly: true,
-          useErrorDialogs: true,
-          stickyAuth: false,
+          useErrorDialogs: true, // 出錯時是否顯示錯誤對話框
+          stickyAuth: true,
+          biometricOnly: true, // 背景持久化認證會話
         ),
       );
+
+      setState(() {
+        _authorized = authenticated ? '認證成功' : '認證失敗';
+      });
     } on PlatformException catch (e) {
+      setState(() {
+        _authorized = "錯誤 - ${e.message}";
+        _isAuthenticating = false; // 更新狀態為非認證狀態
+      });
       print(e);
     }
     if (!mounted) return;
-
+    final String message = authenticated ? '認證成功' : '認證失敗';
     setState(() {
-      _authorized = authenticated ? '驗證通過' : '驗證失敗';
+      _isAuthenticating = false;
+      _authorized = message;
     });
+  }
+
+  Future<void> _authenticateWithBiometrics() async {
+    bool authenticated = false;
+    try {
+      setState(() {
+        _isAuthenticating = true;
+        _authorized = 'Authenticating';
+      });
+      authenticated = await auth.authenticate(
+        localizedReason:
+            'Scan your fingerprint (or face or whatever) to authenticate',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: true,
+        ),
+      );
+      setState(() {
+        _isAuthenticating = false;
+        _authorized = 'Authenticating';
+      });
+    } on PlatformException catch (e) {
+      print(e);
+      setState(() {
+        _isAuthenticating = false;
+        _authorized = 'Error - ${e.message}';
+      });
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+
+    final String message = authenticated ? 'Authorized' : 'Not Authorized';
+    setState(() {
+      _authorized = message;
+    });
+  }
+
+  Future<void> _cancelAuthentication() async {
+    await auth.stopAuthentication();
+    setState(() => _isAuthenticating = false);
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-      appBar: AppBar(
-        title: Text('指紋辨識'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('指紋辨識'),
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: ListView(
+          padding: const EdgeInsets.only(top: 30),
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                if (_supportState == _SupportState.unknown)
+                  const CircularProgressIndicator()
+                else if (_supportState == _SupportState.supported)
+                  const Text('This device is supported')
+                else
+                  const Text('This device is not supported'),
+                const Divider(height: 100),
+                Text('Can check biometrics: $_canCheckBiometrics\n'),
+                ElevatedButton(
+                  onPressed: _checkBiometrics,
+                  child: const Text('Check biometrics'),
+                ),
+                const Divider(height: 100),
+                Text('Available biometrics: $_availableBiometrics\n'),
+                ElevatedButton(
+                  onPressed: _getAvailableBiometrics,
+                  child: const Text('Get available biometrics'),
+                ),
+                const Divider(height: 100),
+                Text('Current State: $_authorized\n'),
+                if (_isAuthenticating)
+                  ElevatedButton(
+                    onPressed: _cancelAuthentication,
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text('Cancel Authentication'),
+                        Icon(Icons.cancel),
+                      ],
+                    ),
+                  )
+                else
+                  Column(
+                    children: <Widget>[
+                      ElevatedButton(
+                        onPressed: _authenticate,
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text('Authenticate'),
+                            Icon(Icons.perm_device_information),
+                          ],
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: _authenticateWithBiometrics,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(_isAuthenticating
+                                ? 'Cancel'
+                                : 'Authenticate: biometrics only'),
+                            const Icon(Icons.fingerprint),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+          ],
         ),
       ),
-      body: ConstrainedBox(
-          constraints: const BoxConstraints.expand(),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Text('是否有可用的生物识别技术: $_canCheckBiometrics\n'),
-                ElevatedButton(
-                  child: const Text('检查生物识别技术'),
-                  onPressed: _checkBiometrics,
-                ),
-                Text('可用的生物识别技术: $_availableBiometrics\n'),
-                ElevatedButton(
-                  child: const Text('获取可用的生物识别技术'),
-                  onPressed: _getAvailableBiometrics,
-                ),
-                Text('状态: $_authorized\n'),
-                ElevatedButton(
-                  child: const Text('验证'),
-                  onPressed: _authenticate,
-                )
-              ])),
-    ));
+    );
   }
+}
+
+enum _SupportState {
+  unknown,
+  supported,
+  unsupported,
 }

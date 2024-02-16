@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:rc168/pages/fingerprint.dart';
+
+import 'package:flutter/services.dart';
 
 class LoginPage extends StatefulWidget {
   final Function onLoginSuccess;
@@ -20,6 +23,10 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
   final LocalAuthentication auth = LocalAuthentication();
+  bool? _canCheckBiometrics;
+  List<BiometricType>? _availableBiometrics;
+  String _authorized = 'Not Authorized';
+  bool _isAuthenticating = false;
 
   @override
   void dispose() {
@@ -30,6 +37,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     final formData = FormData.fromMap({
       'email': _emailController.text,
       'password': _passwordController.text,
@@ -58,6 +67,9 @@ class _LoginPageState extends State<LoginPage> {
         widget.onLoginSuccess();
         saveLoginState(isLogin);
 
+        await prefs.setString('email', _emailController.text);
+        print(email);
+
         Navigator.pop(context);
       } else {
         _showDialog('登入失敗', '帳號密碼輸入錯誤。');
@@ -85,6 +97,52 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  Future<void> _authenticate() async {
+    bool authenticated = false;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+      setState(() {
+        _isAuthenticating = true; // 更新狀態為正在認證
+        _authorized = '正在進行身份認證';
+      });
+
+      // 調用local_auth的authenticate方法
+      authenticated = await auth.authenticate(
+        localizedReason: '請掃描您的指紋進行認證', // 在彈窗中顯示的提示信息
+        options: const AuthenticationOptions(
+          useErrorDialogs: true, // 出錯時是否顯示錯誤對話框
+          stickyAuth: true,
+          biometricOnly: true, // 背景持久化認證會話
+        ),
+      );
+
+      setState(() {
+        _authorized = authenticated ? '認證成功' : '認證失敗';
+        if (authenticated) {
+          email = prefs.getString('email').toString();
+          isLogin = true;
+          widget.onLoginSuccess();
+          saveLoginState(isLogin);
+
+          Navigator.pop(context);
+        }
+      });
+    } on PlatformException catch (e) {
+      setState(() {
+        _authorized = "錯誤 - ${e.message}";
+        _isAuthenticating = false; // 更新狀態為非認證狀態
+      });
+      print(e);
+    }
+    if (!mounted) return;
+    final String message = authenticated ? '認證成功' : '認證失敗';
+    setState(() {
+      _isAuthenticating = false;
+      _authorized = message;
+    });
   }
 
   @override
@@ -135,8 +193,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => FingerprintPage()));
+                // Navigator.of(context).push(MaterialPageRoute(
+                //     builder: (context) => const FingerprintPage()));
+                _authenticate();
               },
               child: Text(
                 '使用指紋登入',

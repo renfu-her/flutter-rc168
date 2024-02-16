@@ -259,8 +259,8 @@ class UserPreferences {
 
   static Future logout() async {
     await _preferences?.setBool(_keyLoggedIn, false);
-    await _preferences?.remove(_keyEmail);
-    email = '';
+    // await _preferences?.remove(_keyEmail);
+    // email = '';
     isLogin = false;
     fullName = '';
   }
