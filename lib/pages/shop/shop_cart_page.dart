@@ -135,7 +135,6 @@ class _ShopCartPageState extends State<ShopCartPage> {
           customerAddress = addressData['customer_address'][0];
         } else {
           // 如果 status 為 false，選擇最新地址或其他邏輯
-          // ... (這裡加入您的邏輯)
         }
 
         // print(customerAddress);
