@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/pages/product_detail.dart';
-import 'package:rc168/pages/shop/shop_page.dart';
+// import 'package:rc168/pages/shop/shop_page.dart';
 
 class CategoryDetailPage extends StatefulWidget {
   final String categoryId;
@@ -18,7 +18,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
   List<Category> categories = [];
   bool isLoading = true;
   SortOption currentSortOption = SortOption.defaultSort;
-  int _selectedQuantity = 1;
+  // int _selectedQuantity = 1;
 
   @override
   void initState() {
@@ -202,8 +202,8 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                                 );
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.blue,
-                                onPrimary: Colors.white,
+                                backgroundColor: Colors.blue,
+                                foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(6),
                                 ),
@@ -283,4 +283,3 @@ Future<void> addToCart(String productId, int quantity) async {
     print(e);
   }
 }
-
