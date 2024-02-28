@@ -177,9 +177,12 @@ class _ShopPageState extends State<ShopPage> {
                               '${imgUrl}' + product.thumbUrl,
                               width: 80,
                             ),
-                            title: Text(product.name +
-                                "\nNT\$" +
-                                product.price.toString()),
+                            title: ResponsiveText(
+                              product.name +
+                                  "\nNT\$" +
+                                  product.price.toString(),
+                              fontSize: 18,
+                            ),
                             subtitle: Row(
                               children: [
                                 IconButton(
@@ -225,7 +228,10 @@ class _ShopPageState extends State<ShopPage> {
                                     }
                                   },
                                 ),
-                                Text('数量: ${product.quantity}'),
+                                ResponsiveText(
+                                  '数量: ${product.quantity}',
+                                  fontSize: 18,
+                                ),
                                 IconButton(
                                     icon: Icon(Icons.add),
                                     onPressed: () async {
@@ -241,7 +247,7 @@ class _ShopPageState extends State<ShopPage> {
                             trailing: ResponsiveText(
                               'NT\$' +
                                   (product.price * product.quantity).toString(),
-                              fontSize: 16,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           );
@@ -282,10 +288,7 @@ class _ShopPageState extends State<ShopPage> {
                         Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) => MyApp()));
                       },
-                      child: const Text(
-                        '逛逛賣場',
-                        style: TextStyle(fontSize: 18),
-                      ),
+                      child: ResponsiveText('逛逛賣場', fontSize: 18),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
                         foregroundColor: Colors.white, // 文本颜色为白色

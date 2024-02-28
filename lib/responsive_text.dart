@@ -24,7 +24,7 @@ class ResponsiveText extends StatelessWidget {
     // 获取屏幕的宽度
     double screenWidth = MediaQuery.of(context).size.width;
     // 根据屏幕宽度设置文字大小
-    double fontSize = screenWidth / (430 / this.fontSize); // 假设以600为基准进行调整
+    double fontSize = screenWidth / (600 / this.fontSize); // 假设以600为基准进行调整
 
     return Text(
       text,
