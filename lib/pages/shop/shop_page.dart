@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/shop/shop_cart_page.dart';
+import 'package:rc168/responsive_text.dart';
 
 class ShopPage extends StatefulWidget {
   @override
@@ -126,12 +127,10 @@ class _ShopPageState extends State<ShopPage> {
                         size: 80,
                         color: Colors.grey[400],
                       ),
-                      Text(
+                      ResponsiveText(
                         '您的購物車是空的!',
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.grey[400],
-                        ),
+                        fontSize: 24,
+                        color: Colors.grey[400]!,
                       ),
                       SizedBox(height: 20),
                       // ElevatedButton(
@@ -153,16 +152,12 @@ class _ShopPageState extends State<ShopPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            '商品總計',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            'NT\$${totalAmount.toStringAsFixed(0)}',
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
+                          ResponsiveText('商品總計',
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                          ResponsiveText(
+                              'NT\$${totalAmount.toStringAsFixed(0)}',
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
                         ],
                       ),
                     ),
@@ -243,11 +238,11 @@ class _ShopPageState extends State<ShopPage> {
                                     }),
                               ],
                             ),
-                            trailing: Text(
-                              '小計 NT\$' +
+                            trailing: ResponsiveText(
+                              'NT\$' +
                                   (product.price * product.quantity).toString(),
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           );
                         },
@@ -266,9 +261,10 @@ class _ShopPageState extends State<ShopPage> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ShopCartPage()));
                   },
-                  child: const Text(
+                  child: ResponsiveText(
                     '結 帳',
-                    style: TextStyle(fontSize: 18),
+                    fontSize: 18,
+                    color: Colors.white,
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey, // 按钮背景颜色为灰色
@@ -305,9 +301,10 @@ class _ShopPageState extends State<ShopPage> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ShopCartPage()));
                       },
-                      child: const Text(
+                      child: ResponsiveText(
                         '結 帳',
-                        style: TextStyle(fontSize: 18),
+                        fontSize: 18,
+                        color: Colors.white,
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色

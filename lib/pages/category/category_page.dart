@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/category/category_detail_page.dart';
+import 'package:rc168/responsive_text.dart';
 
 class CategoryPage extends StatefulWidget {
   @override
@@ -75,9 +76,9 @@ class _CategoryPageState extends State<CategoryPage> {
                     // 確保文字和圖片高度一致
                     alignment: Alignment.centerLeft,
                     height: 65,
-                    child: Text(
+                    child: ResponsiveText(
                       category.name,
-                      style: TextStyle(fontSize: 18),
+                      fontSize: 18,
                     ),
                   ),
                   onTap: () {

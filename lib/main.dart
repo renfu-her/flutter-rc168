@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,10 +12,15 @@ import 'package:rc168/pages/search_page.dart';
 import 'package:rc168/pages/shop/shop_page.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:rc168/firebase_options.dart';
 
 // 创建一个全局的通知插件实例
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+
+FirebaseMessaging messaging = FirebaseMessaging.instance;
 
 var dio = Dio();
 String appUrl = 'https://ocapi.remember1688.com';
@@ -53,6 +59,15 @@ void main() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   runApp(MyApp());
+
+  // firebase message notification
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
+  log("FCMToken $fcmToken");
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -86,7 +101,38 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) {
+        String? body = message.notification?.body ?? "";
+        String? title = message.notification?.title ?? "";
+
+        const AndroidNotificationDetails androidPlatformChannelSpecifics =
+            AndroidNotificationDetails(
+          'notification_channel', // 频道ID
+          'Message Notifications', // 频道名称
+          channelDescription: 'Notification channel for order updates', // 频道描述
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'Message Placed',
+        );
+        const NotificationDetails platformChannelSpecifics =
+            NotificationDetails(android: androidPlatformChannelSpecifics);
+        flutterLocalNotificationsPlugin.show(
+          0, // 通知ID
+          title, // 通知标题
+          body, // 通知内容
+          platformChannelSpecifics,
+        );
+        // debugPrint("onMessage:");
+        // log("onMessage: $message");
+        // final snackBar =
+        //     SnackBar(content: Text(message.notification?.title ?? ""));
+        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      },
+    );
+
     super.initState();
+
     // showOrderPlacedNotification();
     getSetting().then((img) {
       if (mounted) {
@@ -100,6 +146,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     setUserPreferences();
+    //_getToken();
+  }
+
+  void _getToken() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    late String? token;
+    token = await messaging.getToken();
+    if (token != null) {
+      print("token: $token");
+      setState(() {
+        // _push_token = token!;
+      });
+    }
   }
 
   void setUserPreferences() async {
@@ -325,4 +384,9 @@ Future<void> authenticateWithFingerprint() async {
   } else {
     // 認證失敗，處理方式根據需求定
   }
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(message) async {
+  await Firebase.initializeApp();
+  print('Handling a background message ${message.messageId}');
 }

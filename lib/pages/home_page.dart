@@ -6,6 +6,7 @@ import 'package:rc168/pages/product_detail.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:rc168/pages/shop/shop_page.dart';
+import 'package:rc168/responsive_text.dart';
 
 var dio = Dio();
 
@@ -92,14 +93,12 @@ class _HomePageState extends State<HomePage> {
               return const Center(child: CircularProgressIndicator());
             },
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(16.0),
-            child: Text(
+            child: ResponsiveText(
               '最新商品',
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
               textAlign: TextAlign.center,
             ),
           ),
@@ -168,15 +167,14 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment:
                                     CrossAxisAlignment.center, // 將對齊方式改為置中
                                 children: <Widget>[
-                                  Text(
+                                  ResponsiveText(
                                     product.name,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
+                                    fontWeight: FontWeight.bold,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.center, // 文本對齊也設置為居中
                                   ),
-                                  Text(
+                                  ResponsiveText(
                                     product.price,
                                     textAlign: TextAlign.center, // 文本對齊設置為居中
                                   ),
@@ -186,9 +184,10 @@ class _HomePageState extends State<HomePage> {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8.0),
                               child: ElevatedButton(
-                                child: Text(
+                                child: ResponsiveText(
                                   '加入購物車',
-                                  style: TextStyle(fontSize: 18),
+                                  fontSize: 18,
+                                  color: Colors.white,
                                 ),
                                 onPressed: () async {
                                   Navigator.push(

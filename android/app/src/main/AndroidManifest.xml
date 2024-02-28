@@ -33,8 +33,9 @@
         <service
             android:name="com.google.firebase.messaging.FirebaseMessagingService"
             android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.messaging.NOTIFICATION_OPEN" />
+             <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
     </application>

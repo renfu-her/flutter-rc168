@@ -6,6 +6,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as dom;
+import 'package:rc168/responsive_text.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -103,12 +104,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
               if (options.isNotEmpty) {
                 contentWidgets.add(
-                  const Center(
-                    child: Text(
-                      '商品選項',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
+                  Center(
+                    child: ResponsiveText('商品選項',
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 );
               }
@@ -125,7 +123,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         flex: 3,
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            hint: Text('請選擇'),
+                            hint: const Text('請選擇'),
                             isExpanded: true,
                             value: selectedOptionValues[option.id],
                             onChanged: (String? newValue) {
@@ -197,15 +195,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(product['name'],
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
+                                ResponsiveText(product['name'],
+                                    fontSize: 18, fontWeight: FontWeight.bold),
                                 Center(
                                   // 将Text包裹在Center小部件中以实现居中对齐
-                                  child: Text('NT${product['price']}',
-                                      style: const TextStyle(
-                                          fontSize: 18, color: Colors.red)),
+                                  child: ResponsiveText('NT${product['price']}',
+                                      fontSize: 18, color: Colors.red),
                                 ),
                               ],
                             ),
@@ -232,13 +227,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   borderRadius:
                                       BorderRadius.circular(5.0), // 邊框圓角
                                 ),
-                                child: Text(
+                                child: ResponsiveText(
                                   product['stock_status'],
-                                  style: TextStyle(
-                                    color: product['stock_status'] == '有現貨'
-                                        ? Colors.green
-                                        : Colors.red, // 文本顏色也可以相應改變
-                                  ),
+                                  color: product['stock_status'] == '有現貨'
+                                      ? Colors.green
+                                      : Colors.red, // 文本顏色也可以相應改變
                                 ),
                               ),
                               const SizedBox(height: 6),
@@ -258,11 +251,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ...contentWidgets,
                     ...optionWidgets,
                     const SizedBox(height: 6),
-                    const Center(
-                      child: Text(
+                    Center(
+                      child: ResponsiveText(
                         '商品說明',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -275,9 +268,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                ResponsiveText(
                                     convertHtmlToString(product['description']),
-                                    style: const TextStyle(fontSize: 18)),
+                                    fontSize: 18),
                               ],
                             ),
                           ),
@@ -332,10 +325,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => MyApp()));
             },
-            child: Text(
-              '加入購物車',
-              style: TextStyle(fontSize: 18),
-            ),
+            child: ResponsiveText('加入購物車', fontSize: 18, color: Colors.white),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
               foregroundColor: Colors.white, // 文本颜色为白色
