@@ -288,7 +288,8 @@ class _ShopPageState extends State<ShopPage> {
                         Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) => MyApp()));
                       },
-                      child: ResponsiveText('逛逛賣場', fontSize: 18),
+                      child: ResponsiveText('逛逛賣場',
+                          fontSize: 18, color: Colors.white),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
                         foregroundColor: Colors.white, // 文本颜色为白色

@@ -344,6 +344,8 @@ Future<void> showOrderPlacedNotification(String orderId) async {
     '訂單編號：${orderId}，已經訂購完成.', // 通知内容
     platformChannelSpecifics,
   );
+
+  fetchAndRemoveCartItems();
 }
 
 Future<void> showOrderCompletedNotification() async {
@@ -389,4 +391,59 @@ Future<void> authenticateWithFingerprint() async {
 Future<void> _firebaseMessagingBackgroundHandler(message) async {
   await Firebase.initializeApp();
   print('Handling a background message ${message.messageId}');
+}
+
+void fetchAndRemoveCartItems() async {
+  var dio = Dio();
+  try {
+    // 发起GET请求以获取购物车数据
+    final response = await dio.get(
+      '${appUri}/gws_customer_cart',
+      queryParameters: {
+        'customer_id': customerId,
+        'api_key': apiKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // 请求成功，解析购物车数据
+      Map<String, dynamic> jsonData = response.data;
+      List<dynamic> carts = jsonData['customer_cart'];
+
+      // 遍历购物车项并删除它们
+      for (var cart in carts) {
+        removeCartItem(cart['cart_id']);
+      }
+    } else {
+      // 错误处理
+      print('Failed to fetch cart items: ${response.statusCode}');
+    }
+  } catch (e) {
+    // 异常处理
+    print('Error fetching cart items: $e');
+  }
+}
+
+void removeCartItem(String cartId) async {
+  var dio = Dio();
+  try {
+    final response = await dio.get(
+      '${appUri}/gws_customer_cart/remove',
+      queryParameters: {
+        'customer_id': customerId,
+        'cart_id': cartId,
+        'api_key': apiKey,
+      },
+    );
+    if (response.statusCode == 200) {
+      // 请求成功处理
+      print('Item removed successfully: ${response.data}');
+    } else {
+      // 错误处理
+      print('Failed to remove item: ${response.statusCode}');
+    }
+  } catch (e) {
+    // 异常处理
+    print('Error removing item: $e');
+  }
 }

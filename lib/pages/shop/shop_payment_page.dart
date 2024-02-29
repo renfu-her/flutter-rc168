@@ -23,6 +23,15 @@ class _ShopPaymentPageState extends State<ShopPaymentPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('付款頁面'),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyApp()),
+          ),
+        ),
       ),
       body: WebView(
         initialUrl: widget.htmlUrl,
