@@ -153,10 +153,10 @@ class _ShopPageState extends State<ShopPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ResponsiveText('商品總計',
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                              fontSize: 24, fontWeight: FontWeight.bold),
                           ResponsiveText(
                               'NT\$${totalAmount.toStringAsFixed(0)}',
-                              fontSize: 20,
+                              fontSize: 24,
                               fontWeight: FontWeight.bold),
                         ],
                       ),
@@ -181,7 +181,7 @@ class _ShopPageState extends State<ShopPage> {
                               product.name +
                                   "\nNT\$" +
                                   product.price.toString(),
-                              fontSize: 18,
+                              fontSize: 22,
                             ),
                             subtitle: Row(
                               children: [
@@ -230,7 +230,7 @@ class _ShopPageState extends State<ShopPage> {
                                 ),
                                 ResponsiveText(
                                   '数量: ${product.quantity}',
-                                  fontSize: 18,
+                                  fontSize: 20,
                                 ),
                                 IconButton(
                                     icon: Icon(Icons.add),
@@ -247,7 +247,7 @@ class _ShopPageState extends State<ShopPage> {
                             trailing: ResponsiveText(
                               'NT\$' +
                                   (product.price * product.quantity).toString(),
-                              fontSize: 18,
+                              fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
                           );
@@ -269,7 +269,7 @@ class _ShopPageState extends State<ShopPage> {
                   },
                   child: ResponsiveText(
                     '結 帳',
-                    fontSize: 18,
+                    fontSize: 20,
                     color: Colors.white,
                   ),
                   style: ElevatedButton.styleFrom(
@@ -289,7 +289,7 @@ class _ShopPageState extends State<ShopPage> {
                             MaterialPageRoute(builder: (context) => MyApp()));
                       },
                       child: ResponsiveText('逛逛賣場',
-                          fontSize: 18, color: Colors.white),
+                          fontSize: 20, color: Colors.white),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
                         foregroundColor: Colors.white, // 文本颜色为白色
@@ -307,7 +307,7 @@ class _ShopPageState extends State<ShopPage> {
                       },
                       child: ResponsiveText(
                         '結 帳',
-                        fontSize: 18,
+                        fontSize: 20,
                         color: Colors.white,
                       ),
                       style: ElevatedButton.styleFrom(

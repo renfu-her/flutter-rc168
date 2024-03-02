@@ -206,11 +206,11 @@ class _ShopCartPageState extends State<ShopCartPage> {
             ),
             title: ResponsiveText(
               method.title,
-              fontSize: 16.0, // 字體大小
+              fontSize: 22.0, // 字體大小
             ),
             trailing: ResponsiveText(
               'NT\$${method.cost}',
-              fontSize: 16.0, // 字體大小
+              fontSize: 22.0, // 字體大小
               fontWeight: FontWeight.bold, // 字體加粗
             ),
             onTap: () {
@@ -386,7 +386,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                         Padding(
                           padding: EdgeInsets.all(16.0),
                           child: ResponsiveText('付款方式',
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -442,7 +442,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                   final zoneDetails = snapshot.data!['zone'];
                                   return ListTile(
                                     title: ResponsiveText('收貨地址',
-                                        fontSize: 18,
+                                        fontSize: 24,
                                         fontWeight: FontWeight.bold),
                                     subtitle: Text(
                                       '${customerAddress!['firstname']} ${customerAddress!['lastname']} \n' +
@@ -486,9 +486,12 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                 '${imgUrl}' + product.thumbUrl,
                                 width: 80,
                               ),
-                              title: ResponsiveText(product.name +
-                                  "\nNT\$" +
-                                  product.price.toString()),
+                              title: ResponsiveText(
+                                product.name +
+                                    "\nNT\$" +
+                                    product.price.toString(),
+                                fontSize: 22,
+                              ),
                               subtitle: Row(
                                 children: [
                                   ResponsiveText('数量: ${product.quantity}'),
@@ -498,7 +501,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                   'NT\$' +
                                       (product.price * product.quantity)
                                           .toString(),
-                                  fontSize: 16,
+                                  fontSize: 22,
                                   fontWeight: FontWeight.bold),
                             );
                           }
@@ -519,7 +522,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                   },
                   child: const Text(
                     '確定下訂單',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 20),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey, // 按钮背景颜色为灰色
@@ -537,7 +540,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                         Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) => MyApp()));
                       },
-                      child: ResponsiveText('逛逛賣場', fontSize: 18),
+                      child: ResponsiveText('逛逛賣場', fontSize: 20),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
                         foregroundColor: Colors.white, // 文本颜色为白色
@@ -552,7 +555,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                         submitOrder();
                       },
                       child: ResponsiveText('確定下訂單',
-                          fontSize: 18, color: Colors.white),
+                          fontSize: 20, color: Colors.white),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
                         foregroundColor: Colors.white, // 文本颜色为白色

@@ -11,7 +11,7 @@ class ResponsiveText extends StatelessWidget {
 
   ResponsiveText(
     this.text, {
-    this.fontSize = 16, // 默认字体大小
+    this.fontSize = 20, // 默认字体大小
     this.fontWeight = FontWeight.normal, // 默认字重
     this.color = Colors.black, // 默认颜色
     this.textAlign = TextAlign.start, // 默认居中

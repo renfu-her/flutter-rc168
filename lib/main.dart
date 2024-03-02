@@ -49,25 +49,26 @@ void main() async {
   print(isLoggedIn);
   print(useFingerprint);
 
-  // 初始化设置
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher'); // 使用应用图标
-  final InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-  );
-
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-  runApp(MyApp());
-
   // firebase message notification
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   final fcmToken = await FirebaseMessaging.instance.getToken();
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  log('User granted permission: ${settings.authorizationStatus}');
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   log("FCMToken $fcmToken");
 
+  runApp(MyApp());
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -102,32 +103,42 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     FirebaseMessaging.onMessage.listen(
-      (RemoteMessage message) {
+      (RemoteMessage message) async {
         String? body = message.notification?.body ?? "";
         String? title = message.notification?.title ?? "";
 
-        const AndroidNotificationDetails androidPlatformChannelSpecifics =
-            AndroidNotificationDetails(
+        const androidNotificationDetails = AndroidNotificationDetails(
           'notification_channel', // 频道ID
           'Message Notifications', // 频道名称
-          channelDescription: 'Notification channel for order updates', // 频道描述
+          channelDescription: 'Notification channel for order updates',
           importance: Importance.max,
           priority: Priority.high,
-          ticker: 'Message Placed',
+          largeIcon: DrawableResourceAndroidBitmap('logox512'),
         );
-        const NotificationDetails platformChannelSpecifics =
-            NotificationDetails(android: androidPlatformChannelSpecifics);
-        flutterLocalNotificationsPlugin.show(
-          0, // 通知ID
-          title, // 通知标题
-          body, // 通知内容
-          platformChannelSpecifics,
+
+        const iOSNotificationDetails = DarwinNotificationDetails();
+
+        const notificationDetails = NotificationDetails(
+          android: androidNotificationDetails,
+          iOS: iOSNotificationDetails,
         );
-        // debugPrint("onMessage:");
-        // log("onMessage: $message");
-        // final snackBar =
-        //     SnackBar(content: Text(message.notification?.title ?? ""));
-        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+            FlutterLocalNotificationsPlugin();
+        const initializationSettingsAndroid =
+            AndroidInitializationSettings('logox512');
+        const initializationSettingsIOS = DarwinInitializationSettings();
+        const initSetttings = InitializationSettings(
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsIOS);
+
+        flutterLocalNotificationsPlugin.initialize(initSetttings);
+
+        await flutterLocalNotificationsPlugin.show(
+            0, // channelId
+            title, // notificationTitle
+            body, // notificationBody
+            notificationDetails);
       },
     );
 
@@ -327,22 +338,36 @@ class UserPreferences {
 
 // 通知類
 Future<void> showOrderPlacedNotification(String orderId) async {
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
+  const androidNotificationDetails = AndroidNotificationDetails(
     'order_channel', // 频道ID
     'Order Notifications', // 频道名称
-    channelDescription: 'Notification channel for order updates', // 频道描述
+    channelDescription: 'Notification channel for order updates',
     importance: Importance.max,
     priority: Priority.high,
-    ticker: 'Order Placed',
+    largeIcon: DrawableResourceAndroidBitmap('logox512'),
   );
-  const NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
+
+  const iOSNotificationDetails = DarwinNotificationDetails();
+
+  const notificationDetails = NotificationDetails(
+    android: androidNotificationDetails,
+    iOS: iOSNotificationDetails,
+  );
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  const initializationSettingsAndroid =
+      AndroidInitializationSettings('logox512');
+  const initializationSettingsIOS = DarwinInitializationSettings();
+  const initSetttings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+
+  flutterLocalNotificationsPlugin.initialize(initSetttings);
   await flutterLocalNotificationsPlugin.show(
-    0, // 通知ID
+    5, // 通知ID
     '訂單通知', // 通知标题
     '訂單編號：${orderId}，已經訂購完成.', // 通知内容
-    platformChannelSpecifics,
+    notificationDetails,
   );
 
   fetchAndRemoveCartItems();
@@ -353,23 +378,37 @@ Future<void> showOrderCompletedNotification() async {
 }
 
 Future<void> showOrderCancelledNotification() async {
-  // 类似于 showOrderPlacedNotification，修改为订单取消的相关信息
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
+  const androidNotificationDetails = AndroidNotificationDetails(
     'order_channel', // 频道ID
     'Order Notifications', // 频道名称
-    channelDescription: 'Notification channel for order updates', // 频道描述
+    channelDescription: 'Notification channel for order updates',
     importance: Importance.max,
     priority: Priority.high,
-    ticker: 'Order Placed',
+    largeIcon: DrawableResourceAndroidBitmap('logox512'),
   );
-  const NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
+
+  const iOSNotificationDetails = DarwinNotificationDetails();
+
+  const notificationDetails = NotificationDetails(
+    android: androidNotificationDetails,
+    iOS: iOSNotificationDetails,
+  );
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  const initializationSettingsAndroid =
+      AndroidInitializationSettings('logox512');
+  const initializationSettingsIOS = DarwinInitializationSettings();
+  const initSetttings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+
+  flutterLocalNotificationsPlugin.initialize(initSetttings);
+
   await flutterLocalNotificationsPlugin.show(
-    0, // 通知ID
+    10, // 通知ID
     '訂單通知', // 通知标题
     '訂單通知 - 訂單已經取消.', // 通知内容
-    platformChannelSpecifics,
+    notificationDetails,
   );
 }
 

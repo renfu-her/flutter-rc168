@@ -106,7 +106,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 contentWidgets.add(
                   Center(
                     child: ResponsiveText('商品選項',
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 );
               }
@@ -196,11 +196,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 ResponsiveText(product['name'],
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                    fontSize: 20, fontWeight: FontWeight.bold),
                                 Center(
                                   // 将Text包裹在Center小部件中以实现居中对齐
                                   child: ResponsiveText('NT${product['price']}',
-                                      fontSize: 18, color: Colors.red),
+                                      fontSize: 20, color: Colors.red),
                                 ),
                               ],
                             ),

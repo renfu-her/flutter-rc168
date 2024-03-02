@@ -39,7 +39,7 @@ flutter_icons:
   android: "launcher_icon"
   ios: true
   remove_alpah_ios: true
-  image_path: "assets/icon.png"
+  image_path: "assets/logox512.png"
 
 flutter:
   uses-material-design: true

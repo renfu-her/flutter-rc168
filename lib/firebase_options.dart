@@ -44,38 +44,38 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCzLX9TQQjQulaTFBJhS5yUVnO9Y10Ar5Y',
-    appId: '1:841434982717:web:2fc38bd8ee9cc1d568bd54',
-    messagingSenderId: '841434982717',
-    projectId: 'test-fcm-72314',
-    authDomain: 'test-fcm-72314.firebaseapp.com',
-    storageBucket: 'test-fcm-72314.appspot.com',
-    measurementId: 'G-DL9S3Z3ZDG',
+    apiKey: 'AIzaSyA6-ra6Pg2Yh4O_UyHFtzeqx8XOBM2RpTE',
+    appId: '1:820244556849:web:bab356fd5f76111dfb7910',
+    messagingSenderId: '820244556849',
+    projectId: 'fcm-rc168',
+    authDomain: 'fcm-rc168.firebaseapp.com',
+    storageBucket: 'fcm-rc168.appspot.com',
+    measurementId: 'G-FPSCW6VSER',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD-RpwJ3DdvwbvT180rn4kfmCk7TkG0ZvA',
-    appId: '1:841434982717:android:51e176a492d5e9b968bd54',
-    messagingSenderId: '841434982717',
-    projectId: 'test-fcm-72314',
-    storageBucket: 'test-fcm-72314.appspot.com',
+    apiKey: 'AIzaSyDJ81SudJ17nne0KKsOHoLSsvr7dlty7kM',
+    appId: '1:820244556849:android:910aecd4d3aa2794fb7910',
+    messagingSenderId: '820244556849',
+    projectId: 'fcm-rc168',
+    storageBucket: 'fcm-rc168.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDF2pg89FWBJ_4A8VfEZ-hBoLwkSQ9obSI',
-    appId: '1:841434982717:ios:f0c7fb71712479fc68bd54',
-    messagingSenderId: '841434982717',
-    projectId: 'test-fcm-72314',
-    storageBucket: 'test-fcm-72314.appspot.com',
-    iosBundleId: 'com.example.rc168',
+    apiKey: 'AIzaSyCY2AHrlEGc4J7EpcjsfC7Y8EAmgE2-x9w',
+    appId: '1:820244556849:ios:7b6623035d277678fb7910',
+    messagingSenderId: '820244556849',
+    projectId: 'fcm-rc168',
+    storageBucket: 'fcm-rc168.appspot.com',
+    iosBundleId: 'com.rc168.app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDF2pg89FWBJ_4A8VfEZ-hBoLwkSQ9obSI',
-    appId: '1:841434982717:ios:b897a36c9f98753968bd54',
-    messagingSenderId: '841434982717',
-    projectId: 'test-fcm-72314',
-    storageBucket: 'test-fcm-72314.appspot.com',
-    iosBundleId: 'com.example.rc168.RunnerTests',
+    apiKey: 'AIzaSyCY2AHrlEGc4J7EpcjsfC7Y8EAmgE2-x9w',
+    appId: '1:820244556849:ios:8da976988d55ad59fb7910',
+    messagingSenderId: '820244556849',
+    projectId: 'fcm-rc168',
+    storageBucket: 'fcm-rc168.appspot.com',
+    iosBundleId: 'com.rc168.app.RunnerTests',
   );
 }

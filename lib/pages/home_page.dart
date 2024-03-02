@@ -169,6 +169,7 @@ class _HomePageState extends State<HomePage> {
                                 children: <Widget>[
                                   ResponsiveText(
                                     product.name,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -176,6 +177,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   ResponsiveText(
                                     product.price,
+                                    fontSize: 20,
                                     textAlign: TextAlign.center, // 文本對齊設置為居中
                                   ),
                                 ],
@@ -186,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                               child: ElevatedButton(
                                 child: ResponsiveText(
                                   '加入購物車',
-                                  fontSize: 18,
+                                  fontSize: 20,
                                   color: Colors.white,
                                 ),
                                 onPressed: () async {
