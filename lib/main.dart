@@ -113,7 +113,6 @@ class _MyHomePageState extends State<MyHomePage> {
           channelDescription: 'Notification channel for order updates',
           importance: Importance.max,
           priority: Priority.high,
-          largeIcon: DrawableResourceAndroidBitmap('logox512'),
         );
 
         const iOSNotificationDetails = DarwinNotificationDetails();
@@ -344,7 +343,6 @@ Future<void> showOrderPlacedNotification(String orderId) async {
     channelDescription: 'Notification channel for order updates',
     importance: Importance.max,
     priority: Priority.high,
-    largeIcon: DrawableResourceAndroidBitmap('logox512'),
   );
 
   const iOSNotificationDetails = DarwinNotificationDetails();
@@ -384,7 +382,6 @@ Future<void> showOrderCancelledNotification() async {
     channelDescription: 'Notification channel for order updates',
     importance: Importance.max,
     priority: Priority.high,
-    largeIcon: DrawableResourceAndroidBitmap('logox512'),
   );
 
   const iOSNotificationDetails = DarwinNotificationDetails();
