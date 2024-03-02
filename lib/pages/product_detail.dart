@@ -320,10 +320,51 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
           child: ElevatedButton(
             onPressed: () async {
-              await addToCart(widget.productId, _selectedQuantity);
-              selectedIndex = 3;
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => MyApp()));
+              if (isLogin == true) {
+                await addToCart(widget.productId, _selectedQuantity);
+                selectedIndex = 3;
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => MyApp()));
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: ResponsiveText(
+                        '未登入',
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            ResponsiveText('您尚未登入，请先登入。'),
+                          ],
+                        ),
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('取消'),
+                          onPressed: () {
+                            Navigator.of(context).pop(); // 关闭对话框
+                          },
+                        ),
+                        TextButton(
+                          child: Text('登入'),
+                          onPressed: () {
+                            // 可以在这里添加跳转到登录页面的代码
+                            Navigator.of(context).pop(); // 先关闭对话框
+                            // 假设你有一个名为LoginPage的登录页面
+                            selectedIndex = 4;
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => MyApp()));
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
             },
             child: ResponsiveText('加入購物車', fontSize: 18, color: Colors.white),
             style: ElevatedButton.styleFrom(
