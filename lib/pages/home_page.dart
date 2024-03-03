@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.all(16.0),
             child: ResponsiveText(
               '最新商品',
-              fontSize: 20.0,
+              fontSize: 24.0,
               fontWeight: FontWeight.bold,
               textAlign: TextAlign.center,
             ),

@@ -2,7 +2,7 @@
     <application
         android:label="聯合福利社"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -28,7 +28,8 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
-            android:value="2" />
+            android:value="2"
+            android:resource="@mipmap/ic_launcher" /> 
 
         <service
             android:name="com.google.firebase.messaging.FirebaseMessagingService"

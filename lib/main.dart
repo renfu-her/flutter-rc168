@@ -108,12 +108,13 @@ class _MyHomePageState extends State<MyHomePage> {
         String? title = message.notification?.title ?? "";
 
         const androidNotificationDetails = AndroidNotificationDetails(
-          'notification_channel', // 频道ID
-          'Message Notifications', // 频道名称
-          channelDescription: 'Notification channel for order updates',
-          importance: Importance.max,
-          priority: Priority.high,
-        );
+            'notification_channel', // 频道ID
+            'Message Notifications', // 频道名称
+            channelDescription: 'Notification channel for order updates',
+            importance: Importance.max,
+            priority: Priority.high,
+            largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
+            icon: '@mipmap/ic_launcher');
 
         const iOSNotificationDetails = DarwinNotificationDetails();
 
@@ -338,12 +339,13 @@ class UserPreferences {
 // 通知類
 Future<void> showOrderPlacedNotification(String orderId) async {
   const androidNotificationDetails = AndroidNotificationDetails(
-    'order_channel', // 频道ID
-    'Order Notifications', // 频道名称
-    channelDescription: 'Notification channel for order updates',
-    importance: Importance.max,
-    priority: Priority.high,
-  );
+      'order_channel', // 频道ID
+      'Order Notifications', // 频道名称
+      channelDescription: 'Notification channel for order updates',
+      importance: Importance.max,
+      priority: Priority.high,
+      largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
+      icon: '@mipmap/ic_launcher');
 
   const iOSNotificationDetails = DarwinNotificationDetails();
 
@@ -377,12 +379,13 @@ Future<void> showOrderCompletedNotification() async {
 
 Future<void> showOrderCancelledNotification() async {
   const androidNotificationDetails = AndroidNotificationDetails(
-    'order_channel', // 频道ID
-    'Order Notifications', // 频道名称
-    channelDescription: 'Notification channel for order updates',
-    importance: Importance.max,
-    priority: Priority.high,
-  );
+      'order_channel', // 频道ID
+      'Order Notifications', // 频道名称
+      channelDescription: 'Notification channel for order updates',
+      importance: Importance.max,
+      priority: Priority.high,
+      largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
+      icon: '@mipmap/ic_launcher');
 
   const iOSNotificationDetails = DarwinNotificationDetails();
 
