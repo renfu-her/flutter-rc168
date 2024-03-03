@@ -225,34 +225,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildBannerCarousel(List<BannerModel> banners) {
-    // 創建一個PageController，initialPage設置為一個很大的數字
-    PageController controller =
-        PageController(initialPage: 1000 * banners.length);
-
-    return Container(
-      height: 200, // 設定輪播區域高度
-      child: PageView.builder(
-        controller: controller,
-        itemCount: null, // 使itemCount為無限
-        itemBuilder: (context, index) {
-          // 使用餘數運算符來循環banners列表
-          var actualIndex = index % banners.length;
-          var banner = banners[actualIndex];
-          return GestureDetector(
-            onTap: () {
-              // _launchURL(banner.link);
-            },
-            child: Image.network(
-              '${imgUrl}${banner.image}',
-              fit: BoxFit.cover,
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   void _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
 
