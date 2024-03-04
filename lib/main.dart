@@ -108,13 +108,13 @@ class _MyHomePageState extends State<MyHomePage> {
         String? title = message.notification?.title ?? "";
 
         const androidNotificationDetails = AndroidNotificationDetails(
-            'notification_channel', // 频道ID
-            'Message Notifications', // 频道名称
-            channelDescription: 'Notification channel for order updates',
-            importance: Importance.max,
-            priority: Priority.high,
-            largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
-            icon: '@mipmap/ic_launcher');
+          'notification_channel', // 频道ID
+          'Message Notifications', // 频道名称
+          channelDescription: 'Notification channel for order updates',
+          importance: Importance.max,
+          priority: Priority.high,
+          largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
+        );
 
         const iOSNotificationDetails = DarwinNotificationDetails();
 
@@ -126,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
         FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
             FlutterLocalNotificationsPlugin();
         const initializationSettingsAndroid =
-            AndroidInitializationSettings('logox512');
+            AndroidInitializationSettings('ic_launcher');
         const initializationSettingsIOS = DarwinInitializationSettings();
         const initSetttings = InitializationSettings(
             android: initializationSettingsAndroid,
@@ -339,13 +339,13 @@ class UserPreferences {
 // 通知類
 Future<void> showOrderPlacedNotification(String orderId) async {
   const androidNotificationDetails = AndroidNotificationDetails(
-      'order_channel', // 频道ID
-      'Order Notifications', // 频道名称
-      channelDescription: 'Notification channel for order updates',
-      importance: Importance.max,
-      priority: Priority.high,
-      largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
-      icon: '@mipmap/ic_launcher');
+    'order_channel', // 频道ID
+    'Order Notifications', // 频道名称
+    channelDescription: 'Notification channel for order updates',
+    importance: Importance.max,
+    priority: Priority.high,
+    largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
+  );
 
   const iOSNotificationDetails = DarwinNotificationDetails();
 
@@ -357,7 +357,7 @@ Future<void> showOrderPlacedNotification(String orderId) async {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   const initializationSettingsAndroid =
-      AndroidInitializationSettings('logox512');
+      AndroidInitializationSettings('ic_launcher');
   const initializationSettingsIOS = DarwinInitializationSettings();
   const initSetttings = InitializationSettings(
       android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
@@ -379,13 +379,13 @@ Future<void> showOrderCompletedNotification() async {
 
 Future<void> showOrderCancelledNotification() async {
   const androidNotificationDetails = AndroidNotificationDetails(
-      'order_channel', // 频道ID
-      'Order Notifications', // 频道名称
-      channelDescription: 'Notification channel for order updates',
-      importance: Importance.max,
-      priority: Priority.high,
-      largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
-      icon: '@mipmap/ic_launcher');
+    'order_channel', // 频道ID
+    'Order Notifications', // 频道名称
+    channelDescription: 'Notification channel for order updates',
+    importance: Importance.max,
+    priority: Priority.high,
+    largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
+  );
 
   const iOSNotificationDetails = DarwinNotificationDetails();
 
@@ -397,7 +397,7 @@ Future<void> showOrderCancelledNotification() async {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   const initializationSettingsAndroid =
-      AndroidInitializationSettings('logox512');
+      AndroidInitializationSettings('ic_launcher');
   const initializationSettingsIOS = DarwinInitializationSettings();
   const initSetttings = InitializationSettings(
       android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
