@@ -255,7 +255,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       child: ResponsiveText(
                         '商品說明',
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 20,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -268,9 +268,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ResponsiveText(
-                                    convertHtmlToString(product['description']),
-                                    fontSize: 18),
+                                Text(
+                                  convertHtmlToString(product['description']),
+                                  style: const TextStyle(fontSize: 16),
+                                ),
                               ],
                             ),
                           ),
