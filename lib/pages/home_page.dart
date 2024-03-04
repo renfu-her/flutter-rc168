@@ -5,7 +5,7 @@ import 'package:rc168/main.dart';
 import 'package:rc168/pages/product_detail.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:rc168/pages/shop/shop_page.dart';
+// import 'package:rc168/pages/shop/shop_page.dart';
 import 'package:rc168/responsive_text.dart';
 
 var dio = Dio();
@@ -68,56 +68,55 @@ class _HomePageState extends State<HomePage> {
       super.dispose();
     }
 
-    // print(fetchBanners());
     return Scaffold(
-      // appBar: AppBar(title: Text('最新商品')),
-      body: Column(
-        children: <Widget>[
-          FutureBuilder<dynamic>(
-            future: fetchBanners(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  var product = snapshot.data;
-                  var images = product; // 确保这是字符串列表
-                  return Column(
-                    children: [
-                      buildBannerCarousel(images),
-                      // ... 其余的布局代码
-                    ],
-                  );
-                } else if (snapshot.hasError) {
-                  return Text("Error: ${snapshot.error}");
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            FutureBuilder<dynamic>(
+              future: fetchBanners(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    var product = snapshot.data;
+                    var images = product; // 确保这是字符串列表
+                    return Column(
+                      children: [
+                        buildBannerCarousel(images),
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text("Error: ${snapshot.error}");
+                  }
                 }
-              }
-              return const Center(child: CircularProgressIndicator());
-            },
-          ),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: ResponsiveText(
-              '最新商品',
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
-              textAlign: TextAlign.center,
+                return const Center(child: CircularProgressIndicator());
+              },
             ),
-          ),
-          Expanded(
-            child: FutureBuilder<List<Product>>(
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: ResponsiveText(
+                '最新商品',
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            FutureBuilder<List<Product>>(
               future: fetchProducts(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text("Error: ${snapshot.error}"));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(child: const Text("No products found"));
+                  return const Center(child: Text("No products found"));
                 } else {
                   return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: crossAxisCount,
                       childAspectRatio: 0.7,
                     ),
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       Product product = snapshot.data![index];
@@ -162,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 crossAxisAlignment:
                                     CrossAxisAlignment.center, // 將對齊方式改為置中
@@ -184,7 +183,8 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                               child: ElevatedButton(
                                 child: ResponsiveText(
                                   '加入購物車',
@@ -219,8 +219,8 @@ class _HomePageState extends State<HomePage> {
                 }
               },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
