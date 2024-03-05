@@ -105,7 +105,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               if (options.isNotEmpty) {
                 contentWidgets.add(
                   Center(
-                    child: ResponsiveText('商品選項',
+                    child: ResponsiveText('款式及尺寸',
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 );
@@ -253,7 +253,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     const SizedBox(height: 6),
                     Center(
                       child: ResponsiveText(
-                        '商品說明',
+                        '商品描述',
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -279,29 +279,29 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.blue, // 设定背景颜色
-                                borderRadius:
-                                    BorderRadius.circular(6.0), // 这里设置圆角大小
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  RatingStarWidget(rating: product['rating'])
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Row(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       Expanded(
+                    //         child: Container(
+                    //           decoration: BoxDecoration(
+                    //             color: Colors.blue, // 设定背景颜色
+                    //             borderRadius:
+                    //                 BorderRadius.circular(6.0), // 这里设置圆角大小
+                    //           ),
+                    //           child: Row(
+                    //             mainAxisAlignment: MainAxisAlignment.center,
+                    //             children: [
+                    //               RatingStarWidget(rating: product['rating'])
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     const SizedBox(height: 160),
                   ],
                 ),
