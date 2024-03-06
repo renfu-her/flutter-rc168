@@ -321,6 +321,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 }).toList(),
                 onChanged: (value) => setState(() => _selectedZoneId = value!),
               ),
+              const SizedBox(
+                height: 50,
+              ),
             ],
           ),
         ),

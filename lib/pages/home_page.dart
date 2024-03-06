@@ -219,6 +219,134 @@ class _HomePageState extends State<HomePage> {
                 }
               },
             ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ResponsiveText(
+                '熱門商品',
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            FutureBuilder<List<Product>>(
+              future: fetchPopularProducts(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text("Error: ${snapshot.error}"));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text("No products found"));
+                } else {
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      childAspectRatio: 0.7,
+                    ),
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      Product product = snapshot.data![index];
+                      return Card(
+                        clipBehavior: Clip.antiAlias,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero, // 移除圓角
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Expanded(
+                              child: InkWell(
+                                // 使用 InkWell 包裹圖片
+                                onTap: () {
+                                  // 添加 onTap 事件
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductDetailPage(
+                                        productId: product.id,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: Image.network(
+                                    '${imgUrl}' + product.thumb,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    },
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(Icons.error),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.center, // 將對齊方式改為置中
+                                children: <Widget>[
+                                  ResponsiveText(
+                                    product.name,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center, // 文本對齊也設置為居中
+                                  ),
+                                  ResponsiveText(
+                                    product.price,
+                                    fontSize: 20,
+                                    textAlign: TextAlign.center, // 文本對齊設置為居中
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: ElevatedButton(
+                                child: ResponsiveText(
+                                  '加入購物車',
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () async {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductDetailPage(
+                                        productId: product.id,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(6), // 設定圓角半徑為 10
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),
@@ -238,9 +366,22 @@ class _HomePageState extends State<HomePage> {
 
 Future<List<Product>> fetchProducts() async {
   try {
-    var response =
-        await Dio().get('${appUri}/gws_products_latest&api_key=${apiKey}');
+    var response = await Dio()
+        .get('${appUri}/gws_products_latest&limit=8&api_key=${apiKey}');
     return (response.data['latest_products'] as List)
+        .map((p) => Product.fromJson(p))
+        .toList();
+  } catch (e) {
+    print(e);
+    throw e;
+  }
+}
+
+Future<List<Product>> fetchPopularProducts() async {
+  try {
+    var response = await Dio()
+        .get('${appUri}/gws_products_popular&limit=8&api_key=${apiKey}');
+    return (response.data['popular_products'] as List)
         .map((p) => Product.fromJson(p))
         .toList();
   } catch (e) {

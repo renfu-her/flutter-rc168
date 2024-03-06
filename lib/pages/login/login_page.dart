@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
             ElevatedButton(
               onPressed: _isLoading ? null : _login, // 当加载时禁用按钮
               child: Text(
-                _isLoading ? '登录中...' : '登录', // 当加载时显示登录中...
+                _isLoading ? '登入中...' : '登入', // 当加载时显示登录中...
                 style: TextStyle(fontSize: 18),
               ),
               style: ElevatedButton.styleFrom(

@@ -332,14 +332,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: ResponsiveText(
-                        '未登入',
+                        '您尚未登入會員 ',
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
                       content: SingleChildScrollView(
                         child: ListBody(
                           children: <Widget>[
-                            ResponsiveText('您尚未登入，请先登入。'),
+                            ResponsiveText('請先登入會員！'),
                           ],
                         ),
                       ),

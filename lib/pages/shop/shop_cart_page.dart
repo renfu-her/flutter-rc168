@@ -400,13 +400,13 @@ class _ShopCartPageState extends State<ShopCartPage> {
                             isExpanded: true,
                             value: _selectedPaymentMethod,
                             items: [
-                              DropdownMenuItem(
-                                value: 'bank_transfer',
-                                child: ResponsiveText('銀行轉帳'),
-                              ),
+                              // DropdownMenuItem(
+                              //   value: 'bank_transfer',
+                              //   child: ResponsiveText('銀行轉帳'),
+                              // ),
                               DropdownMenuItem(
                                 value: 'linepay_sainent',
-                                child: ResponsiveText('Line Pay'),
+                                child: ResponsiveText('LINE Pay'),
                               ),
                               DropdownMenuItem(
                                 value: 'ecpaypayment',
