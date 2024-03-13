@@ -139,7 +139,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 child: value.price == 0
                                     ? Text("${value.name}")
                                     : Text(
-                                        "${value.name}\n${value.pricePrefix}NT\$${value.price.toString()}"),
+                                        "${value.name}(${value.pricePrefix}NT\$${value.price.toString()})"),
                               );
                             }).toList(),
                           ),

@@ -260,10 +260,10 @@ class _ShopCartPageState extends State<ShopCartPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: ResponsiveText(
-              '錯誤',
+              '溫馨提醒!',
               fontSize: 18,
             ),
-            content: ResponsiveText('付款方式 或者 物流方式沒有選擇'),
+            content: ResponsiveText('您尚未選定付款方式或物流方式。'),
             actions: <Widget>[
               TextButton(
                 child: ResponsiveText('確定'),

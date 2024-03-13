@@ -301,28 +301,50 @@ class _RegisterPageState extends State<RegisterPage> {
                   return null;
                 },
               ),
-              DropdownButtonFormField<String>(
-                value: _selectedCountryId,
-                items: _countries.map((Country country) {
-                  return DropdownMenuItem<String>(
-                    value: country.id,
-                    child: Text(country.name),
-                  );
-                }).toList(),
-                onChanged: (value) => _onCountrySelected(value!),
+              Row(
+                children: [
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      value: _selectedCountryId,
+                      items: _countries.map((Country country) {
+                        return DropdownMenuItem<String>(
+                          value: country.id,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width - 56,
+                            child: Text(
+                              country.name,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) => _onCountrySelected(value!),
+                    ),
+                  ),
+                ],
               ),
-              DropdownButtonFormField<String>(
-                value: _selectedZoneId,
-                items: _zones.map((Zone zone) {
-                  return DropdownMenuItem<String>(
-                    value: zone.id,
-                    child: Text(zone.name),
-                  );
-                }).toList(),
-                onChanged: (value) => setState(() => _selectedZoneId = value!),
+              Row(
+                children: [
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      value: _selectedZoneId,
+                      items: _zones.map((Zone zone) {
+                        return DropdownMenuItem<String>(
+                          value: zone.id,
+                          child: Text(
+                            zone.name,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) =>
+                          setState(() => _selectedZoneId = value!),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(
-                height: 50,
+                height: 100,
               ),
             ],
           ),
