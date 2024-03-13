@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:rc168/main.dart';
 
 class AddressAddPage extends StatefulWidget {
@@ -184,10 +185,21 @@ class _AddressAddPageState extends State<AddressAddPage> {
                 controller: _lastNameController,
                 decoration: const InputDecoration(
                   labelText: '名字 *',
+                  labelStyle: TextStyle(
+                    fontSize: 14, // 这里可以更改标签字体大小
+                  ),
+                  // 如果你还想更改用户输入的文本大小，那么添加下面这行
+                  hintStyle: TextStyle(
+                    fontSize: 14, // 更改提示文字大小
+                  ),
+                  hintText: '請输入您的名字',
+                ),
+                style: const TextStyle(
+                  fontSize: 14, // 更改用户输入的文本大小
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return '請輸入名字';
+                    return '請输入名字';
                   }
                   return null;
                 },
@@ -196,6 +208,17 @@ class _AddressAddPageState extends State<AddressAddPage> {
                 controller: _firstNameController,
                 decoration: const InputDecoration(
                   labelText: '姓式 *',
+                  labelStyle: TextStyle(
+                    fontSize: 14, // 这里可以更改标签字体大小
+                  ),
+                  // 如果你还想更改用户输入的文本大小，那么添加下面这行
+                  hintStyle: TextStyle(
+                    fontSize: 14, // 更改提示文字大小
+                  ),
+                  hintText: '請输入您的姓氏',
+                ),
+                style: const TextStyle(
+                  fontSize: 14, // 更改用户输入的文本大小
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -207,13 +230,37 @@ class _AddressAddPageState extends State<AddressAddPage> {
               TextFormField(
                 controller: _companyController,
                 decoration: const InputDecoration(
-                  labelText: '公司/服務單位',
+                    labelText: '超商店到店物流',
+                    labelStyle: TextStyle(
+                      fontSize: 14, // 这里可以更改标签字体大小
+                    ),
+                    // 如果你还想更改用户输入的文本大小，那么添加下面这行
+                    hintStyle: TextStyle(
+                      fontSize: 14, // 更改提示文字大小
+                    ),
+                    hintText: '請输入 7-11 門市或者全家門市'),
+                style: const TextStyle(
+                  fontSize: 14, // 更改用户输入的文本大小
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '請輸入 7-11 門市或者全家門市';
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 controller: _address1Controller,
                 decoration: const InputDecoration(
                   labelText: '地址1 *',
+                  labelStyle: TextStyle(
+                    fontSize: 14, // 这里可以更改标签字体大小
+                  ),
+                  // 如果你还想更改用户输入的文本大小，那么添加下面这行
+                  hintStyle: TextStyle(
+                    fontSize: 14, // 更改提示文字大小
+                  ),
+                  hintText: '請输入地址1',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -225,13 +272,29 @@ class _AddressAddPageState extends State<AddressAddPage> {
               TextFormField(
                 controller: _address2Controller,
                 decoration: const InputDecoration(
-                  labelText: '地址2',
+                  labelText: '地址2 ',
+                  labelStyle: TextStyle(
+                    fontSize: 14, // 这里可以更改标签字体大小
+                  ),
+                  // 如果你还想更改用户输入的文本大小，那么添加下面这行
+                  hintStyle: TextStyle(
+                    fontSize: 14, // 更改提示文字大小
+                  ),
+                  hintText: '請输入地址2',
                 ),
               ),
               TextFormField(
                 controller: _postcodeController,
                 decoration: const InputDecoration(
                   labelText: '郵遞區號 *',
+                  labelStyle: TextStyle(
+                    fontSize: 14, // 这里可以更改标签字体大小
+                  ),
+                  // 如果你还想更改用户输入的文本大小，那么添加下面这行
+                  hintStyle: TextStyle(
+                    fontSize: 14, // 更改提示文字大小
+                  ),
+                  hintText: '請输入郵遞區號',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -244,6 +307,14 @@ class _AddressAddPageState extends State<AddressAddPage> {
                 controller: _cityController,
                 decoration: const InputDecoration(
                   labelText: '區/鄉/鎮 *',
+                  labelStyle: TextStyle(
+                    fontSize: 14, // 这里可以更改标签字体大小
+                  ),
+                  // 如果你还想更改用户输入的文本大小，那么添加下面这行
+                  hintStyle: TextStyle(
+                    fontSize: 14, // 更改提示文字大小
+                  ),
+                  hintText: '請输入區/鄉/鎮',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -257,7 +328,10 @@ class _AddressAddPageState extends State<AddressAddPage> {
                 items: _countries.map((Country country) {
                   return DropdownMenuItem<String>(
                     value: country.id,
-                    child: Text(country.name),
+                    child: Text(
+                      country.name,
+                      style: const TextStyle(fontSize: 14),
+                    ),
                   );
                 }).toList(),
                 onChanged: (value) => _onCountrySelected(value!),
@@ -267,7 +341,10 @@ class _AddressAddPageState extends State<AddressAddPage> {
                 items: _zones.map((Zone zone) {
                   return DropdownMenuItem<String>(
                     value: zone.id,
-                    child: Text(zone.name),
+                    child: Text(
+                      zone.name,
+                      style: const TextStyle(fontSize: 14),
+                    ),
                   );
                 }).toList(),
                 onChanged: (value) => setState(() => _selectedZoneId = value!),
