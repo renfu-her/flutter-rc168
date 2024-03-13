@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="聯合福利社"
+        android:label="iSmart OMO"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
