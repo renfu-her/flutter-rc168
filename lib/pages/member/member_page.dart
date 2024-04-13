@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
@@ -9,6 +7,7 @@ import 'package:rc168/pages/member/profile_page.dart';
 import 'package:rc168/pages/member/order_page.dart';
 import 'package:rc168/pages/member/address/address_page.dart';
 import 'package:rc168/pages/member/register_page.dart';
+import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 class MemberPage extends StatefulWidget {
   @override
@@ -82,7 +81,10 @@ class _MemberPageState extends State<MemberPage> {
       itemBuilder: (BuildContext context, int index) {
         var info = informations[index];
         return ListTile(
-          title: Text(info['title'] ?? '無標題'),
+          title: Text(
+            info['title'] ?? '無標題',
+            style: TextStyle(fontSize: 18.px),
+          ),
           onTap: () {
             Navigator.push(
               context,
@@ -115,9 +117,9 @@ class _MemberPageState extends State<MemberPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         SizedBox(height: 16),
-        const Text(
+        Text(
           '請登入會員帳號',
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 18.px),
         ),
         const SizedBox(height: 16),
         Row(
@@ -243,14 +245,14 @@ class _MemberPageState extends State<MemberPage> {
               .pushReplacement(MaterialPageRoute(builder: (_) => (MyApp())));
         }),
         const SizedBox(height: 22),
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(left: 16.0),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
               '相關說明',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 22.px,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -266,7 +268,7 @@ class _MemberPageState extends State<MemberPage> {
   Widget _buildOptionItem(IconData icon, String title, VoidCallback onTap) {
     return ListTile(
       leading: Icon(icon),
-      title: Text(title),
+      title: Text(title, style: TextStyle(fontSize: 18.px)),
       trailing: const Icon(Icons.chevron_right),
       onTap: onTap,
     );

@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/member/address/address_add_page.dart';
+import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 class AddressPage extends StatefulWidget {
   @override
@@ -142,11 +141,11 @@ class _AddressPageState extends State<AddressPage> {
                       ListTile(
                         title: Text(
                           '${address.firstname} ${address.lastname}',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 18.px),
                         ),
                         subtitle: Text(
                           '${address.address1} \n${address.address2} \n${address.city}, ${address.zoneName}, ${address.countryName}, ${address.postcode}',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 18.px),
                         ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize
@@ -199,7 +198,7 @@ class _AddressPageState extends State<AddressPage> {
           onPressed: () {
             _openAddAddressPage();
           },
-          child: Text('增加新的地址'),
+          child: Text('增加新的地址', style: TextStyle(fontSize: 20.px)),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,

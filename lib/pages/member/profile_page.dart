@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
+import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -236,7 +237,7 @@ class _ProfilePageState extends State<ProfilePage> {
               _showDialog('提示', '請填寫必填的密碼欄位。');
             }
           },
-          child: Text('儲存'),
+          child: Text('儲存', style: TextStyle(fontSize: 20.px)),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,

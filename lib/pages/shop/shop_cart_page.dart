@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/shop/shop_payment_page.dart';
-import 'package:rc168/responsive_text.dart';
 import 'package:rc168/pages/member/address/address_cart_page.dart';
-import 'package:text_responsive/text_responsive.dart';
+import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 class ShopCartPage extends StatefulWidget {
   // final String? addressId;
@@ -194,10 +193,11 @@ class _ShopCartPageState extends State<ShopCartPage> {
       children: [
         Padding(
             padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
-            child: ResponsiveText(
+            child: Text(
               '物流方式', // 標題
-              fontSize: 20.0, // 字體大小
-              fontWeight: FontWeight.bold, // 字體加粗
+              style: TextStyle(
+                  fontSize: 20.px, // 字體大小
+                  fontWeight: FontWeight.bold), // 字體加粗
             )),
         ...methods.map((method) {
           return ListTile(
@@ -213,14 +213,15 @@ class _ShopCartPageState extends State<ShopCartPage> {
                 });
               },
             ),
-            title: ResponsiveText(
+            title: Text(
               method.title,
-              fontSize: 22.0, // 字體大小
+              style: TextStyle(fontSize: 18.px), // 字體大小
             ),
-            trailing: ResponsiveText(
+            trailing: Text(
               'NT\$${method.cost}',
-              fontSize: 22.0, // 字體大小
-              fontWeight: FontWeight.bold, // 字體加粗
+              style: TextStyle(
+                  fontSize: 18.px, // 字體大小
+                  fontWeight: FontWeight.bold), // 字體加粗
             ),
             onTap: () {
               setState(() {
@@ -268,14 +269,14 @@ class _ShopCartPageState extends State<ShopCartPage> {
         context: context, // 确保你有一个BuildContext实例名为context
         builder: (BuildContext context) {
           return AlertDialog(
-            title: ResponsiveText(
+            title: Text(
               '溫馨提醒!',
-              fontSize: 18,
+              style: TextStyle(fontSize: 16.px),
             ),
-            content: ResponsiveText('您尚未選定付款方式或物流方式。'),
+            content: Text('您尚未選定付款方式或物流方式。', style: TextStyle(fontSize: 16.px)),
             actions: <Widget>[
               TextButton(
-                child: ResponsiveText('確定'),
+                child: Text('確定', style: TextStyle(fontSize: 16.px)),
                 onPressed: () {
                   Navigator.of(context).pop(); // 关闭对话框
                 },
@@ -371,15 +372,15 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             '商品總計',
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: 20.px, fontWeight: FontWeight.bold),
                           ),
                           Text(
                             'NT\$${totalAmount.toStringAsFixed(0)}',
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 20.px, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -394,8 +395,10 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       children: [
                         Padding(
                           padding: EdgeInsets.all(16.0),
-                          child: ResponsiveText('付款方式',
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                          child: Text('付款方式',
+                              style: TextStyle(
+                                  fontSize: 20.px,
+                                  fontWeight: FontWeight.bold)),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -415,11 +418,11 @@ class _ShopCartPageState extends State<ShopCartPage> {
                               // ),
                               DropdownMenuItem(
                                 value: 'linepay_sainent',
-                                child: ResponsiveText('LINE Pay'),
+                                child: Text('LINE Pay'),
                               ),
                               DropdownMenuItem(
                                 value: 'ecpaypayment',
-                                child: ResponsiveText('綠界金流'),
+                                child: Text('綠界金流'),
                               ),
                             ],
                             onChanged: (String? value) {
@@ -427,7 +430,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                 _selectedPaymentMethod = value;
                               });
                             },
-                            hint: ResponsiveText('選擇付款方式'),
+                            hint: Text('選擇付款方式'),
                           ),
                         ),
                       ],
@@ -451,15 +454,16 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                       snapshot.data!['country'];
                                   final zoneDetails = snapshot.data!['zone'];
                                   return ListTile(
-                                    title: ResponsiveText('收貨地址',
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold),
+                                    title: Text('收貨地址',
+                                        style: TextStyle(
+                                            fontSize: 20.px,
+                                            fontWeight: FontWeight.bold)),
                                     subtitle: Text(
                                       '${customerAddress!['firstname']} ${customerAddress!['lastname']} \n' +
                                           '${customerAddress!['address_1']} ${customerAddress!['address_2']} \n' +
                                           '${zoneDetails['name']}, ${countryDetails['name']} \n' +
                                           '${customerAddress!['postcode']}',
-                                      style: const TextStyle(fontSize: 16),
+                                      style: TextStyle(fontSize: 18.px),
                                     ),
                                     trailing: IconButton(
                                       icon: const Icon(Icons.edit),
@@ -510,23 +514,24 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                 '${imgUrl}' + product.thumbUrl,
                                 width: 80,
                               ),
-                              title: ResponsiveText(
+                              title: Text(
                                 product.name +
                                     "\nNT\$" +
                                     product.price.toString(),
-                                fontSize: 22,
+                                style: TextStyle(fontSize: 16.px),
                               ),
                               subtitle: Row(
                                 children: [
-                                  ResponsiveText('数量: ${product.quantity}'),
+                                  Text('数量: ${product.quantity}'),
                                 ],
                               ),
-                              trailing: ResponsiveText(
+                              trailing: Text(
                                   'NT\$' +
                                       (product.price * product.quantity)
                                           .toString(),
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontSize: 18.px,
+                                      fontWeight: FontWeight.bold)),
                             );
                           }
                         },
@@ -564,7 +569,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                         Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) => MyApp()));
                       },
-                      child: ResponsiveText('逛逛賣場', fontSize: 20),
+                      child: Text('逛逛賣場', style: TextStyle(fontSize: 20.px)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
                         foregroundColor: Colors.white, // 文本颜色为白色
@@ -578,8 +583,9 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       onPressed: () {
                         submitOrder();
                       },
-                      child: ResponsiveText('確定下訂單',
-                          fontSize: 20, color: Colors.white),
+                      child: Text('確定下訂單',
+                          style:
+                              TextStyle(fontSize: 20.px, color: Colors.white)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
                         foregroundColor: Colors.white, // 文本颜色为白色
