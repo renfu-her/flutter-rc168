@@ -318,6 +318,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.17"
+  flutter_responsive_framework:
+    dependency: "direct main"
+    description:
+      name: flutter_responsive_framework
+      sha256: b9b83f9eb7cc6897121db3f8c71dbd4d15830342faef40c5e680a52daa7d090e
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -584,6 +592,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.4"
+  responsive_sizer:
+    dependency: "direct main"
+    description:
+      name: responsive_sizer
+      sha256: "6aefee6065c0883681bc7559147a24d8fa1846d296a216abcda25ff349340712"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.3.1"
   share_plus:
     dependency: "direct main"
     description:
@@ -717,6 +733,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.1"
+  text_responsive:
+    dependency: "direct main"
+    description:
+      name: text_responsive
+      sha256: "0d0e6685d19dffd38fe4a45522245b3a344e0d4302ba96c779ff32b9f96b22d4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   timezone:
     dependency: transitive
     description:

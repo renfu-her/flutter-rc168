@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/category/category_detail_page.dart';
 import 'package:rc168/responsive_text.dart';
+import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
+import 'package:text_responsive/text_responsive.dart';
 
 class CategoryPage extends StatefulWidget {
   @override
@@ -76,9 +78,11 @@ class _CategoryPageState extends State<CategoryPage> {
                     // 確保文字和圖片高度一致
                     alignment: Alignment.centerLeft,
                     height: 65,
-                    child: ResponsiveText(
+                    child: InlineTextWidget(
                       category.name,
-                      fontSize: 18,
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                   onTap: () {

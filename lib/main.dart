@@ -15,6 +15,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rc168/firebase_options.dart';
+import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 // 创建一个全局的通知插件实例
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -38,6 +39,8 @@ bool isLogin = false;
 int customerId = 0;
 String fullName = '';
 int selectedIndex = 0;
+Map<String, dynamic>? customerData;
+Map<String, dynamic>? customerAddress;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,7 +71,15 @@ void main() async {
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   log("FCMToken $fcmToken");
 
-  runApp(MyApp());
+  // runApp(MyApp());
+  runApp(
+    ResponsiveUIWidget(
+      builder: (context, orientation, screenType) {
+        return MyApp();
+      },
+    ),
+  );
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

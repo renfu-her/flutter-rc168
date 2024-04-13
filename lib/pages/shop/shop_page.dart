@@ -169,7 +169,7 @@ class _ShopPageState extends State<ShopPage> {
                     Expanded(
                       child: ListView.builder(
                         itemCount: products.length,
-                        padding: EdgeInsets.only(bottom: 100.0),
+                        padding: const EdgeInsets.only(bottom: 100.0),
                         itemBuilder: (context, index) {
                           final product = products[index];
                           return ListTile(
@@ -233,7 +233,7 @@ class _ShopPageState extends State<ShopPage> {
                                   fontSize: 20,
                                 ),
                                 IconButton(
-                                    icon: Icon(Icons.add),
+                                    icon: const Icon(Icons.add),
                                     onPressed: () async {
                                       // 若數量不為1，正常增加數量
                                       setState(() {
@@ -275,7 +275,7 @@ class _ShopPageState extends State<ShopPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey, // 按钮背景颜色为灰色
                     foregroundColor: Colors.white, // 文本颜色为白色
-                    minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
+                    minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
                     ),

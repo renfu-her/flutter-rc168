@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:rc168/main.dart';
 
 class AddressAddPage extends StatefulWidget {

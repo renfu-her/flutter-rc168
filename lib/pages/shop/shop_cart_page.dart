@@ -5,18 +5,20 @@ import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/shop/shop_payment_page.dart';
 import 'package:rc168/responsive_text.dart';
+import 'package:rc168/pages/member/address/address_cart_page.dart';
 
 class ShopCartPage extends StatefulWidget {
+  // final String? addressId;
+  // const ShopCartPage({super.key, required this.addressId});
+
   @override
   _ShopCartPageState createState() => _ShopCartPageState();
 }
 
 class _ShopCartPageState extends State<ShopCartPage> {
   List<Product> products = [];
-  Map<String, dynamic>? customerData;
   bool isLoading = true;
   double totalAmount = 0.0;
-  Map<String, dynamic>? customerAddress;
   int? _selectedShippingMethodCode;
   String? _selectedPaymentMethod;
   double _selectedShippingCost = 0.0;
@@ -27,6 +29,13 @@ class _ShopCartPageState extends State<ShopCartPage> {
     super.initState();
     fetchCartItems();
     getCustomerDataAndFetchAddress();
+    // if (widget.addressId != null) {
+    //   String? address = widget.addressId;
+    //   print('address: ${widget.addressId}');
+    //   fetchCustomerAddress(defaultAddressId: address!);
+    // } else {
+    //   getCustomerDataAndFetchAddress();
+    // }
     // fetchShippingMethods();
   }
 
@@ -115,6 +124,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
 
       Response addressResponse;
       if (addressId.isNotEmpty) {
+        // print('fetchCustomerAddress: ${addressId}');
         // Fetch specific address
         addressResponse = await dio.get('$appUri/gws_customer_address',
             queryParameters: {
@@ -138,7 +148,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
           // 如果 status 為 false，選擇最新地址或其他邏輯
         }
 
-        // print(customerAddress);
+        print('customerAddress: ${customerAddress}');
       });
     } catch (e) {
       print(e);
@@ -429,6 +439,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                         padding: const EdgeInsets.only(bottom: 100.0),
                         itemBuilder: (context, index) {
                           if (index == 0 && customerAddress != null) {
+                            print(customerAddress);
                             // 在列表的最上方显示地址信息
                             return FutureBuilder<Map<String, dynamic>?>(
                               future: fetchCountryAndZoneDetails(
@@ -453,8 +464,22 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                     ),
                                     trailing: IconButton(
                                       icon: const Icon(Icons.edit),
-                                      onPressed: () {
+                                      onPressed: () async {
                                         // 編輯地址的邏輯
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddressCartAddPage()),
+                                        ).then((selectedAddress) {
+                                          print('address: ' + selectedAddress);
+                                          if (selectedAddress != null) {
+                                            // 更新地址信息
+                                            fetchCustomerAddress(
+                                                defaultAddressId:
+                                                    selectedAddress.id);
+                                          }
+                                        });
                                       },
                                     ),
                                   );

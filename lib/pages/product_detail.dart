@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
-import 'package:rc168/pages/shop/shop_page.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as dom;
 import 'package:rc168/responsive_text.dart';
+import 'package:text_responsive/text_responsive.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -104,10 +104,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
               if (options.isNotEmpty) {
                 contentWidgets.add(
-                  Center(
-                    child: ResponsiveText('款式及尺寸',
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
+                  const Center(
+                      child: InlineTextWidget(
+                    '款式及尺寸',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  )),
                 );
               }
 
@@ -117,7 +118,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     children: [
                       Expanded(
                         flex: 2,
-                        child: Text(option.name),
+                        child: InlineTextWidget(option.name,
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
                       ),
                       Expanded(
                         flex: 3,
@@ -137,9 +140,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               return DropdownMenuItem<String>(
                                 value: value.id,
                                 child: value.price == 0
-                                    ? Text("${value.name}")
-                                    : Text(
-                                        "${value.name}(${value.pricePrefix}NT\$${value.price.toString()})"),
+                                    ? InlineTextWidget("${value.name}",
+                                        style: const TextStyle(fontSize: 20))
+                                    : InlineTextWidget(
+                                        "${value.name}(${value.pricePrefix}NT\$${value.price.toString()})",
+                                        style: const TextStyle(fontSize: 20)),
                               );
                             }).toList(),
                           ),
@@ -195,12 +200,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ResponsiveText(product['name'],
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                InlineTextWidget(product['name'],
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
                                 Center(
                                   // 将Text包裹在Center小部件中以实现居中对齐
-                                  child: ResponsiveText('NT${product['price']}',
-                                      fontSize: 20, color: Colors.red),
+                                  child: InlineTextWidget(
+                                      'NT${product['price']}',
+                                      style: const TextStyle(
+                                          fontSize: 20, color: Colors.red)),
                                 ),
                               ],
                             ),
@@ -227,11 +236,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   borderRadius:
                                       BorderRadius.circular(5.0), // 邊框圓角
                                 ),
-                                child: ResponsiveText(
+                                child: InlineTextWidget(
                                   product['stock_status'],
-                                  color: product['stock_status'] == '有現貨'
-                                      ? Colors.green
-                                      : Colors.red, // 文本顏色也可以相應改變
+                                  style: TextStyle(
+                                      color: product['stock_status'] == '有現貨'
+                                          ? Colors.green
+                                          : Colors.red), // 文本顏色也可以相應改變
                                 ),
                               ),
                               const SizedBox(height: 6),
@@ -251,11 +261,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ...contentWidgets,
                     ...optionWidgets,
                     const SizedBox(height: 6),
-                    Center(
-                      child: ResponsiveText(
+                    const Center(
+                      child: InlineTextWidget(
                         '商品描述',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -268,9 +278,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                InlineTextWidget(
                                   convertHtmlToString(product['description']),
-                                  style: const TextStyle(fontSize: 16),
+                                  style: const TextStyle(fontSize: 18),
                                 ),
                               ],
                             ),
@@ -367,7 +377,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 );
               }
             },
-            child: ResponsiveText('加入購物車', fontSize: 18, color: Colors.white),
+            child: InlineTextWidget('加入購物車',
+                style: const TextStyle(fontSize: 18, color: Colors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
               foregroundColor: Colors.white, // 文本颜色为白色

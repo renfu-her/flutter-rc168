@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:text_responsive/text_responsive.dart';
 
 class SearchPage extends StatelessWidget {
   @override
@@ -23,7 +24,7 @@ class SearchPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 24),
-            Text(
+            InlineTextWidget(
               '輸入商品名稱或種類',
               style: TextStyle(color: Colors.grey, fontSize: 18),
             ),
