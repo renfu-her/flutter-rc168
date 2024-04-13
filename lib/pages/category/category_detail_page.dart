@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/pages/product_detail.dart';
+import 'package:text_responsive/text_responsive.dart';
 // import 'package:rc168/pages/shop/shop_page.dart';
 
 class CategoryDetailPage extends StatefulWidget {
@@ -74,7 +75,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
       setState(() {
         isLoading = false;
       });
-      print(e);
+      // print(e);
     }
   }
 
@@ -103,7 +104,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('產品列表 - ${widget.categoryName}'),
+        title: InlineTextWidget('產品列表 - ${widget.categoryName}'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
@@ -122,14 +123,14 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
             items: SortOption.values.map((SortOption value) {
               return DropdownMenuItem<SortOption>(
                 value: value,
-                child: Text(_sortOptionToString(value)),
+                child: InlineTextWidget(_sortOptionToString(value)),
               );
             }).toList(),
           ),
         ),
         Expanded(
           child: isLoading
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -165,20 +166,22 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Text(
+                                InlineTextWidget(
                                   category.name,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                  maxLines: 1,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                  // maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                 ),
-                                Text(
+                                InlineTextWidget(
                                   category.price,
+                                  style: const TextStyle(fontSize: 16),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
@@ -187,9 +190,9 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8.0),
                             child: ElevatedButton(
-                              child: Text(
+                              child: InlineTextWidget(
                                 '加入購物車',
-                                style: TextStyle(fontSize: 18),
+                                style: const TextStyle(fontSize: 18),
                               ),
                               onPressed: () async {
                                 Navigator.push(

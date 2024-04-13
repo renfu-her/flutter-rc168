@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/shop/shop_cart_page.dart';
 import 'package:rc168/responsive_text.dart';
+import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 class ShopPage extends StatefulWidget {
   @override
@@ -127,10 +128,10 @@ class _ShopPageState extends State<ShopPage> {
                         size: 80,
                         color: Colors.grey[400],
                       ),
-                      ResponsiveText(
+                      Text(
                         '您的購物車是空的!',
-                        fontSize: 24,
-                        color: Colors.grey[400]!,
+                        style: TextStyle(
+                            fontSize: 20.px, color: Colors.grey[400]!),
                       ),
                       SizedBox(height: 20),
                       // ElevatedButton(
@@ -152,12 +153,14 @@ class _ShopPageState extends State<ShopPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ResponsiveText('商品總計',
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                          ResponsiveText(
-                              'NT\$${totalAmount.toStringAsFixed(0)}',
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold),
+                          Text('商品總計',
+                              style: TextStyle(
+                                  fontSize: 20.px,
+                                  fontWeight: FontWeight.bold)),
+                          Text('NT\$${totalAmount.toStringAsFixed(0)}',
+                              style: TextStyle(
+                                  fontSize: 20.px,
+                                  fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
@@ -177,11 +180,11 @@ class _ShopPageState extends State<ShopPage> {
                               '${imgUrl}' + product.thumbUrl,
                               width: 80,
                             ),
-                            title: ResponsiveText(
+                            title: Text(
                               product.name +
                                   "\nNT\$" +
                                   product.price.toString(),
-                              fontSize: 22,
+                              style: TextStyle(fontSize: 16.px),
                             ),
                             subtitle: Row(
                               children: [
@@ -228,9 +231,9 @@ class _ShopPageState extends State<ShopPage> {
                                     }
                                   },
                                 ),
-                                ResponsiveText(
+                                Text(
                                   '数量: ${product.quantity}',
-                                  fontSize: 20,
+                                  style: TextStyle(fontSize: 18.px),
                                 ),
                                 IconButton(
                                     icon: const Icon(Icons.add),
@@ -244,11 +247,11 @@ class _ShopPageState extends State<ShopPage> {
                                     }),
                               ],
                             ),
-                            trailing: ResponsiveText(
+                            trailing: Text(
                               'NT\$' +
                                   (product.price * product.quantity).toString(),
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
+                              style: TextStyle(
+                                  fontSize: 20.px, fontWeight: FontWeight.bold),
                             ),
                           );
                         },
@@ -267,10 +270,9 @@ class _ShopPageState extends State<ShopPage> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ShopCartPage()));
                   },
-                  child: ResponsiveText(
+                  child: Text(
                     '結 帳',
-                    fontSize: 20,
-                    color: Colors.white,
+                    style: TextStyle(fontSize: 18.px, color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey, // 按钮背景颜色为灰色
@@ -305,10 +307,9 @@ class _ShopPageState extends State<ShopPage> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ShopCartPage()));
                       },
-                      child: ResponsiveText(
+                      child: Text(
                         '結 帳',
-                        fontSize: 20,
-                        color: Colors.white,
+                        style: TextStyle(fontSize: 20.px, color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色

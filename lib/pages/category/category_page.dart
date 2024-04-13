@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/category/category_detail_page.dart';
-import 'package:rc168/responsive_text.dart';
-import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 import 'package:text_responsive/text_responsive.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -80,7 +78,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     height: 65,
                     child: InlineTextWidget(
                       category.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                       ),
                     ),

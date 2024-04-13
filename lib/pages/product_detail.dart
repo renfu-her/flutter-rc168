@@ -7,6 +7,7 @@ import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as dom;
 import 'package:rc168/responsive_text.dart';
 import 'package:text_responsive/text_responsive.dart';
+import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -118,9 +119,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     children: [
                       Expanded(
                         flex: 2,
-                        child: InlineTextWidget(option.name,
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
+                        child: Text(option.name,
+                            style: TextStyle(
+                                fontSize: 20.px, fontWeight: FontWeight.bold)),
                       ),
                       Expanded(
                         flex: 3,
@@ -140,11 +141,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               return DropdownMenuItem<String>(
                                 value: value.id,
                                 child: value.price == 0
-                                    ? InlineTextWidget("${value.name}",
-                                        style: const TextStyle(fontSize: 20))
-                                    : InlineTextWidget(
+                                    ? Text("${value.name}",
+                                        style: TextStyle(fontSize: 20.px))
+                                    : Text(
                                         "${value.name}(${value.pricePrefix}NT\$${value.price.toString()})",
-                                        style: const TextStyle(fontSize: 20)),
+                                        style: TextStyle(fontSize: 20.px)),
                               );
                             }).toList(),
                           ),
@@ -200,16 +201,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                InlineTextWidget(product['name'],
-                                    style: const TextStyle(
-                                        fontSize: 20,
+                                Text(product['name'],
+                                    style: TextStyle(
+                                        fontSize: 20.px,
                                         fontWeight: FontWeight.bold)),
                                 Center(
                                   // 将Text包裹在Center小部件中以实现居中对齐
-                                  child: InlineTextWidget(
-                                      'NT${product['price']}',
-                                      style: const TextStyle(
-                                          fontSize: 20, color: Colors.red)),
+                                  child: Text('NT${product['price']}',
+                                      style: TextStyle(
+                                          fontSize: 20.px, color: Colors.red)),
                                 ),
                               ],
                             ),
@@ -236,7 +236,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   borderRadius:
                                       BorderRadius.circular(5.0), // 邊框圓角
                                 ),
-                                child: InlineTextWidget(
+                                child: Text(
                                   product['stock_status'],
                                   style: TextStyle(
                                       color: product['stock_status'] == '有現貨'
@@ -261,11 +261,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ...contentWidgets,
                     ...optionWidgets,
                     const SizedBox(height: 6),
-                    const Center(
-                      child: InlineTextWidget(
+                    Center(
+                      child: Text(
                         '商品描述',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                            fontWeight: FontWeight.bold, fontSize: 20.px),
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -278,9 +278,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                InlineTextWidget(
+                                Text(
                                   convertHtmlToString(product['description']),
-                                  style: const TextStyle(fontSize: 18),
+                                  style: TextStyle(fontSize: 18.px),
                                 ),
                               ],
                             ),
@@ -341,10 +341,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: ResponsiveText(
+                      title: Text(
                         '您尚未登入會員 ',
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+                        style: TextStyle(
+                            fontSize: 20.px, fontWeight: FontWeight.bold),
                       ),
                       content: SingleChildScrollView(
                         child: ListBody(
@@ -377,8 +377,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 );
               }
             },
-            child: InlineTextWidget('加入購物車',
-                style: const TextStyle(fontSize: 18, color: Colors.white)),
+            child: Text('加入購物車',
+                style: TextStyle(fontSize: 20.px, color: Colors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
               foregroundColor: Colors.white, // 文本颜色为白色
@@ -481,7 +481,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
                   '$currentQuantity', // 顯示當前數量
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 16.0,
+                    fontSize: 16.px,
                   ),
                 ),
               ),
