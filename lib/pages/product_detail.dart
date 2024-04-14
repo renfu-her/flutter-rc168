@@ -81,6 +81,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
+  String splitByLengthAndJoin(String str, int length,
+      {String separator = ' '}) {
+    List<String> parts = [];
+    for (int i = 0; i < str.length; i += length) {
+      int end = (i + length < str.length) ? i + length : str.length;
+      parts.add(str.substring(i, end));
+    }
+    return parts.join(separator);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,9 +129,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     children: [
                       Expanded(
                         flex: 2,
-                        child: Text(option.name,
-                            style: TextStyle(
-                                fontSize: 20.px, fontWeight: FontWeight.bold)),
+                        child: InlineTextWidget(option.name,
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
                       ),
                       Expanded(
                         flex: 3,
@@ -141,11 +151,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               return DropdownMenuItem<String>(
                                 value: value.id,
                                 child: value.price == 0
-                                    ? Text("${value.name}",
-                                        style: TextStyle(fontSize: 20.px))
-                                    : Text(
+                                    ? InlineTextWidget("${value.name}",
+                                        style: TextStyle(fontSize: 18))
+                                    : InlineTextWidget(
                                         "${value.name}(${value.pricePrefix}NT\$${value.price.toString()})",
-                                        style: TextStyle(fontSize: 20.px)),
+                                        style: TextStyle(fontSize: 18)),
                               );
                             }).toList(),
                           ),
@@ -201,15 +211,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(product['name'],
-                                    style: TextStyle(
-                                        fontSize: 20.px,
-                                        fontWeight: FontWeight.bold)),
+                                InlineTextWidget(
+                                  splitByLengthAndJoin(product['name'], 12,
+                                      separator: '\n'),
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                  // overflow: TextOverflow.ellipsis,
+                                ),
                                 Center(
                                   // 将Text包裹在Center小部件中以实现居中对齐
-                                  child: Text('NT${product['price']}',
-                                      style: TextStyle(
-                                          fontSize: 20.px, color: Colors.red)),
+                                  child: InlineTextWidget(
+                                      'NT${product['price']}',
+                                      style: const TextStyle(
+                                          fontSize: 18, color: Colors.red)),
                                 ),
                               ],
                             ),
@@ -261,11 +276,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ...contentWidgets,
                     ...optionWidgets,
                     const SizedBox(height: 6),
-                    Center(
-                      child: Text(
+                    const Center(
+                      child: InlineTextWidget(
                         '商品描述',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20.px),
+                            fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -278,9 +293,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                InlineTextWidget(
                                   convertHtmlToString(product['description']),
-                                  style: TextStyle(fontSize: 18.px),
+                                  style: TextStyle(fontSize: 18),
                                 ),
                               ],
                             ),
@@ -341,10 +356,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text(
+                      title: InlineTextWidget(
                         '您尚未登入會員 ',
                         style: TextStyle(
-                            fontSize: 20.px, fontWeight: FontWeight.bold),
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       content: SingleChildScrollView(
                         child: ListBody(
@@ -377,8 +392,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 );
               }
             },
-            child: Text('加入購物車',
-                style: TextStyle(fontSize: 20.px, color: Colors.white)),
+            child: InlineTextWidget('加入購物車',
+                style: TextStyle(fontSize: 18, color: Colors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
               foregroundColor: Colors.white, // 文本颜色为白色

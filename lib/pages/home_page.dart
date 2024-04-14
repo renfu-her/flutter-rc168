@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 // import 'package:rc168/pages/shop/shop_page.dart';
 import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
+import 'package:text_responsive/text_responsive.dart';
 
 var dio = Dio();
 
@@ -91,11 +92,11 @@ class _HomePageState extends State<HomePage> {
                 return const Center(child: CircularProgressIndicator());
               },
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(16.0),
-              child: Text(
+              child: InlineTextWidget(
                 '最新商品',
-                style: TextStyle(fontSize: 20.px, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -165,20 +166,19 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment:
                                     CrossAxisAlignment.center, // 將對齊方式改為置中
                                 children: <Widget>[
-                                  Text(
+                                  InlineTextWidget(
                                     product.name,
-                                    style: TextStyle(
-                                      fontSize: 16.px, // 使用 .sp 來自動調整字體大小
+                                    style: const TextStyle(
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
-                                    maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.center,
                                   ),
-                                  Text(
+                                  InlineTextWidget(
                                     product.price,
-                                    style: TextStyle(
-                                      fontSize: 16.px, // 使用 .sp 來自動調整字體大小
+                                    style: const TextStyle(
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                     textAlign: TextAlign.center,
@@ -190,10 +190,10 @@ class _HomePageState extends State<HomePage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
                               child: ElevatedButton(
-                                child: Text(
+                                child: InlineTextWidget(
                                   '加入購物車',
-                                  style: TextStyle(
-                                      fontSize: 18.px, color: Colors.white),
+                                  style: const TextStyle(
+                                      fontSize: 18, color: Colors.white),
                                 ),
                                 onPressed: () async {
                                   Navigator.push(
@@ -225,9 +225,10 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text(
+              child: InlineTextWidget(
                 '熱門商品',
-                style: TextStyle(fontSize: 20.px, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -297,18 +298,17 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment:
                                     CrossAxisAlignment.center, // 將對齊方式改為置中
                                 children: <Widget>[
-                                  Text(
+                                  InlineTextWidget(
                                     product.name,
-                                    style: TextStyle(
-                                        fontSize: 16.px,
+                                    style: const TextStyle(
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold),
-                                    maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.center, // 文本對齊也設置為居中
                                   ),
-                                  Text(
+                                  InlineTextWidget(
                                     product.price,
-                                    style: TextStyle(fontSize: 18.px),
+                                    style: const TextStyle(fontSize: 18),
                                     textAlign: TextAlign.center, // 文本對齊設置為居中
                                   ),
                                 ],
@@ -318,10 +318,10 @@ class _HomePageState extends State<HomePage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
                               child: ElevatedButton(
-                                child: Text(
+                                child: InlineTextWidget(
                                   '加入購物車',
                                   style: TextStyle(
-                                      fontSize: 18.px, color: Colors.white),
+                                      fontSize: 16, color: Colors.white),
                                 ),
                                 onPressed: () async {
                                   Navigator.push(

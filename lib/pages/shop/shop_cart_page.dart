@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/shop/shop_payment_page.dart';
 import 'package:rc168/pages/member/address/address_cart_page.dart';
+import 'package:text_responsive/text_responsive.dart';
 import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 class ShopCartPage extends StatefulWidget {
@@ -213,14 +214,14 @@ class _ShopCartPageState extends State<ShopCartPage> {
                 });
               },
             ),
-            title: Text(
+            title: InlineTextWidget(
               method.title,
-              style: TextStyle(fontSize: 18.px), // 字體大小
+              style: TextStyle(fontSize: 18), // 字體大小
             ),
-            trailing: Text(
+            trailing: InlineTextWidget(
               'NT\$${method.cost}',
               style: TextStyle(
-                  fontSize: 18.px, // 字體大小
+                  fontSize: 18, // 字體大小
                   fontWeight: FontWeight.bold), // 字體加粗
             ),
             onTap: () {
@@ -269,14 +270,15 @@ class _ShopCartPageState extends State<ShopCartPage> {
         context: context, // 确保你有一个BuildContext实例名为context
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(
+            title: InlineTextWidget(
               '溫馨提醒!',
-              style: TextStyle(fontSize: 16.px),
+              style: TextStyle(fontSize: 16),
             ),
-            content: Text('您尚未選定付款方式或物流方式。', style: TextStyle(fontSize: 16.px)),
+            content: InlineTextWidget('您尚未選定付款方式或物流方式。',
+                style: TextStyle(fontSize: 16)),
             actions: <Widget>[
               TextButton(
-                child: Text('確定', style: TextStyle(fontSize: 16.px)),
+                child: InlineTextWidget('確定', style: TextStyle(fontSize: 18)),
                 onPressed: () {
                   Navigator.of(context).pop(); // 关闭对话框
                 },
@@ -307,30 +309,35 @@ class _ShopCartPageState extends State<ShopCartPage> {
       'amount': totalAmount,
     };
 
-    try {
-      // 发送POST请求
-      final response = await dio.post(
-        '${demoUrl}/api/product/submit',
-        data: orderData,
+    final response = await dio.post(
+      '${demoUrl}/api/product/submit',
+      data: orderData,
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = response.data['data'];
+      final htmlUrl =
+          '${demoUrl}/api/product/payment?customerId=${customerId}&orderId=' +
+              responseData['order']['order_id'];
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ShopPaymentPage(htmlUrl: htmlUrl)),
       );
-
-      if (response.statusCode == 200) {
-        final responseData = response.data['data'];
-        final htmlUrl =
-            '${demoUrl}/api/product/payment?customerId=${customerId}&orderId=' +
-                responseData['order']['order_id'];
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ShopPaymentPage(htmlUrl: htmlUrl)),
-        );
-      } else {
-        print('Failed to submit order: ${response.statusCode}');
-      }
-    } on DioException catch (e) {
-      print('Error submitting order: $e');
+    } else {
+      print('Failed to submit order: ${response.statusCode}');
     }
+  }
+
+  String splitByLengthAndJoin(String str, int length,
+      {String separator = ' '}) {
+    List<String> parts = [];
+    for (int i = 0; i < str.length; i += length) {
+      int end = (i + length < str.length) ? i + length : str.length;
+      parts.add(str.substring(i, end));
+    }
+    return parts.join(separator);
   }
 
   @override
@@ -354,10 +361,10 @@ class _ShopCartPageState extends State<ShopCartPage> {
                         size: 80,
                         color: Colors.grey[400],
                       ),
-                      Text(
+                      InlineTextWidget(
                         '您的購物車是空的!',
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 22,
                           color: Colors.grey[400],
                         ),
                       ),
@@ -372,15 +379,15 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          InlineTextWidget(
                             '商品總計',
                             style: TextStyle(
-                                fontSize: 20.px, fontWeight: FontWeight.bold),
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          Text(
+                          InlineTextWidget(
                             'NT\$${totalAmount.toStringAsFixed(0)}',
                             style: TextStyle(
-                                fontSize: 20.px, fontWeight: FontWeight.bold),
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -395,10 +402,9 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       children: [
                         Padding(
                           padding: EdgeInsets.all(16.0),
-                          child: Text('付款方式',
+                          child: InlineTextWidget('付款方式',
                               style: TextStyle(
-                                  fontSize: 20.px,
-                                  fontWeight: FontWeight.bold)),
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -454,16 +460,16 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                       snapshot.data!['country'];
                                   final zoneDetails = snapshot.data!['zone'];
                                   return ListTile(
-                                    title: Text('收貨地址',
+                                    title: InlineTextWidget('收貨地址',
                                         style: TextStyle(
-                                            fontSize: 20.px,
+                                            fontSize: 18,
                                             fontWeight: FontWeight.bold)),
-                                    subtitle: Text(
+                                    subtitle: InlineTextWidget(
                                       '${customerAddress!['firstname']} ${customerAddress!['lastname']} \n' +
                                           '${customerAddress!['address_1']} ${customerAddress!['address_2']} \n' +
                                           '${zoneDetails['name']}, ${countryDetails['name']} \n' +
                                           '${customerAddress!['postcode']}',
-                                      style: TextStyle(fontSize: 18.px),
+                                      style: TextStyle(fontSize: 18),
                                     ),
                                     trailing: IconButton(
                                       icon: const Icon(Icons.edit),
@@ -514,23 +520,24 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                 '${imgUrl}' + product.thumbUrl,
                                 width: 80,
                               ),
-                              title: Text(
-                                product.name +
+                              title: InlineTextWidget(
+                                splitByLengthAndJoin(product.name, 9,
+                                        separator: '\n') +
                                     "\nNT\$" +
                                     product.price.toString(),
-                                style: TextStyle(fontSize: 16.px),
+                                style: TextStyle(fontSize: 16),
                               ),
                               subtitle: Row(
                                 children: [
-                                  Text('数量: ${product.quantity}'),
+                                  InlineTextWidget('数量: ${product.quantity}'),
                                 ],
                               ),
-                              trailing: Text(
+                              trailing: InlineTextWidget(
                                   'NT\$' +
                                       (product.price * product.quantity)
                                           .toString(),
                                   style: TextStyle(
-                                      fontSize: 18.px,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.bold)),
                             );
                           }
@@ -549,9 +556,9 @@ class _ShopCartPageState extends State<ShopCartPage> {
                   onPressed: () {
                     submitOrder();
                   },
-                  child: const Text(
+                  child: const InlineTextWidget(
                     '確定下訂單',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 18),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey, // 按钮背景颜色为灰色
@@ -569,7 +576,8 @@ class _ShopCartPageState extends State<ShopCartPage> {
                         Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) => MyApp()));
                       },
-                      child: Text('逛逛賣場', style: TextStyle(fontSize: 20.px)),
+                      child: InlineTextWidget('逛逛賣場',
+                          style: TextStyle(fontSize: 16)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
                         foregroundColor: Colors.white, // 文本颜色为白色
@@ -583,9 +591,8 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       onPressed: () {
                         submitOrder();
                       },
-                      child: Text('確定下訂單',
-                          style:
-                              TextStyle(fontSize: 20.px, color: Colors.white)),
+                      child: InlineTextWidget('確定下訂單',
+                          style: TextStyle(fontSize: 18, color: Colors.white)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
                         foregroundColor: Colors.white, // 文本颜色为白色

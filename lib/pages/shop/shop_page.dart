@@ -4,6 +4,7 @@ import 'package:rc168/main.dart';
 import 'package:rc168/pages/shop/shop_cart_page.dart';
 import 'package:rc168/responsive_text.dart';
 import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
+import 'package:text_responsive/text_responsive.dart';
 
 class ShopPage extends StatefulWidget {
   @override
@@ -109,6 +110,16 @@ class _ShopPageState extends State<ShopPage> {
     }
   }
 
+  String splitByLengthAndJoin(String str, int length,
+      {String separator = ' '}) {
+    List<String> parts = [];
+    for (int i = 0; i < str.length; i += length) {
+      int end = (i + length < str.length) ? i + length : str.length;
+      parts.add(str.substring(i, end));
+    }
+    return parts.join(separator);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,10 +139,10 @@ class _ShopPageState extends State<ShopPage> {
                         size: 80,
                         color: Colors.grey[400],
                       ),
-                      Text(
+                      InlineTextWidget(
                         '您的購物車是空的!',
-                        style: TextStyle(
-                            fontSize: 20.px, color: Colors.grey[400]!),
+                        style:
+                            TextStyle(fontSize: 20, color: Colors.grey[400]!),
                       ),
                       SizedBox(height: 20),
                       // ElevatedButton(
@@ -153,14 +164,13 @@ class _ShopPageState extends State<ShopPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('商品總計',
+                          InlineTextWidget('商品總計',
                               style: TextStyle(
-                                  fontSize: 20.px,
-                                  fontWeight: FontWeight.bold)),
-                          Text('NT\$${totalAmount.toStringAsFixed(0)}',
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          InlineTextWidget(
+                              'NT\$${totalAmount.toStringAsFixed(0)}',
                               style: TextStyle(
-                                  fontSize: 20.px,
-                                  fontWeight: FontWeight.bold)),
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
@@ -180,11 +190,12 @@ class _ShopPageState extends State<ShopPage> {
                               '${imgUrl}' + product.thumbUrl,
                               width: 80,
                             ),
-                            title: Text(
-                              product.name +
+                            title: InlineTextWidget(
+                              splitByLengthAndJoin(product.name, 9,
+                                      separator: '\n') +
                                   "\nNT\$" +
                                   product.price.toString(),
-                              style: TextStyle(fontSize: 16.px),
+                              style: TextStyle(fontSize: 16),
                             ),
                             subtitle: Row(
                               children: [
@@ -198,7 +209,8 @@ class _ShopPageState extends State<ShopPage> {
                                         context: context, // 這裡需要提供BuildContext
                                         builder: (BuildContext context) {
                                           return AlertDialog(
-                                            title: Text('確認'),
+                                            title: Text('確認',
+                                                style: TextStyle(fontSize: 18)),
                                             content: Text('是否要刪除該項目？'),
                                             actions: <Widget>[
                                               TextButton(
@@ -231,9 +243,9 @@ class _ShopPageState extends State<ShopPage> {
                                     }
                                   },
                                 ),
-                                Text(
+                                InlineTextWidget(
                                   '数量: ${product.quantity}',
-                                  style: TextStyle(fontSize: 18.px),
+                                  style: TextStyle(fontSize: 16),
                                 ),
                                 IconButton(
                                     icon: const Icon(Icons.add),
@@ -247,11 +259,11 @@ class _ShopPageState extends State<ShopPage> {
                                     }),
                               ],
                             ),
-                            trailing: Text(
+                            trailing: InlineTextWidget(
                               'NT\$' +
                                   (product.price * product.quantity).toString(),
                               style: TextStyle(
-                                  fontSize: 20.px, fontWeight: FontWeight.bold),
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                           );
                         },
@@ -270,9 +282,9 @@ class _ShopPageState extends State<ShopPage> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ShopCartPage()));
                   },
-                  child: Text(
+                  child: InlineTextWidget(
                     '結 帳',
-                    style: TextStyle(fontSize: 18.px, color: Colors.white),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey, // 按钮背景颜色为灰色
@@ -290,8 +302,8 @@ class _ShopPageState extends State<ShopPage> {
                         Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) => MyApp()));
                       },
-                      child: ResponsiveText('逛逛賣場',
-                          fontSize: 20, color: Colors.white),
+                      child: InlineTextWidget('逛逛賣場',
+                          style: TextStyle(fontSize: 20, color: Colors.white)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
                         foregroundColor: Colors.white, // 文本颜色为白色
@@ -307,9 +319,9 @@ class _ShopPageState extends State<ShopPage> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ShopCartPage()));
                       },
-                      child: Text(
+                      child: InlineTextWidget(
                         '結 帳',
-                        style: TextStyle(fontSize: 20.px, color: Colors.white),
+                        style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
