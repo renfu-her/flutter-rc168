@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/shop/shop_cart_page.dart';
-import 'package:rc168/responsive_text.dart';
-import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 import 'package:text_responsive/text_responsive.dart';
 
 class ShopPage extends StatefulWidget {

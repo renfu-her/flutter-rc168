@@ -4,7 +4,6 @@ import 'package:rc168/main.dart';
 import 'package:rc168/pages/shop/shop_payment_page.dart';
 import 'package:rc168/pages/member/address/address_cart_page.dart';
 import 'package:text_responsive/text_responsive.dart';
-import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 class ShopCartPage extends StatefulWidget {
   // final String? addressId;
@@ -194,10 +193,10 @@ class _ShopCartPageState extends State<ShopCartPage> {
       children: [
         Padding(
             padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
-            child: Text(
+            child: InlineTextWidget(
               '物流方式', // 標題
               style: TextStyle(
-                  fontSize: 20.px, // 字體大小
+                  fontSize: 18, // 字體大小
                   fontWeight: FontWeight.bold), // 字體加粗
             )),
         ...methods.map((method) {
