@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
-import 'package:rc168/responsive_text.dart';
+import 'package:text_responsive/text_responsive.dart';
 
 class OrderPage extends StatefulWidget {
   @override
@@ -42,9 +42,9 @@ class _OrderPageState extends State<OrderPage> {
               itemBuilder: (context, index) {
                 Order order = snapshot.data![index];
                 return ListTile(
-                  title: ResponsiveText(
+                  title: InlineTextWidget(
                     '訂單號碼 #${order.orderId}',
-                    fontWeight: FontWeight.bold,
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

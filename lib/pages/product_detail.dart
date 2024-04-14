@@ -304,29 +304,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: Row(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Expanded(
-                    //         child: Container(
-                    //           decoration: BoxDecoration(
-                    //             color: Colors.blue, // 设定背景颜色
-                    //             borderRadius:
-                    //                 BorderRadius.circular(6.0), // 这里设置圆角大小
-                    //           ),
-                    //           child: Row(
-                    //             mainAxisAlignment: MainAxisAlignment.center,
-                    //             children: [
-                    //               RatingStarWidget(rating: product['rating'])
-                    //             ],
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
                     const SizedBox(height: 160),
                   ],
                 ),

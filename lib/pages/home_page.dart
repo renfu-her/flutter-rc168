@@ -6,7 +6,6 @@ import 'package:rc168/pages/product_detail.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 // import 'package:rc168/pages/shop/shop_page.dart';
-import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 import 'package:text_responsive/text_responsive.dart';
 
 var dio = Dio();
