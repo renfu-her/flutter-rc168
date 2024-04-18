@@ -2,29 +2,36 @@ import 'package:flutter/material.dart';
 
 class ResponsiveText extends StatelessWidget {
   final String text;
-  final double fontSize;
+  final double baseFontSize; // Base font size at your chosen breakpoint
   final FontWeight fontWeight;
-  final Color color; // 新增颜色参数
+  final Color color;
   final int maxLines;
   final TextOverflow overflow;
   final TextAlign textAlign;
 
   ResponsiveText(
     this.text, {
-    this.fontSize = 20, // 默认字体大小
-    this.fontWeight = FontWeight.normal, // 默认字重
-    this.color = Colors.black, // 默认颜色
-    this.textAlign = TextAlign.start, // 默认居中
-    this.overflow = TextOverflow.clip, // 默认以省略号处理溢出文本
+    this.baseFontSize = 16, // Choose a reasonable default size
+    this.fontWeight = FontWeight.normal,
+    this.color = Colors.black,
+    this.textAlign = TextAlign.start,
+    this.overflow = TextOverflow.clip,
     this.maxLines = 1,
   });
 
   @override
   Widget build(BuildContext context) {
-    // 获取屏幕的宽度
     double screenWidth = MediaQuery.of(context).size.width;
-    // 根据屏幕宽度设置文字大小
-    double fontSize = screenWidth / (600 / this.fontSize); // 假设以600为基准进行调整
+    double textScaleFactor = MediaQuery.of(context).textScaleFactor;
+    double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+    double baseWidth =
+        360; // Base width could be 360px for standard mobile devices
+
+    // Adjust font size relative to the base width
+    double fontSize = (screenWidth / baseWidth) *
+        baseFontSize *
+        textScaleFactor /
+        devicePixelRatio;
 
     return Text(
       text,
@@ -35,7 +42,7 @@ class ResponsiveText extends StatelessWidget {
       ),
       textAlign: textAlign,
       overflow: overflow,
-      maxLines: maxLines,
+      // maxLines: maxLines,
     );
   }
 }

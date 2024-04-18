@@ -7,7 +7,8 @@ import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as dom;
 import 'package:rc168/responsive_text.dart';
 import 'package:text_responsive/text_responsive.dart';
-import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -57,6 +58,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       element.replaceWith(dom.Text('• ${element.text}\n'));
     });
 
+    // print(document.body!.text);
     return document.body!.text;
   }
 
@@ -91,6 +93,53 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return parts.join(separator);
   }
 
+  void showShareDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0)), // Rounded corners
+          child: Container(
+            padding: EdgeInsets.all(20.0),
+            height: 120, // Set the height of the dialog
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment
+                      .spaceEvenly, // Center the icons horizontally
+                  children: <Widget>[
+                    IconButton(
+                      icon:
+                          Icon(FontAwesomeIcons.line, size: 40.0), // Icon size
+                      onPressed: () {
+                        // Line sharing code
+                        Share.share('check out my website https://example.com',
+                            subject: 'Look what I made!');
+                        Navigator.of(context).pop(); // Dismiss the dialog
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(FontAwesomeIcons.facebookMessenger,
+                          size: 40.0), // Icon size
+                      onPressed: () {
+                        // Messenger sharing code
+                        Share.share('check out my website https://example.com',
+                            subject: 'Look what I made!');
+                        Navigator.of(context).pop(); // Dismiss the dialog
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,6 +151,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: () {}),
+          IconButton(
+              icon: Icon(FontAwesomeIcons.solidShareFromSquare /*  */),
+              onPressed: () {
+                showShareDialog(context);
+              }),
+        ],
       ),
       body: FutureBuilder<dynamic>(
         future: productDetail,
@@ -151,11 +208,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               return DropdownMenuItem<String>(
                                 value: value.id,
                                 child: value.price == 0
-                                    ? InlineTextWidget("${value.name}",
-                                        style: TextStyle(fontSize: 18))
-                                    : InlineTextWidget(
+                                    ? ResponsiveText("${value.name}",
+                                        baseFontSize: 34)
+                                    : ResponsiveText(
                                         "${value.name}(${value.pricePrefix}NT\$${value.price.toString()})",
-                                        style: TextStyle(fontSize: 18)),
+                                        baseFontSize: 34),
                               );
                             }).toList(),
                           ),
@@ -293,9 +350,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                InlineTextWidget(
+                                ResponsiveText(
                                   convertHtmlToString(product['description']),
-                                  style: TextStyle(fontSize: 18),
+                                  baseFontSize: 36,
                                 ),
                               ],
                             ),
@@ -473,7 +530,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
                   '$currentQuantity', // 顯示當前數量
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 16.px,
+                    fontSize: 16,
                   ),
                 ),
               ),

@@ -229,10 +229,10 @@ class _MyHomePageState extends State<MyHomePage> {
             : SizedBox(),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
-        actions: [
-          IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: () {}),
-          IconButton(icon: Icon(FontAwesomeIcons.comments), onPressed: () {}),
-        ],
+        // actions: [
+        //   IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: () {}),
+        //   IconButton(icon: Icon(FontAwesomeIcons.comments), onPressed: () {}),
+        // ],
         iconTheme: IconThemeData(color: Colors.white),
       ),
       drawer: Drawer(
