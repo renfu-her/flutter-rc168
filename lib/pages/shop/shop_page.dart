@@ -193,12 +193,12 @@ class _ShopPageState extends State<ShopPage> {
                                       separator: '\n') +
                                   "\nNT\$" +
                                   product.price.toString(),
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(fontSize: 14),
                             ),
                             subtitle: Row(
                               children: [
                                 IconButton(
-                                  icon: Icon(Icons.remove),
+                                  icon: Icon(Icons.remove, size: 14),
                                   onPressed: () async {
                                     if (product.quantity == 1) {
                                       // 當數量為1時，顯示確認對話框
@@ -243,10 +243,13 @@ class _ShopPageState extends State<ShopPage> {
                                 ),
                                 InlineTextWidget(
                                   '数量: ${product.quantity}',
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(fontSize: 12),
                                 ),
                                 IconButton(
-                                    icon: const Icon(Icons.add),
+                                    icon: const Icon(
+                                      Icons.add,
+                                      size: 14,
+                                    ),
                                     onPressed: () async {
                                       // 若數量不為1，正常增加數量
                                       setState(() {
@@ -261,7 +264,7 @@ class _ShopPageState extends State<ShopPage> {
                               'NT\$' +
                                   (product.price * product.quantity).toString(),
                               style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
+                                  fontSize: 14, fontWeight: FontWeight.bold),
                             ),
                           );
                         },

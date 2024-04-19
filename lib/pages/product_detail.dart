@@ -111,8 +111,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       .spaceEvenly, // Center the icons horizontally
                   children: <Widget>[
                     IconButton(
-                      icon:
-                          Icon(FontAwesomeIcons.line, size: 40.0), // Icon size
+                      icon: Icon(FontAwesomeIcons.line, size: 40.0),
+                      color: Colors.green, // Icon size
                       onPressed: () {
                         // Line sharing code
                         Share.share('check out my website https://example.com',
@@ -121,8 +121,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       },
                     ),
                     IconButton(
-                      icon: Icon(FontAwesomeIcons.facebookMessenger,
-                          size: 40.0), // Icon size
+                      icon:
+                          Icon(FontAwesomeIcons.facebookMessenger, size: 40.0),
+                      color: Colors.blue, // Icon size
                       onPressed: () {
                         // Messenger sharing code
                         Share.share('check out my website https://example.com',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:text_responsive/text_responsive.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class OrderPage extends StatefulWidget {
   @override
@@ -105,12 +106,26 @@ class _OrderPageState extends State<OrderPage> {
                       )
                     ],
                   ),
-                  // trailing: ElevatedButton(
-                  //   onPressed: () {
-                  //     // 实现点击事件
-                  //   },
-                  //   child: const Text('再買一次'),
-                  // ),
+                  trailing: Row(
+                    mainAxisSize:
+                        MainAxisSize.min, // 重要：這確保 Row 只佔用其子 widgets 所需的最小空間
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(FontAwesomeIcons
+                            .infoCircle), // 詳情圖標，請確保已經加載了 FontAwesome
+                        onPressed: () {
+                          // 在這裡處理查看詳情的事件
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(FontAwesomeIcons
+                            .shoppingCart), // 再買一次的圖標，請確保已經加載了 FontAwesome
+                        onPressed: () {
+                          // 在這裡處理再買一次的事件
+                        },
+                      ),
+                    ],
+                  ),
                 );
               },
             );

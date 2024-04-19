@@ -4,6 +4,7 @@ import 'package:rc168/main.dart';
 import 'package:rc168/pages/shop/shop_payment_page.dart';
 import 'package:rc168/pages/member/address/address_cart_page.dart';
 import 'package:text_responsive/text_responsive.dart';
+import 'package:rc168/responsive_text.dart';
 
 class ShopCartPage extends StatefulWidget {
   // final String? addressId;
@@ -215,12 +216,12 @@ class _ShopCartPageState extends State<ShopCartPage> {
             ),
             title: InlineTextWidget(
               method.title,
-              style: TextStyle(fontSize: 18), // 字體大小
+              style: TextStyle(fontSize: 16), // 字體大小
             ),
             trailing: InlineTextWidget(
               'NT\$${method.cost}',
               style: TextStyle(
-                  fontSize: 18, // 字體大小
+                  fontSize: 16, // 字體大小
                   fontWeight: FontWeight.bold), // 字體加粗
             ),
             onTap: () {
@@ -524,11 +525,12 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                         separator: '\n') +
                                     "\nNT\$" +
                                     product.price.toString(),
-                                style: TextStyle(fontSize: 16),
+                                style: TextStyle(fontSize: 14),
                               ),
                               subtitle: Row(
                                 children: [
-                                  InlineTextWidget('数量: ${product.quantity}'),
+                                  InlineTextWidget('数量: ${product.quantity}',
+                                      style: TextStyle(fontSize: 12)),
                                 ],
                               ),
                               trailing: InlineTextWidget(
@@ -536,7 +538,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                       (product.price * product.quantity)
                                           .toString(),
                                   style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold)),
                             );
                           }
