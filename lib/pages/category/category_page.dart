@@ -15,22 +15,20 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   void initState() {
     super.initState();
-    // fetchCategories();
+    fetchCategories();
   }
 
   Future<List<Category>> fetchCategories() async {
-    // try {
-    var response = await dio.get('${appUri}/gws_categories&api_key=${apiKey}');
-
+    var dio = Dio();
+    Response response = await dio
+        .get('${appUri}/gws_appservice/allCategories&api_key=${apiKey}');
     if (response.statusCode == 200) {
-      List<dynamic> categoryJson = response.data['categories'];
-      return categoryJson.map((json) => Category.fromJson(json)).toList();
+      List<dynamic> data = response.data['categories'];
+      print(data);
+      return data.map((category) => Category.fromJson(category)).toList();
     } else {
-      throw Exception('Failed to load category');
+      throw Exception('Failed to load categories');
     }
-    // } catch (e) {
-    //   throw Exception('Error: Failed to load category');
-    // }
   }
 
   @override
@@ -41,60 +39,34 @@ class _CategoryPageState extends State<CategoryPage> {
       ),
       body: FutureBuilder<List<Category>>(
         future: fetchCategories(),
-        builder: (context, snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text("No categories found"));
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else {
+            List<Category> categories = snapshot.data ?? [];
             return ListView.builder(
-              itemCount: snapshot.data!.length,
+              itemCount: categories.length,
               itemBuilder: (context, index) {
-                var category = snapshot.data![index];
-                var imagePath = category.image.isNotEmpty
-                    ? '${imgUrl}' + category.image
-                    : 'assets/images/no_image.png';
-
-                return ListTile(
-                  leading: SizedBox(
-                    width: 60,
-                    height: 60,
-                    child: Image.network(
-                      imagePath,
-                      fit: BoxFit.cover, // 控制圖片如何佔滿容器
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          'assets/images/no_image.png', // 預設圖片
+                Category category = categories[index];
+                return SizedBox(
+                    height: 80,
+                    child: ListTile(
+                      title: Text(category.name),
+                      leading: ClipOval(
+                        child: Image.network(
+                          category.image,
+                          width: 60,
                           fit: BoxFit.cover,
-                        );
-                      },
-                    ),
-                  ),
-                  title: Container(
-                    // 確保文字和圖片高度一致
-                    alignment: Alignment.centerLeft,
-                    height: 65,
-                    child: InlineTextWidget(
-                      category.name,
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CategoryDetailPage(
-                          categoryId: category.id,
-                          categoryName: category.name,
                         ),
                       ),
-                    );
-                  },
-                );
+                      onTap: () {
+                        // Handle the tap event.
+                        // For example, you can navigate to the category detail page.
+                      },
+                    ));
               },
             );
           }
@@ -105,16 +77,29 @@ class _CategoryPageState extends State<CategoryPage> {
 }
 
 class Category {
-  final String id;
   final String name;
+  // final List<Category> children;
+  final String column;
+  final String href;
   final String image;
 
-  Category({required this.id, required this.name, this.image = ''});
+  Category(
+      {required this.name,
+      // required this.children,
+      required this.column,
+      required this.href,
+      required this.image});
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
-        id: json['category_id'] as String,
-        name: json['name'] as String,
-        image: json['image'] as String? ?? '');
+      name: json['name'] as String,
+      // children: json['children'] ??
+      //     (json['children'] as List<dynamic>)
+      //         .map((childJson) => Category.fromJson(childJson))
+      //         .toList(),
+      column: json['column'] as String,
+      href: json['href'] as String,
+      image: json['image'] as String,
+    );
   }
 }
