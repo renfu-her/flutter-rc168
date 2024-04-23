@@ -47,20 +47,34 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   String convertHtmlToString(String htmlContent) {
     var document = html_parser.parse(htmlContent);
 
+    // Format headings
     document.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((element) {
       element.replaceWith(dom.Text('${element.text}\n'));
     });
 
+    // Format paragraphs
     document.querySelectorAll('p').forEach((element) {
-      element.replaceWith(dom.Text('${element.text}\n'));
+      element.replaceWith(dom.Text(
+          '${element.text}\n\n')); // Added an extra newline for paragraph spacing
     });
-    // // 将li标签替换为点
+
+    // Replace 'li' with bullet points
     document.querySelectorAll('li').forEach((element) {
       element.replaceWith(dom.Text('• ${element.text}\n'));
     });
 
-    // print(document.body!.text);
-    return document.body!.text;
+    // Extract 'src' from 'img' tags and include it in the text
+    document.querySelectorAll('img').forEach((element) {
+      var imgSrc = element.attributes['src'];
+      if (imgSrc != null) {
+        // This will insert the URL text directly into the output.
+        // You may want to format it or handle it differently depending on your needs.
+        element.replaceWith(dom.Text('Image: $imgSrc\n'));
+      }
+    });
+
+    return document.body!.text
+        .trim(); // Trim to remove any leading/trailing whitespace
   }
 
   Future<dynamic> getProductDetail() async {
@@ -392,9 +406,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ResponsiveText(
-                                  convertHtmlToString(product['description']),
-                                  baseFontSize: 36,
+                                MyHtmlWidget(
+                                  htmlContent: '<h1>測試商品01</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240210230805.png">' +
+                                      '<p></p><h1>測試商品02</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240105141314.png">' +
+                                      '<p></p><h1>測試商品03</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/ST10PRO.png">' +
+                                      '<h1>測試商品01</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240210230805.png">' +
+                                      '<p></p><h1>測試商品02</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240105141314.png">' +
+                                      '<p></p><h1>測試商品03</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/ST10PRO.png">',
+                                  baseFontSize: 8,
                                 ),
                               ],
                             ),
@@ -501,6 +520,59 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+List<Widget> convertHtmlToWidgets(String htmlContent,
+    {double baseFontSize = 14}) {
+  var document = html_parser.parse(htmlContent);
+  List<Widget> widgetsList = [];
+
+  document.body!.nodes.forEach((node) {
+    if (node is dom.Element) {
+      switch (node.localName) {
+        case 'h1':
+          widgetsList.add(Text(node.text,
+              style: TextStyle(
+                  fontSize: baseFontSize * 2, fontWeight: FontWeight.bold)));
+          break;
+        case 'p':
+          widgetsList
+              .add(Text(node.text, style: TextStyle(fontSize: baseFontSize)));
+          break;
+        case 'img':
+          var imgSrc = node.attributes['src'];
+          if (imgSrc != null) {
+            widgetsList.add(Image.network(imgSrc));
+          }
+          break;
+        // ... 处理其他HTML标签
+      }
+    } else if (node is dom.Text) {
+      widgetsList
+          .add(Text(node.text, style: TextStyle(fontSize: baseFontSize)));
+    }
+  });
+
+  return widgetsList;
+}
+
+class MyHtmlWidget extends StatelessWidget {
+  final String htmlContent;
+  final double baseFontSize;
+
+  MyHtmlWidget({Key? key, required this.htmlContent, this.baseFontSize = 14})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> widgets =
+        convertHtmlToWidgets(htmlContent, baseFontSize: baseFontSize);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: widgets,
     );
   }
 }
