@@ -26,6 +26,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   final CarouselController _controller = CarouselController();
   int _current = 0;
   int _selectedQuantity = 1;
+  List service = [];
 
   @override
   void initState() {
@@ -93,7 +94,39 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return parts.join(separator);
   }
 
-  void showShareDialog(BuildContext context) {
+  Future<Map<String, dynamic>> fetchCustomerServiceData(int number) async {
+    var dio = Dio();
+    Map<String, dynamic> service = {};
+    try {
+      var response = await dio.get(
+          '${appUri}/gws_appservice/onlineCustomerService&api_key=${apiKey}');
+      if (response.statusCode == 200) {
+        var data = response.data;
+        if (data['status'] == 0 || data['status'] == null) {
+          // 根据number选择返回哪个服务信息
+          service = data[number == 1
+              ? 'online_customer_service_1'
+              : 'online_customer_service_2'];
+        } else {
+          print('Status is not 0 or null.');
+        }
+      } else {
+        print('Failed to fetch data: HTTP status ${response.statusCode}');
+      }
+    } on DioError catch (e) {
+      print('Dio error: ${e.message}');
+    } catch (e) {
+      print('Error: $e');
+    }
+    return service;
+  }
+
+  // TODO: 加入分享功能
+  void showShareDialog(BuildContext context) async {
+    Map<String, dynamic> fetchData1 = await fetchCustomerServiceData(1);
+    Map<String, dynamic> fetchData2 = await fetchCustomerServiceData(2);
+    print(fetchData1);
+    print(fetchData2);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -110,27 +143,35 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   mainAxisAlignment: MainAxisAlignment
                       .spaceEvenly, // Center the icons horizontally
                   children: <Widget>[
-                    IconButton(
-                      icon: Icon(FontAwesomeIcons.line, size: 40.0),
-                      color: Colors.green, // Icon size
-                      onPressed: () {
-                        // Line sharing code
-                        Share.share('check out my website https://example.com',
-                            subject: 'Look what I made!');
-                        Navigator.of(context).pop(); // Dismiss the dialog
-                      },
-                    ),
-                    IconButton(
-                      icon:
-                          Icon(FontAwesomeIcons.facebookMessenger, size: 40.0),
-                      color: Colors.blue, // Icon size
-                      onPressed: () {
-                        // Messenger sharing code
-                        Share.share('check out my website https://example.com',
-                            subject: 'Look what I made!');
-                        Navigator.of(context).pop(); // Dismiss the dialog
-                      },
-                    ),
+                    if (fetchData1['status'] == '1')
+                      IconButton(
+                        icon: Image.network(
+                          fetchData1['thumb'],
+                          width: 40,
+                          height: 40,
+                        ),
+                        color: Colors.green, // Icon size
+                        onPressed: () async {
+                          // Line sharing code
+                          Share.share(fetchData1['link'], subject: 'LINE 通知');
+                          // Navigator.of(context).pop();
+                        },
+                      ),
+                    if (fetchData2['status'] == '1')
+                      IconButton(
+                        icon: Image.network(
+                          fetchData2['thumb'],
+                          width: 40,
+                          height: 40,
+                        ),
+                        color: Colors.blue, // Icon size
+                        onPressed: () async {
+                          // Messenger sharing code
+                          Share.share(fetchData2['link'],
+                              subject: 'FaceBook 通知');
+                          // Navigator.of(context).pop();
+                        },
+                      ),
                   ],
                 ),
               ],

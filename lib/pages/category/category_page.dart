@@ -37,7 +37,7 @@ class _CategoryPageState extends State<CategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('分類'),
+        title: const Text('分類'),
       ),
       body: FutureBuilder<List<Category>>(
         future: fetchCategories(),
