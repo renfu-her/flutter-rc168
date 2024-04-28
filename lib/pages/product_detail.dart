@@ -81,11 +81,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     try {
       var response =
           await dio.get('${demoUrl}/api/product/detail/${widget.productId}');
-      print(widget.productId);
+      // print(widget.productId);
       if (response.statusCode == 200) {
         var productOptions = response.data['data']['options'] as List;
         var productOptionsParsed =
             productOptions.map((json) => ProductOption.fromJson(json)).toList();
+
+        // print(response.data['data']);
         return {
           'details': response.data['data'],
           'options': productOptionsParsed,
@@ -324,20 +326,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                InlineTextWidget(
-                                  splitByLengthAndJoin(product['name'], 12,
-                                      separator: '\n'),
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                  // overflow: TextOverflow.ellipsis,
-                                ),
+                                ResponsiveText(product['name'],
+                                    baseFontSize: 40,
+                                    fontWeight: FontWeight.bold),
                                 Center(
                                   // 将Text包裹在Center小部件中以实现居中对齐
-                                  child: InlineTextWidget(
-                                      'NT${product['price']}',
-                                      style: const TextStyle(
-                                          fontSize: 18, color: Colors.red)),
+                                  child: ResponsiveText(
+                                      product['special'] != false
+                                          ? 'NT${product['special']}'
+                                          : 'NT${product['price']}',
+                                      baseFontSize: 40,
+                                      color: Colors.red),
                                 ),
                               ],
                             ),
@@ -407,13 +406,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 MyHtmlWidget(
-                                  htmlContent: '<h1>測試商品01</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240210230805.png">' +
-                                      '<p></p><h1>測試商品02</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240105141314.png">' +
+                                  htmlContent: '<h1>測試商品01</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240210230805.png" >' +
+                                      '<p></p><h1>測試商品02</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240105141314.png" >' +
                                       '<p></p><h1>測試商品03</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/ST10PRO.png">' +
-                                      '<h1>測試商品01</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240210230805.png">' +
-                                      '<p></p><h1>測試商品02</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240105141314.png">' +
-                                      '<p></p><h1>測試商品03</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/ST10PRO.png">',
-                                  baseFontSize: 8,
+                                      '<h1>測試商品01</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240210230805.png" >' +
+                                      '<p></p><h1>測試商品02</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240105141314.png" >' +
+                                      '<p></p><h1>測試商品03</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/ST10PRO.png" >',
+                                  baseFontSize: 18,
                                 ),
                               ],
                             ),
@@ -451,15 +450,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: InlineTextWidget(
+                      title: ResponsiveText(
                         '您尚未登入會員 ',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        baseFontSize: 40,
+                        fontWeight: FontWeight.bold,
                       ),
                       content: SingleChildScrollView(
                         child: ListBody(
                           children: <Widget>[
-                            ResponsiveText('請先登入會員！'),
+                            ResponsiveText(
+                              '請先登入會員！',
+                              baseFontSize: 36,
+                            ),
                           ],
                         ),
                       ),
@@ -535,7 +537,7 @@ List<Widget> convertHtmlToWidgets(String htmlContent,
         case 'h1':
           widgetsList.add(Text(node.text,
               style: TextStyle(
-                  fontSize: baseFontSize * 2, fontWeight: FontWeight.bold)));
+                  fontSize: baseFontSize, fontWeight: FontWeight.bold)));
           break;
         case 'p':
           widgetsList
@@ -544,10 +546,13 @@ List<Widget> convertHtmlToWidgets(String htmlContent,
         case 'img':
           var imgSrc = node.attributes['src'];
           if (imgSrc != null) {
-            widgetsList.add(Image.network(imgSrc));
+            widgetsList.add(Image.network(
+              imgSrc,
+              width: double.infinity, // Set width to screen width
+            ));
           }
           break;
-        // ... 处理其他HTML标签
+        // ... Handle other HTML tags
       }
     } else if (node is dom.Text) {
       widgetsList

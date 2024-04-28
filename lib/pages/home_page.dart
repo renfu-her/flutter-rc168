@@ -175,7 +175,9 @@ class _HomePageState extends State<HomePage> {
                                     textAlign: TextAlign.center,
                                   ),
                                   InlineTextWidget(
-                                    product.price,
+                                    product.special != false
+                                        ? product.special
+                                        : product.price,
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -306,7 +308,9 @@ class _HomePageState extends State<HomePage> {
                                     textAlign: TextAlign.center, // 文本對齊也設置為居中
                                   ),
                                   InlineTextWidget(
-                                    product.price,
+                                    product.special != false
+                                        ? product.special
+                                        : product.price,
                                     style: const TextStyle(fontSize: 18),
                                     textAlign: TextAlign.center, // 文本對齊設置為居中
                                   ),
@@ -410,12 +414,15 @@ class Product {
   final String name;
   final String thumb;
   final String price;
+  final dynamic special;
 
-  Product(
-      {required this.id,
-      required this.name,
-      required this.thumb,
-      required this.price});
+  Product({
+    required this.id,
+    required this.name,
+    required this.thumb,
+    required this.price,
+    required this.special,
+  });
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
@@ -423,6 +430,7 @@ class Product {
       name: json['name'],
       thumb: json['thumb'],
       price: json['price'],
+      special: json['special'] ?? false,
     );
   }
 }

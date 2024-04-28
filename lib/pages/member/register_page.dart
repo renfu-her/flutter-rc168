@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
+import 'package:rc168/responsive_text.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -40,11 +41,17 @@ class _RegisterPageState extends State<RegisterPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(title),
-          content: Text(message),
+          title: ResponsiveText(
+            title,
+            baseFontSize: 40,
+          ),
+          content: ResponsiveText(
+            message,
+            baseFontSize: 36,
+          ),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: Text('確定'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -304,21 +311,25 @@ class _RegisterPageState extends State<RegisterPage> {
               Row(
                 children: [
                   Expanded(
-                    child: DropdownButtonFormField<String>(
-                      value: _selectedCountryId,
-                      items: _countries.map((Country country) {
-                        return DropdownMenuItem<String>(
-                          value: country.id,
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width - 56,
-                            child: Text(
-                              country.name,
-                              overflow: TextOverflow.ellipsis,
+                    child: Visibility(
+                      visible:
+                          false, // Set the visibility to true or false based on your requirement
+                      child: DropdownButtonFormField<String>(
+                        value: _selectedCountryId,
+                        items: _countries.map((Country country) {
+                          return DropdownMenuItem<String>(
+                            value: country.id,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width - 56,
+                              child: Text(
+                                country.name,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) => _onCountrySelected(value!),
+                          );
+                        }).toList(),
+                        onChanged: (value) => _onCountrySelected(value!),
+                      ),
                     ),
                   ),
                 ],
@@ -326,19 +337,23 @@ class _RegisterPageState extends State<RegisterPage> {
               Row(
                 children: [
                   Expanded(
-                    child: DropdownButtonFormField<String>(
-                      value: _selectedZoneId,
-                      items: _zones.map((Zone zone) {
-                        return DropdownMenuItem<String>(
-                          value: zone.id,
-                          child: Text(
-                            zone.name,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) =>
-                          setState(() => _selectedZoneId = value!),
+                    child: Visibility(
+                      visible:
+                          false, // Set the visibility to true or false based on your requirement
+                      child: DropdownButtonFormField<String>(
+                        value: _selectedZoneId,
+                        items: _zones.map((Zone zone) {
+                          return DropdownMenuItem<String>(
+                            value: zone.id,
+                            child: Text(
+                              zone.name,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) =>
+                            setState(() => _selectedZoneId = value!),
+                      ),
                     ),
                   ),
                 ],

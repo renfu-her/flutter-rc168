@@ -78,25 +78,23 @@ class _CategoryPageState extends State<CategoryPage> {
 
 class Category {
   final String name;
-  // final List<Category> children;
   final String column;
   final String href;
   final String image;
+  final List<dynamic> children;
 
-  Category(
-      {required this.name,
-      // required this.children,
-      required this.column,
-      required this.href,
-      required this.image});
+  Category({
+    required this.name,
+    required this.column,
+    required this.href,
+    required this.image,
+    required this.children,
+  });
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
       name: json['name'] as String,
-      // children: json['children'] ??
-      //     (json['children'] as List<dynamic>)
-      //         .map((childJson) => Category.fromJson(childJson))
-      //         .toList(),
+      children: json['children'] as List<dynamic>,
       column: json['column'] as String,
       href: json['href'] as String,
       image: json['image'] as String,
