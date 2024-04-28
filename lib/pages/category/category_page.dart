@@ -63,8 +63,15 @@ class _CategoryPageState extends State<CategoryPage> {
                         ),
                       ),
                       onTap: () {
-                        // Handle the tap event.
-                        // For example, you can navigate to the category detail page.
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CategoryDetailPage(
+                              categoryId: category.column,
+                              categoryName: category.name,
+                            ),
+                          ),
+                        );
                       },
                     ));
               },
