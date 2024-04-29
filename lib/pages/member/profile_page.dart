@@ -238,7 +238,7 @@ class _ProfilePageState extends State<ProfilePage> {
               _showDialog('提示', '請填寫必填的密碼欄位。');
             }
           },
-          child: ResponsiveText('儲存', baseFontSize: 36),
+          child: ResponsiveText('儲存', baseFontSize: 36, color: Colors.white),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,

@@ -343,12 +343,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                           Column(
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.share), // 使用分享图标
-                                onPressed: () {
-                                  Share.share('商品: ${product['name']}');
-                                },
-                              ),
+                              // IconButton(
+                              //   icon: const Icon(Icons.share), // 使用分享图标
+                              //   onPressed: () {
+                              //     Share.share('商品: ${product['name']}');
+                              //   },
+                              // ),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 5.0,

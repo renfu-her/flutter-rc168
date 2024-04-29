@@ -521,7 +521,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                         separator: '\n') +
                                     "\nNT\$" +
                                     product.price.toString(),
-                                style: TextStyle(fontSize: 14),
+                                style: const TextStyle(fontSize: 14),
                               ),
                               subtitle: Row(
                                 children: [
