@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/category/category_detail_page.dart';
-import 'package:text_responsive/text_responsive.dart';
+import 'package:rc168/responsive_text.dart';
 
 class CategoryPage extends StatefulWidget {
   @override
@@ -47,33 +47,65 @@ class _CategoryPageState extends State<CategoryPage> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             List<Category> categories = snapshot.data ?? [];
+
             return ListView.builder(
               itemCount: categories.length,
               itemBuilder: (context, index) {
                 Category category = categories[index];
-                return SizedBox(
-                    height: 80,
-                    child: ListTile(
-                      title: Text(category.name),
-                      leading: ClipOval(
-                        child: Image.network(
-                          category.image,
-                          width: 60,
-                          fit: BoxFit.cover,
+                return ListTile(
+                  leading: ClipOval(
+                    child: Image.network(
+                      category.image,
+                      width: 60,
+                      height: 60, // Make sure the images are circle
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CategoryDetailPage(
+                          categoryId: category.categoryId,
+                          categoryName: category.name,
                         ),
                       ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CategoryDetailPage(
-                              categoryId: category.column,
-                              categoryName: category.name,
-                            ),
+                    );
+                  },
+                  title: ExpansionTile(
+                    title: ResponsiveText(
+                      category.name,
+                      baseFontSize: 32,
+                    ),
+                    children: category.children.map((childCategory) {
+                      return ListTile(
+                        title: ResponsiveText(
+                          childCategory.name,
+                          baseFontSize: 32,
+                        ),
+                        leading: ClipOval(
+                          child: Image.network(
+                            childCategory.image,
+                            width: 60,
+                            height: 60, // Make sure the images are circle
+                            fit: BoxFit.cover,
                           ),
-                        );
-                      },
-                    ));
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CategoryDetailPage(
+                                categoryId: childCategory.categoryId,
+                                categoryName: childCategory.name,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
+                );
               },
             );
           }
@@ -88,7 +120,8 @@ class Category {
   final String column;
   final String href;
   final String image;
-  final List<dynamic> children;
+  final String categoryId;
+  final List<Category> children;
 
   Category({
     required this.name,
@@ -96,15 +129,22 @@ class Category {
     required this.href,
     required this.image,
     required this.children,
+    required this.categoryId,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
-      name: json['name'] as String,
-      children: json['children'] as List<dynamic>,
-      column: json['column'] as String,
-      href: json['href'] as String,
-      image: json['image'] as String,
+      name: json['name'] as String? ?? '',
+      children: json['children'] != null
+          ? (json['children'] as List<dynamic>)
+              .map((childJson) =>
+                  Category.fromJson(childJson as Map<String, dynamic>))
+              .toList()
+          : [],
+      column: json['column'] as String? ?? '',
+      href: json['href'] as String? ?? '',
+      image: json['image'] as String? ?? '',
+      categoryId: json['categoryId'] as String? ?? '',
     );
   }
 }
