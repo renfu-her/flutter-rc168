@@ -1,4 +1,4 @@
-import 'dart:convert';
+// import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -122,7 +122,8 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
         foregroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => ShopCartPage())),
         ),
       ),
       body: Padding(
@@ -154,26 +155,14 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
                               .min, // Row should be as big as the sum of its children.
                           children: [
                             IconButton(
-                              icon: Icon(Icons.add_circle),
+                              icon: const Icon(Icons.add_circle),
                               onPressed: () {
-                                // 在这里处理编辑按钮的点击事件
-                                // 例如，打开一个编辑表单或导航到另一个页面
-                                // Navigator.of(context).push(...);
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => ShopCartPage()));
                               },
                             ),
-                            // IconButton(
-                            //   icon: Icon(Icons.edit),
-                            //   onPressed: () {
-                            //     // 在这里处理编辑按钮的点击事件
-                            //     // 例如，打开一个编辑表单或导航到另一个页面
-                            //     // Navigator.of(context).push(...);
-                            //     _showDialog('編輯', '更新成功。');
-                            //   },
-                            // ),
                             IconButton(
-                              icon: Icon(Icons.delete),
+                              icon: const Icon(Icons.delete),
                               onPressed: () async {
                                 var deleteAddressRes = await deleteAddress(
                                     '${address.customerId}',
@@ -199,7 +188,7 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
                 },
               );
             } else {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           },
         ),
@@ -214,7 +203,7 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,
-            minimumSize: Size(double.infinity, 36),
+            minimumSize: const Size(double.infinity, 36),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6),
             ),

@@ -56,8 +56,8 @@ class _CategoryPageState extends State<CategoryPage> {
                   leading: ClipOval(
                     child: Image.network(
                       category.image,
-                      width: 60,
-                      height: 60, // Make sure the images are circle
+                      width: 60.0,
+                      height: 60.0, // Make sure the images are circle
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -86,8 +86,8 @@ class _CategoryPageState extends State<CategoryPage> {
                         leading: ClipOval(
                           child: Image.network(
                             childCategory.image,
-                            width: 60,
-                            height: 60, // Make sure the images are circle
+                            width: 60.0,
+                            height: 60.0, // Make sure the images are circle
                             fit: BoxFit.cover,
                           ),
                         ),
