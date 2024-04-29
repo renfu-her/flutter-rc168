@@ -8,6 +8,7 @@ import 'package:rc168/pages/member/order_page.dart';
 import 'package:rc168/pages/member/address/address_page.dart';
 import 'package:rc168/pages/member/register_page.dart';
 import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
+import 'package:rc168/responsive_text.dart';
 
 class MemberPage extends StatefulWidget {
   @override
@@ -81,10 +82,7 @@ class _MemberPageState extends State<MemberPage> {
       itemBuilder: (BuildContext context, int index) {
         var info = informations[index];
         return ListTile(
-          title: Text(
-            info['title'] ?? '無標題',
-            style: TextStyle(fontSize: 18.px),
-          ),
+          title: ResponsiveText(info['title'] ?? '無標題', baseFontSize: 36),
           onTap: () {
             Navigator.push(
               context,
@@ -208,10 +206,8 @@ class _MemberPageState extends State<MemberPage> {
               )
             : SizedBox(height: 160), // 如果 logoImg 为空，则显示一个占位符
         const SizedBox(height: 16),
-        Text(
-          '${fullName}',
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
+        ResponsiveText('${fullName}',
+            baseFontSize: 36, fontWeight: FontWeight.bold),
         const SizedBox(height: 2),
         Text(
           email,
@@ -249,12 +245,10 @@ class _MemberPageState extends State<MemberPage> {
           padding: EdgeInsets.only(left: 16.0),
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text(
+            child: ResponsiveText(
               '相關說明',
-              style: TextStyle(
-                fontSize: 22.px,
-                fontWeight: FontWeight.bold,
-              ),
+              baseFontSize: 40,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -268,7 +262,7 @@ class _MemberPageState extends State<MemberPage> {
   Widget _buildOptionItem(IconData icon, String title, VoidCallback onTap) {
     return ListTile(
       leading: Icon(icon),
-      title: Text(title, style: TextStyle(fontSize: 18.px)),
+      title: ResponsiveText(title, baseFontSize: 36),
       trailing: const Icon(Icons.chevron_right),
       onTap: onTap,
     );

@@ -525,7 +525,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                               ),
                               subtitle: Row(
                                 children: [
-                                  InlineTextWidget('数量: ${product.quantity}',
+                                  InlineTextWidget('數量: ${product.quantity}',
                                       style: TextStyle(fontSize: 12)),
                                 ],
                               ),
