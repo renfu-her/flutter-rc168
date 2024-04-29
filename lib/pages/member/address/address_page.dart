@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/member/address/address_add_page.dart';
 import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
+import 'package:rc168/responsive_text.dart';
 
 class AddressPage extends StatefulWidget {
   @override
@@ -139,13 +140,13 @@ class _AddressPageState extends State<AddressPage> {
                   return Column(
                     children: <Widget>[
                       ListTile(
-                        title: Text(
+                        title: ResponsiveText(
                           '${address.firstname} ${address.lastname}',
-                          style: TextStyle(fontSize: 18.px),
+                          baseFontSize: 36,
                         ),
-                        subtitle: Text(
+                        subtitle: ResponsiveText(
                           '${address.address1} \n${address.address2} \n${address.city}, ${address.zoneName}, ${address.countryName}, ${address.postcode}',
-                          style: TextStyle(fontSize: 18.px),
+                          baseFontSize: 36,
                         ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize
@@ -181,7 +182,10 @@ class _AddressPageState extends State<AddressPage> {
                           ],
                         ),
                       ),
-                      Divider(), // 添加横线
+                      Divider(),
+                      snapshot.data!.length - 1 == index
+                          ? const SizedBox(height: 80)
+                          : const SizedBox(height: 0),
                     ],
                   );
                 },
