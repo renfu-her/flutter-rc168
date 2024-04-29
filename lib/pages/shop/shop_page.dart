@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/shop/shop_cart_page.dart';
 import 'package:text_responsive/text_responsive.dart';
+import 'package:rc168/responsive_text.dart';
 
 class ShopPage extends StatefulWidget {
   @override
@@ -162,13 +163,12 @@ class _ShopPageState extends State<ShopPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          InlineTextWidget('商品總計',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
-                          InlineTextWidget(
+                          ResponsiveText('商品總計',
+                              baseFontSize: 36, fontWeight: FontWeight.bold),
+                          ResponsiveText(
                               'NT\$${totalAmount.toStringAsFixed(0)}',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                              baseFontSize: 36,
+                              fontWeight: FontWeight.bold),
                         ],
                       ),
                     ),
@@ -188,12 +188,11 @@ class _ShopPageState extends State<ShopPage> {
                               '${imgUrl}' + product.thumbUrl,
                               width: 80,
                             ),
-                            title: InlineTextWidget(
-                              splitByLengthAndJoin(product.name, 9,
-                                      separator: '\n') +
+                            title: ResponsiveText(
+                              product.name +
                                   "\nNT\$" +
                                   product.price.toString(),
-                              style: TextStyle(fontSize: 14),
+                              baseFontSize: 26,
                             ),
                             subtitle: Row(
                               children: [
@@ -241,9 +240,9 @@ class _ShopPageState extends State<ShopPage> {
                                     }
                                   },
                                 ),
-                                InlineTextWidget(
+                                ResponsiveText(
                                   '数量: ${product.quantity}',
-                                  style: TextStyle(fontSize: 12),
+                                  baseFontSize: 24,
                                 ),
                                 IconButton(
                                     icon: const Icon(
@@ -260,11 +259,11 @@ class _ShopPageState extends State<ShopPage> {
                                     }),
                               ],
                             ),
-                            trailing: InlineTextWidget(
+                            trailing: ResponsiveText(
                               'NT\$' +
                                   (product.price * product.quantity).toString(),
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
+                              baseFontSize: 28,
+                              fontWeight: FontWeight.bold,
                             ),
                           );
                         },
