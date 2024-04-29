@@ -194,11 +194,10 @@ class _ShopCartPageState extends State<ShopCartPage> {
       children: [
         Padding(
             padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
-            child: InlineTextWidget(
-              '物流方式', // 標題
-              style: TextStyle(
-                  fontSize: 18, // 字體大小
-                  fontWeight: FontWeight.bold), // 字體加粗
+            child: ResponsiveText(
+              '物流方式',
+              baseFontSize: 34, // 字體大小
+              fontWeight: FontWeight.bold, // 字體加粗
             )),
         ...methods.map((method) {
           return ListTile(
@@ -214,15 +213,14 @@ class _ShopCartPageState extends State<ShopCartPage> {
                 });
               },
             ),
-            title: InlineTextWidget(
+            title: ResponsiveText(
               method.title,
-              style: TextStyle(fontSize: 16), // 字體大小
+              baseFontSize: 32, // 字體大小
             ),
-            trailing: InlineTextWidget(
+            trailing: ResponsiveText(
               'NT\$${method.cost}',
-              style: TextStyle(
-                  fontSize: 16, // 字體大小
-                  fontWeight: FontWeight.bold), // 字體加粗
+              baseFontSize: 34, // 字體大小
+              fontWeight: FontWeight.bold, // 字體加粗
             ),
             onTap: () {
               setState(() {
@@ -375,15 +373,15 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          InlineTextWidget(
+                          ResponsiveText(
                             '商品總計',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                            baseFontSize: 34,
+                            fontWeight: FontWeight.bold,
                           ),
-                          InlineTextWidget(
+                          ResponsiveText(
                             'NT\$${totalAmount.toStringAsFixed(0)}',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                            baseFontSize: 34,
+                            fontWeight: FontWeight.bold,
                           ),
                         ],
                       ),
@@ -398,9 +396,8 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       children: [
                         Padding(
                           padding: EdgeInsets.all(16.0),
-                          child: InlineTextWidget('付款方式',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          child: ResponsiveText('付款方式',
+                              baseFontSize: 34, fontWeight: FontWeight.bold),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -456,16 +453,15 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                       snapshot.data!['country'];
                                   final zoneDetails = snapshot.data!['zone'];
                                   return ListTile(
-                                    title: InlineTextWidget('收貨地址',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold)),
-                                    subtitle: InlineTextWidget(
+                                    title: ResponsiveText('收貨地址',
+                                        baseFontSize: 34,
+                                        fontWeight: FontWeight.bold),
+                                    subtitle: ResponsiveText(
                                       '${customerAddress!['firstname']} ${customerAddress!['lastname']} \n' +
                                           '${customerAddress!['address_1']} ${customerAddress!['address_2']} \n' +
                                           '${zoneDetails['name']}, ${countryDetails['name']} \n' +
                                           '${customerAddress!['postcode']}',
-                                      style: TextStyle(fontSize: 18),
+                                      baseFontSize: 30,
                                     ),
                                     trailing: IconButton(
                                       icon: const Icon(Icons.edit),
@@ -516,26 +512,24 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                 '${imgUrl}' + product.thumbUrl,
                                 width: 80,
                               ),
-                              title: InlineTextWidget(
-                                splitByLengthAndJoin(product.name, 9,
-                                        separator: '\n') +
+                              title: ResponsiveText(
+                                product.name +
                                     "\nNT\$" +
                                     product.price.toString(),
-                                style: const TextStyle(fontSize: 14),
+                                baseFontSize: 28,
                               ),
                               subtitle: Row(
                                 children: [
-                                  InlineTextWidget('數量: ${product.quantity}',
-                                      style: TextStyle(fontSize: 12)),
+                                  ResponsiveText('數量: ${product.quantity}',
+                                      baseFontSize: 28),
                                 ],
                               ),
-                              trailing: InlineTextWidget(
+                              trailing: ResponsiveText(
                                   'NT\$' +
                                       (product.price * product.quantity)
                                           .toString(),
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold)),
+                                  baseFontSize: 28,
+                                  fontWeight: FontWeight.bold),
                             );
                           }
                         },
