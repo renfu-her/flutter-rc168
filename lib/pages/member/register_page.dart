@@ -43,15 +43,18 @@ class _RegisterPageState extends State<RegisterPage> {
         return AlertDialog(
           title: ResponsiveText(
             title,
-            baseFontSize: 40,
+            baseFontSize: 36,
           ),
           content: ResponsiveText(
             message,
-            baseFontSize: 36,
+            baseFontSize: 30,
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('確定'),
+              child: ResponsiveText(
+                '確定',
+                baseFontSize: 36,
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },

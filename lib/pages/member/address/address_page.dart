@@ -30,12 +30,18 @@ class _AddressPageState extends State<AddressPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
+        title: ResponsiveText(
+          title,
+          baseFontSize: 36,
+        ),
+        content: ResponsiveText(
+          message,
+          baseFontSize: 30,
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text('確定'),
+            child: ResponsiveText('確定', baseFontSize: 36),
           ),
         ],
       ),

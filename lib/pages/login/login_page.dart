@@ -5,8 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_auth/local_auth.dart';
-
 import 'package:flutter/services.dart';
+import 'package:rc168/responsive_text.dart';
 
 class LoginPage extends StatefulWidget {
   final Function onLoginSuccess;
@@ -86,16 +86,29 @@ class _LoginPageState extends State<LoginPage> {
   void _showDialog(String title, String message) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('確定'),
+      builder: (context) {
+        return AlertDialog(
+          title: ResponsiveText(
+            title,
+            baseFontSize: 36,
           ),
-        ],
-      ),
+          content: ResponsiveText(
+            message,
+            baseFontSize: 39,
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: ResponsiveText(
+                '確定',
+                baseFontSize: 36,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

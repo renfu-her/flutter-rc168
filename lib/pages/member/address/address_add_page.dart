@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
+import 'package:rc168/responsive_text.dart';
 
 class AddressAddPage extends StatefulWidget {
   @override
@@ -39,20 +40,22 @@ class _AddressAddPageState extends State<AddressAddPage> {
   void _showDialog(String title, String message) {
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+      builder: (context) => AlertDialog(
+        title: ResponsiveText(
+          title,
+          baseFontSize: 36,
+        ),
+        content: ResponsiveText(
+          message,
+          baseFontSize: 30,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: ResponsiveText('確定', baseFontSize: 36),
+          ),
+        ],
+      ),
     );
   }
 
