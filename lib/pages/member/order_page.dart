@@ -117,13 +117,13 @@ class _OrderPageState extends State<OrderPage> {
                           // 在這裡處理查看詳情的事件
                         },
                       ),
-                      IconButton(
-                        icon: Icon(FontAwesomeIcons
-                            .shoppingCart), // 再買一次的圖標，請確保已經加載了 FontAwesome
-                        onPressed: () {
-                          // 在這裡處理再買一次的事件
-                        },
-                      ),
+                      // IconButton(
+                      //   icon: Icon(FontAwesomeIcons
+                      //       .shoppingCart), // 再買一次的圖標，請確保已經加載了 FontAwesome
+                      //   onPressed: () {
+                      //     // 在這裡處理再買一次的事件
+                      //   },
+                      // ),
                     ],
                   ),
                 );

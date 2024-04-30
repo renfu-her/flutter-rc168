@@ -269,8 +269,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 leading: const Icon(FontAwesomeIcons.headset),
                 title: const Text('線上客服'),
                 onTap: () {
-                  // Navigator.of(context)
-                  //     .push(MaterialPageRoute(builder: (context) => MyApp()));
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => MyApp()));
                 },
               ),
           ],

@@ -8,6 +8,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:rc168/responsive_text.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:browser_launcher/browser_launcher.dart';
 // import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -137,7 +138,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return service;
   }
 
-  // TODO: 加入分享功能
+  // TODO: 加入客服中心
   void showShareDialog(BuildContext context) async {
     Map<String, dynamic> fetchData1 = await fetchCustomerServiceData(1);
     Map<String, dynamic> fetchData2 = await fetchCustomerServiceData(2);
@@ -168,9 +169,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                         color: Colors.green, // Icon size
                         onPressed: () async {
-                          // Line sharing code
-                          Share.share(fetchData1['link'], subject: 'LINE 通知');
-                          // Navigator.of(context).pop();
+                          Chrome.start([fetchData1['link']]);
                         },
                       ),
                     if (fetchData2['status'] == '1')
@@ -182,10 +181,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                         color: Colors.blue, // Icon size
                         onPressed: () async {
-                          // Messenger sharing code
-                          Share.share(fetchData2['link'],
-                              subject: 'FaceBook 通知');
-                          // Navigator.of(context).pop();
+                          Chrome.start(fetchData2['link']);
                         },
                       ),
                   ],
@@ -212,7 +208,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         actions: [
           IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: () {}),
           IconButton(
-              icon: Icon(FontAwesomeIcons.shareNodes),
+              icon: Icon(FontAwesomeIcons.headset),
               onPressed: () {
                 showShareDialog(context);
               }),
