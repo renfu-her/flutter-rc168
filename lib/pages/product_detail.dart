@@ -212,7 +212,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         actions: [
           IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: () {}),
           IconButton(
-              icon: Icon(FontAwesomeIcons.solidShareFromSquare /*  */),
+              icon: Icon(FontAwesomeIcons.headset),
               onPressed: () {
                 showShareDialog(context);
               }),

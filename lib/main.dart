@@ -67,9 +67,9 @@ void main() async {
     provisional: false,
     sound: true,
   );
-  log('User granted permission: ${settings.authorizationStatus}');
+  // log('User granted permission: ${settings.authorizationStatus}');
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  log("FCMToken $fcmToken");
+  // log("FCMToken $fcmToken");
 
   // runApp(MyApp());
   runApp(
@@ -252,12 +252,27 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               leading: const Icon(FontAwesomeIcons.circleUser),
               title: const Text('會員中心'),
-              onTap: () {},
+              onTap: () {
+                if (isLogin == true) {
+                  selectedIndex = 4;
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => MyApp()));
+                } else {
+                  selectedIndex = 4;
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => MyApp()));
+                }
+              },
             ),
-            // ListTile(
-            //   title: Text('項目2'),
-            //   onTap: () {},
-            // ),
+            if (isLogin) // 条件语句，仅在 isLogin == true 时包含此 ListTile
+              ListTile(
+                leading: const Icon(FontAwesomeIcons.headset),
+                title: const Text('線上客服'),
+                onTap: () {
+                  // Navigator.of(context)
+                  //     .push(MaterialPageRoute(builder: (context) => MyApp()));
+                },
+              ),
           ],
         ),
       ),
