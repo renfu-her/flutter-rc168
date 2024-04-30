@@ -342,7 +342,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Expanded(
                     child: Visibility(
                       visible:
-                          false, // Set the visibility to true or false based on your requirement
+                          true, // Set the visibility to true or false based on your requirement
                       child: DropdownButtonFormField<String>(
                         value: _selectedZoneId,
                         items: _zones.map((Zone zone) {

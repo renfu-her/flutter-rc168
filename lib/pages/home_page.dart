@@ -329,13 +329,37 @@ class _HomePageState extends State<HomePage> {
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.center, // 文本對齊也設置為居中
                                   ),
-                                  InlineTextWidget(
-                                    product.special != false
-                                        ? product.special
-                                        : product.price,
-                                    style: const TextStyle(fontSize: 18),
-                                    textAlign: TextAlign.center, // 文本對齊設置為居中
-                                  ),
+                                  product.special == false
+                                      ? Column(children: [
+                                          ResponsiveText("",
+                                              baseFontSize: 28,
+                                              textAlign: TextAlign.center,
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              color: Colors.grey),
+                                          ResponsiveText(
+                                            product.price,
+                                            baseFontSize: 36,
+                                            fontWeight: FontWeight.bold,
+                                            textAlign: TextAlign.center,
+                                          )
+                                        ])
+                                      : Column(
+                                          children: [
+                                            ResponsiveText(product.price,
+                                                baseFontSize: 28,
+                                                textAlign: TextAlign.center,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                                color: Colors.grey),
+                                            ResponsiveText(
+                                              product.special,
+                                              baseFontSize: 36,
+                                              textAlign: TextAlign.center,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ],
+                                        ),
                                 ],
                               ),
                             ),
