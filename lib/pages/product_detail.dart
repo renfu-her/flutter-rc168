@@ -324,20 +324,45 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         children: [
                           Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 ResponsiveText(product['name'],
                                     baseFontSize: 40,
                                     fontWeight: FontWeight.bold),
-                                Center(
-                                  // 将Text包裹在Center小部件中以实现居中对齐
-                                  child: ResponsiveText(
-                                      product['special'] != false
-                                          ? 'NT${product['special']}'
-                                          : 'NT${product['price']}',
-                                      baseFontSize: 40,
-                                      color: Colors.red),
-                                ),
+                                product['special'] == false
+                                    ? Column(children: [
+                                        ResponsiveText("",
+                                            baseFontSize: 28,
+                                            textAlign: TextAlign.center,
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                            color: Colors.grey),
+                                        ResponsiveText(
+                                          'NT' + product['price'],
+                                          baseFontSize: 36,
+                                          fontWeight: FontWeight.bold,
+                                          textAlign: TextAlign.center,
+                                          color: Colors.red,
+                                        )
+                                      ])
+                                    : Column(
+                                        children: [
+                                          ResponsiveText(
+                                              'NT' + product['price'],
+                                              baseFontSize: 28,
+                                              textAlign: TextAlign.center,
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              color: Colors.grey),
+                                          ResponsiveText(
+                                            'NT' + product['special'],
+                                            baseFontSize: 36,
+                                            textAlign: TextAlign.center,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.red,
+                                          ),
+                                        ],
+                                      ),
                               ],
                             ),
                           ),

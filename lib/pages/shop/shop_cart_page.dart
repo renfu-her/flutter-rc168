@@ -92,8 +92,13 @@ class _ShopCartPageState extends State<ShopCartPage> {
 
             setState(() {
               products.add(product);
-              totalAmount += product.price * product.quantity;
-              _tempTotalAmount += product.price * product.quantity;
+              product.special != false
+                  ? totalAmount += product.special * product.quantity
+                  : totalAmount += product.price * product.quantity;
+
+              product.special != false
+                  ? _tempTotalAmount += product.special * product.quantity
+                  : _tempTotalAmount += product.price * product.quantity;
             });
           }
         }
@@ -147,7 +152,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
           // 如果 status 為 false，選擇最新地址或其他邏輯
         }
 
-        print('customerAddress: ${customerAddress}');
+        print('customerAddress: ${customerAddress}addressId：${addressId}，');
       });
     } catch (e) {
       print(e);
@@ -292,8 +297,10 @@ class _ShopCartPageState extends State<ShopCartPage> {
         return {
           'product_id': product.productId,
           'quantity': product.quantity,
-          'price': product.price,
-          'total': product.price * product.quantity,
+          'price': product.special != false ? product.special : product.price,
+          'total': product.special != false
+              ? product.special * product.quantity
+              : product.price * product.quantity,
           'name': product.name
         };
       }).toList(),
@@ -467,20 +474,20 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                       icon: const Icon(Icons.edit),
                                       onPressed: () async {
                                         // 編輯地址的邏輯
-                                        Navigator.push(
+                                        final selectedAddress =
+                                            await Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   AddressCartAddPage()),
-                                        ).then((selectedAddress) {
-                                          print('地址: ' + selectedAddress);
-                                          if (selectedAddress != null) {
-                                            // 更新地址信息
-                                            fetchCustomerAddress(
-                                                defaultAddressId:
-                                                    selectedAddress.id);
-                                          }
-                                        });
+                                        );
+                                        print('地址: $selectedAddress');
+                                        if (selectedAddress != null) {
+                                          // 更新地址信息
+                                          fetchCustomerAddress(
+                                              defaultAddressId:
+                                                  selectedAddress.id);
+                                        }
                                       },
                                     ),
                                   );
@@ -525,9 +532,13 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                 ],
                               ),
                               trailing: ResponsiveText(
-                                  'NT\$' +
-                                      (product.price * product.quantity)
-                                          .toString(),
+                                  product.special != false
+                                      ? 'NT\$' +
+                                          (product.special * product.quantity)
+                                              .toString()
+                                      : 'NT\$' +
+                                          (product.price * product.quantity)
+                                              .toString(),
                                   baseFontSize: 28,
                                   fontWeight: FontWeight.bold),
                             );
@@ -606,6 +617,7 @@ class Product {
   final int price;
   int quantity;
   final String cartId;
+  final dynamic special;
 
   void incrementQuantity() {
     quantity++;
@@ -624,6 +636,7 @@ class Product {
     required this.price,
     required this.quantity,
     required this.cartId,
+    required this.special,
   });
 
   // 工廠構造函數
@@ -636,6 +649,10 @@ class Product {
           int.parse(combinedJson['price'].replaceAll(RegExp(r'[^0-9\.]'), '')),
       quantity: int.parse(combinedJson['quantity']),
       cartId: combinedJson['cart_id'],
+      special: combinedJson['special'] == false
+          ? false
+          : int.parse(
+              combinedJson['special'].replaceAll(RegExp(r'[^0-9\.]'), '')),
     );
   }
 }

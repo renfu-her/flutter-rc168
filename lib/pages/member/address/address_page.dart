@@ -4,6 +4,7 @@ import 'package:rc168/main.dart';
 import 'package:rc168/pages/member/address/address_add_page.dart';
 import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 import 'package:rc168/responsive_text.dart';
+import 'package:rc168/pages/member/address/address_edit_page.dart';
 
 class AddressPage extends StatefulWidget {
   @override
@@ -163,8 +164,10 @@ class _AddressPageState extends State<AddressPage> {
                               onPressed: () {
                                 // 在这里处理编辑按钮的点击事件
                                 // 例如，打开一个编辑表单或导航到另一个页面
-                                // Navigator.of(context).push(...);
-                                _showDialog('編輯', '更新成功。');
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => AddressEditPage(
+                                        addressId: address.addressId)));
+                                // _showDialog('編輯', '更新成功。');
                               },
                             ),
                             IconButton(

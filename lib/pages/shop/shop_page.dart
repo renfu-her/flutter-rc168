@@ -52,12 +52,12 @@ class _ShopPageState extends State<ShopPage> {
                     'quantity': cartItem['quantity'],
                     'cart_id': cartItem['cart_id'],
                   });
-
             var product = Product.fromJson(combinedData);
-
             setState(() {
               products.add(product);
-              totalAmount += product.price * product.quantity;
+              product.special != false
+                  ? totalAmount += product.special * product.quantity
+                  : totalAmount += product.price * product.quantity;
             });
           }
         }
@@ -144,15 +144,6 @@ class _ShopPageState extends State<ShopPage> {
                             TextStyle(fontSize: 20, color: Colors.grey[400]!),
                       ),
                       SizedBox(height: 20),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     // 這裡添加按鈕的行為，例如返回商店頁面
-                      //   },
-                      //   child: Text('開始選購'),
-                      //   style: ElevatedButton.styleFrom(
-                      //     foregroundColor: Theme.of(context).primaryColor,
-                      //   ),
-                      // )
                     ],
                   ),
                 )
@@ -183,16 +174,27 @@ class _ShopPageState extends State<ShopPage> {
                         padding: const EdgeInsets.only(bottom: 100.0),
                         itemBuilder: (context, index) {
                           final product = products[index];
+                          final displayPrice = (product.special != false)
+                              ? product.special
+                              : product.price;
+
                           return ListTile(
                             leading: Image.network(
                               '${imgUrl}' + product.thumbUrl,
                               width: 80,
                             ),
-                            title: ResponsiveText(
-                              product.name +
-                                  "\nNT\$" +
-                                  product.price.toString(),
-                              baseFontSize: 26,
+                            title: Container(
+                              height: 100, // 设置 Container 的高度
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10), // 添加垂直方向的填充
+                              alignment: Alignment.centerLeft,
+                              child: ResponsiveText(
+                                product.name +
+                                    "\nNT\$" +
+                                    displayPrice.toString(),
+                                baseFontSize: 28,
+                                maxLines: 4,
+                              ),
                             ),
                             subtitle: Row(
                               children: [
@@ -260,8 +262,13 @@ class _ShopPageState extends State<ShopPage> {
                               ],
                             ),
                             trailing: ResponsiveText(
-                              'NT\$' +
-                                  (product.price * product.quantity).toString(),
+                              product.special != false
+                                  ? 'NT\$' +
+                                      (product.special * product.quantity)
+                                          .toString()
+                                  : 'NT\$' +
+                                      (product.price * product.quantity)
+                                          .toString(),
                               baseFontSize: 28,
                               fontWeight: FontWeight.bold,
                             ),
@@ -343,6 +350,8 @@ class Product {
   final String name;
   final String thumbUrl;
   final int price;
+  final dynamic special;
+
   int quantity;
   final String cartId;
 
@@ -363,6 +372,7 @@ class Product {
     required this.price,
     required this.quantity,
     required this.cartId,
+    required this.special,
   });
 
   // 工廠構造函數
@@ -375,6 +385,10 @@ class Product {
           int.parse(combinedJson['price'].replaceAll(RegExp(r'[^0-9\.]'), '')),
       quantity: int.parse(combinedJson['quantity']),
       cartId: combinedJson['cart_id'],
+      special: combinedJson['special'] == false
+          ? false
+          : int.parse(
+              combinedJson['special'].replaceAll(RegExp(r'[^0-9\.]'), '')),
     );
   }
 }

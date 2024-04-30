@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 // import 'package:rc168/pages/shop/shop_page.dart';
 import 'package:text_responsive/text_responsive.dart';
+import 'package:rc168/responsive_text.dart';
 
 var dio = Dio();
 
@@ -45,12 +46,13 @@ class _HomePageState extends State<HomePage> {
           // },
         ),
         items: banners.map((banner) {
+          print(banner);
           return GestureDetector(
             onTap: () {
               _launchURL(banner.link);
             },
             child: Image.network(
-              '${imgUrl}${banner.image}',
+              '${banner.image}',
               fit: BoxFit.cover,
             ),
           );
@@ -75,13 +77,12 @@ class _HomePageState extends State<HomePage> {
             FutureBuilder<dynamic>(
               future: fetchBanners(),
               builder: (context, snapshot) {
+                print(snapshot.data);
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
-                    var product = snapshot.data;
-                    var images = product; // 确保这是字符串列表
                     return Column(
                       children: [
-                        buildBannerCarousel(images),
+                        buildBannerCarousel(snapshot.data),
                       ],
                     );
                   } else if (snapshot.hasError) {
@@ -174,16 +175,37 @@ class _HomePageState extends State<HomePage> {
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.center,
                                   ),
-                                  InlineTextWidget(
-                                    product.special != false
-                                        ? product.special
-                                        : product.price,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
+                                  product.special == false
+                                      ? Column(children: [
+                                          ResponsiveText("",
+                                              baseFontSize: 28,
+                                              textAlign: TextAlign.center,
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              color: Colors.grey),
+                                          ResponsiveText(
+                                            product.price,
+                                            baseFontSize: 36,
+                                            fontWeight: FontWeight.bold,
+                                            textAlign: TextAlign.center,
+                                          )
+                                        ])
+                                      : Column(
+                                          children: [
+                                            ResponsiveText(product.price,
+                                                baseFontSize: 28,
+                                                textAlign: TextAlign.center,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                                color: Colors.grey),
+                                            ResponsiveText(
+                                              product.special,
+                                              baseFontSize: 36,
+                                              textAlign: TextAlign.center,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ],
+                                        ),
                                 ],
                               ),
                             ),
@@ -398,11 +420,12 @@ Future<List<Product>> fetchPopularProducts() async {
 }
 
 Future<List<BannerModel>> fetchBanners() async {
-  final response =
-      await dio.get('${appUri}/gws_banner&banner_id=12&api_key=${apiKey}');
+  final response = await dio
+      .get('${appUri}/gws_appservice/allHomeBanner&&api_key=${apiKey}');
 
   if (response.statusCode == 200) {
-    List<dynamic> bannersJson = response.data['banner'];
+    List<dynamic> bannersJson = response.data['home_top_banner'];
+    print(bannersJson);
     return bannersJson.map((json) => BannerModel.fromJson(json)).toList();
   } else {
     throw Exception('Failed to load banners');
@@ -436,23 +459,14 @@ class Product {
 }
 
 class BannerModel {
-  final String bannerId;
-  final String name;
   final String title;
   final String link;
   final String image;
 
-  BannerModel(
-      {required this.bannerId,
-      required this.name,
-      required this.title,
-      required this.link,
-      required this.image});
+  BannerModel({required this.title, required this.link, required this.image});
 
   factory BannerModel.fromJson(Map<String, dynamic> json) {
     return BannerModel(
-      bannerId: json['banner_id'],
-      name: json['name'],
       title: json['title'],
       link: json['link'],
       image: json['image'],

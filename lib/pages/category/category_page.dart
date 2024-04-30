@@ -24,7 +24,7 @@ class _CategoryPageState extends State<CategoryPage> {
         .get('${appUri}/gws_appservice/allCategories&api_key=${apiKey}');
     if (response.statusCode == 200) {
       List<dynamic> data = response.data['categories'];
-      print(data);
+      // print(data);
       return data.map((category) => Category.fromJson(category)).toList();
     } else {
       throw Exception('Failed to load categories');
@@ -48,65 +48,59 @@ class _CategoryPageState extends State<CategoryPage> {
           } else {
             List<Category> categories = snapshot.data ?? [];
 
-            return ListView.builder(
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                Category category = categories[index];
-                return ListTile(
-                  leading: ClipOval(
-                    child: Image.network(
-                      category.image,
-                      width: 60.0,
-                      height: 60.0, // Make sure the images are circle
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CategoryDetailPage(
-                          categoryId: category.categoryId,
-                          categoryName: category.name,
-                        ),
+            return Theme(
+              data:
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: ListView.builder(
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  Category category = categories[index];
+                  return ExpansionTile(
+                    leading: ClipOval(
+                      child: Image.network(
+                        category.image,
+                        width: 60.0,
+                        height: 60.0,
+                        fit: BoxFit.cover,
                       ),
-                    );
-                  },
-                  title: ExpansionTile(
+                    ),
                     title: ResponsiveText(
                       category.name,
                       baseFontSize: 32,
                     ),
                     children: category.children.map((childCategory) {
-                      return ListTile(
-                        title: ResponsiveText(
-                          childCategory.name,
-                          baseFontSize: 32,
-                        ),
-                        leading: ClipOval(
-                          child: Image.network(
-                            childCategory.image,
-                            width: 60.0,
-                            height: 60.0, // Make sure the images are circle
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CategoryDetailPage(
-                                categoryId: childCategory.categoryId,
-                                categoryName: childCategory.name,
-                              ),
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 40.0), // 增加左邊的空白
+                        child: ListTile(
+                          leading: ClipOval(
+                            child: Image.network(
+                              childCategory.image,
+                              width: 60.0,
+                              height: 60.0,
+                              fit: BoxFit.cover,
                             ),
-                          );
-                        },
+                          ),
+                          title: ResponsiveText(
+                            childCategory.name,
+                            baseFontSize: 32,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoryDetailPage(
+                                  categoryId: childCategory.categoryId,
+                                  categoryName: childCategory.name,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       );
                     }).toList(),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             );
           }
         },

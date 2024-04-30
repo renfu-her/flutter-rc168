@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ResponsiveText extends StatelessWidget {
   final String text;
@@ -8,6 +9,7 @@ class ResponsiveText extends StatelessWidget {
   final int maxLines;
   final TextOverflow overflow;
   final TextAlign textAlign;
+  final TextDecoration decoration;
 
   ResponsiveText(
     this.text, {
@@ -17,6 +19,7 @@ class ResponsiveText extends StatelessWidget {
     this.textAlign = TextAlign.start,
     this.overflow = TextOverflow.clip,
     this.maxLines = 1,
+    this.decoration = TextDecoration.none,
   });
 
   @override
@@ -36,13 +39,13 @@ class ResponsiveText extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        fontSize: fontSize,
-        fontWeight: fontWeight,
-        color: color,
-      ),
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          color: color,
+          decoration: decoration),
       textAlign: textAlign,
       overflow: overflow,
-      // maxLines: maxLines,
+      maxLines: maxLines,
     );
   }
 }
