@@ -62,43 +62,68 @@ class _AddressEditPageState extends State<AddressEditPage> {
     );
   }
 
-  Future<void> addAddress() async {
-    // Build the FormData
-    if (_formKey.currentState!.validate()) {
-      final formData = FormData.fromMap({
+  Future<void> editAddress(String addressId) async {
+    if (_validateAndSaveForm()) {
+      var formData = FormData.fromMap({
+        'customer_id': customerId,
+        'api_key': apiKey,
+        'address_id': addressId,
         'firstname': _firstNameController.text,
         'lastname': _lastNameController.text,
         'company': _companyController.text,
         'address_1': _address1Controller.text,
         'address_2': _address2Controller.text,
         'postcode': _postcodeController.text,
-        'country_id': _selectedCountryId.toString(),
-        'zone_id': _selectedZoneId.toString(),
         'city': _cityController.text,
+        'country_id': _selectedCountryId,
+        'zone_id': _selectedZoneId,
         'custom_field': '{1: 711}',
-        'default': _isDefault
-            ? '1'
-            : '0', // Assuming the API expects '1' for true and '0' for false
+        'default': _isDefault ? '1' : '0',
       });
 
-      // Send the POST request
       try {
         final response = await dio.post(
-          '${appUri}/gws_customer_address/add&customer_id=${customerId}&api_key=${apiKey}',
+          '$appUri/gws_customer_address/edit&customer_id=${customerId}&address_id=${addressId}&api_key=${apiKey}',
           data: formData,
         );
+
+        print(response.data);
         if (response.statusCode == 200) {
-          // _showDialog('更新', '已經更新');
-          Navigator.pop(context);
-          Navigator.pop(context);
+          _showDialog('編輯地址', '編輯地址完成');
         } else {
-          // Handle the error
-          print('Failed to add address');
+          _showDialog('Error', 'Failed to edit address');
         }
       } catch (e) {
-        // Handle any exceptions
-        print('Error occurred: $e');
+        _showDialog('Error', e.toString());
       }
+    }
+  }
+
+  Future<void> showAddress(String addressId) async {
+    try {
+      final response = await dio.post(
+          '$appUri/gws_customer_address&customer_id=${customerId}&address_id=${addressId}&api_key=${apiKey}');
+
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        var addressData = response.data['customer_address'];
+        // // 現在更新所有的控制器和變量
+        _firstNameController.text = addressData[0]['firstname'] ?? '';
+        _lastNameController.text = addressData[0]['lastname'] ?? '';
+        _companyController.text = addressData[0]['company'] ?? '';
+        _postcodeController.text = addressData[0]['postcode'] ?? '';
+        _address1Controller.text = addressData[0]['address_1'] ?? '';
+        _address2Controller.text = addressData[0]['address_2'] ?? '';
+        _cityController.text = addressData[0]['city'] ?? '';
+        _selectedCountryId = addressData[0]['country_id'] ?? '206';
+        _selectedZoneId = addressData[0]['zone_id'] ?? '3139';
+        // 記得更新國家和地區選項
+        _loadZones(_selectedCountryId);
+      } else {
+        _showDialog('Error', 'Failed to load address');
+      }
+    } catch (e) {
+      _showDialog('Error', e.toString());
     }
   }
 
@@ -120,7 +145,9 @@ class _AddressEditPageState extends State<AddressEditPage> {
   void initState() {
     super.initState();
     _loadCountries();
-    _onCountrySelected("206");
+    if (widget.addressId != null) {
+      showAddress(widget.addressId!); // 確保有有效的地址ID
+    }
   }
 
   Future<void> _loadCountries() async {
@@ -172,7 +199,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
     // Build your form widget here using TextFormFields and a submit button
     return Scaffold(
       appBar: AppBar(
-        title: Text('增加新地址'),
+        title: Text('編輯地址'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         leading: IconButton(
@@ -354,6 +381,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
                 }).toList(),
                 onChanged: (value) => setState(() => _selectedZoneId = value!),
               ),
+              SizedBox(height: 80),
             ],
           ),
         ),
@@ -366,13 +394,13 @@ class _AddressEditPageState extends State<AddressEditPage> {
           child: ElevatedButton(
             onPressed: () {
               if (_validateAndSaveForm()) {
-                addAddress();
+                editAddress(widget.addressId!);
               } else {
                 _showDialog('錯誤', '請填寫必填欄位。');
               }
             },
             child: Text(
-              '增加新地址',
+              '編輯地址',
               style: const TextStyle(fontSize: 18),
             ),
             style: ElevatedButton.styleFrom(
