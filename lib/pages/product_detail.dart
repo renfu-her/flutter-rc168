@@ -2,13 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:share_plus/share_plus.dart';
+// import 'package:share_plus/share_plus.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as dom;
 import 'package:rc168/responsive_text.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:browser_launcher/browser_launcher.dart';
+// import 'package:browser_launcher/browser_launcher.dart';
+import 'package:rc168/pages/messenger/fb_messenger_page.dart';
+import 'package:rc168/pages/messenger/line_messenger_page.dart';
 // import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -169,7 +171,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                         color: Colors.green, // Icon size
                         onPressed: () async {
-                          Chrome.start([fetchData1['link']]);
+                          // Chrome.start([fetchData1['link']]);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LineMessengerPage(
+                                    htmlUrl: fetchData1['link'])),
+                          );
                         },
                       ),
                     if (fetchData2['status'] == '1')
@@ -181,7 +189,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                         color: Colors.blue, // Icon size
                         onPressed: () async {
-                          Chrome.start(fetchData2['link']);
+                          // Chrome.start(fetchData2['link']);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FBMessengerPage(
+                                    htmlUrl: fetchData2['link'])),
+                          );
                         },
                       ),
                   ],
@@ -208,7 +222,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         actions: [
           IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: () {}),
           IconButton(
-              icon: Icon(FontAwesomeIcons.headset),
+              icon: Icon(FontAwesomeIcons.shareFromSquare),
               onPressed: () {
                 showShareDialog(context);
               }),
