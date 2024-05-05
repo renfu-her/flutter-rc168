@@ -172,6 +172,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         color: Colors.green, // Icon size
                         onPressed: () async {
                           // Chrome.start([fetchData1['link']]);
+                          print(fetchData1['link']);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
