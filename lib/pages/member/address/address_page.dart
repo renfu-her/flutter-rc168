@@ -119,6 +119,21 @@ class _AddressPageState extends State<AddressPage> {
     return false;
   }
 
+  void _openAddressEditPage(String addressId) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => AddressEditPage(addressId: addressId)),
+    );
+
+    if (result == true) {
+      // 重新加载地址数据
+      setState(() {
+        addresses = fetchAddresses(); // 重新获取地址数据
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,12 +177,7 @@ class _AddressPageState extends State<AddressPage> {
                             IconButton(
                               icon: Icon(Icons.edit),
                               onPressed: () {
-                                // 在这里处理编辑按钮的点击事件
-                                // 例如，打开一个编辑表单或导航到另一个页面
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => AddressEditPage(
-                                        addressId: address.addressId)));
-                                // _showDialog('編輯', '更新成功。');
+                                _openAddressEditPage(address.addressId);
                               },
                             ),
                             IconButton(

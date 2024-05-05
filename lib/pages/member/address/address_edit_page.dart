@@ -204,7 +204,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
         foregroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context, true),
         ),
       ),
       body: SingleChildScrollView(
