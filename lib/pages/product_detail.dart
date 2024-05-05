@@ -322,9 +322,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                ResponsiveText(product['name'],
-                                    baseFontSize: 40,
-                                    fontWeight: FontWeight.bold),
+                                ResponsiveText(
+                                  product['name'],
+                                  baseFontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                  maxLines: 3,
+                                ),
                                 product['special'] == false
                                     ? Column(children: [
                                         ResponsiveText("",

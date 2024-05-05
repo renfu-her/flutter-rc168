@@ -523,7 +523,8 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                 product.name +
                                     "\nNT\$" +
                                     product.price.toString(),
-                                baseFontSize: 28,
+                                baseFontSize: 36,
+                                maxLines: 4,
                               ),
                               subtitle: Row(
                                 children: [

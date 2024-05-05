@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class OrderPage extends StatefulWidget {
+  const OrderPage({Key? key}) : super(key: key);
+
   @override
   _OrderPageState createState() => _OrderPageState();
 }
@@ -45,7 +46,7 @@ class _OrderPageState extends State<OrderPage> {
                 return ListTile(
                   title: InlineTextWidget(
                     '訂單號碼 #${order.orderId}',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +64,7 @@ class _OrderPageState extends State<OrderPage> {
                                   color: Colors.black,
                                 )),
                             TextSpan(
-                                text: '${order.products.toString()}',
+                                text: order.products.toString(),
                                 style: const TextStyle(color: Colors.black)),
                             const TextSpan(
                                 text: '\n    ',
@@ -75,7 +76,7 @@ class _OrderPageState extends State<OrderPage> {
                                   color: Colors.black,
                                 )),
                             TextSpan(
-                                text: '${order.total.toString()}',
+                                text: order.total.toString(),
                                 style: const TextStyle(color: Colors.black)),
                             const TextSpan(
                                 text: '\n    ',
@@ -87,7 +88,7 @@ class _OrderPageState extends State<OrderPage> {
                                   color: Colors.black,
                                 )),
                             TextSpan(
-                                text: '${order.dateAdded}',
+                                text: order.dateAdded,
                                 style: const TextStyle(color: Colors.black)),
                             const TextSpan(
                                 text: '\n    ',
@@ -99,7 +100,7 @@ class _OrderPageState extends State<OrderPage> {
                                   color: Colors.black,
                                 )),
                             TextSpan(
-                                text: '${order.status}',
+                                text: order.status,
                                 style: const TextStyle(color: Colors.black)),
                           ],
                         ),
@@ -111,19 +112,20 @@ class _OrderPageState extends State<OrderPage> {
                         MainAxisSize.min, // 重要：這確保 Row 只佔用其子 widgets 所需的最小空間
                     children: <Widget>[
                       IconButton(
-                        icon: Icon(FontAwesomeIcons
-                            .infoCircle), // 詳情圖標，請確保已經加載了 FontAwesome
+                        icon: const Icon(FontAwesomeIcons
+                            .circleInfo), // 詳情圖標，請確保已經加載了 FontAwesome
                         onPressed: () {
-                          // 在這裡處理查看詳情的事件
+                          
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => ProductDetailPage(
+                          //       productId: order.orderInfo!.orderId,
+                          //     ),
+                          //   ),
+                          // );
                         },
                       ),
-                      // IconButton(
-                      //   icon: Icon(FontAwesomeIcons
-                      //       .shoppingCart), // 再買一次的圖標，請確保已經加載了 FontAwesome
-                      //   onPressed: () {
-                      //     // 在這裡處理再買一次的事件
-                      //   },
-                      // ),
                     ],
                   ),
                 );
@@ -137,19 +139,21 @@ class _OrderPageState extends State<OrderPage> {
 }
 
 Future<List<Order>> fetchOrders() async {
-  var dio = Dio();
   final response = await dio.get(
-      '${appUri}/gws_customer_order&customer_id=${customerId}&api_key=${apiKey}');
+      '$appUri/gws_customer_order&customer_id=$customerId&api_key=$apiKey');
 
   if (response.statusCode == 200) {
     List<Order> orders = (response.data['orders'] as List)
         .map((order) => Order.fromJson(order))
         .toList();
+
+    // print(orders);
     return orders;
   } else {
     throw Exception('Failed to load orders');
   }
 }
+
 
 class Order {
   final String orderId;
@@ -165,7 +169,8 @@ class Order {
       required this.status,
       required this.dateAdded,
       required this.products,
-      required this.total});
+      required this.total,
+      });
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(

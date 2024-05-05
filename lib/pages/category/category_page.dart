@@ -56,12 +56,25 @@ class _CategoryPageState extends State<CategoryPage> {
                 itemBuilder: (context, index) {
                   Category category = categories[index];
                   return ExpansionTile(
-                    leading: ClipOval(
-                      child: Image.network(
-                        category.image,
-                        width: 60.0,
-                        height: 60.0,
-                        fit: BoxFit.cover,
+                    leading: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CategoryDetailPage(
+                              categoryId: category.categoryId,
+                              categoryName: category.name,
+                            ),
+                          ),
+                        );
+                      },
+                      child: ClipOval(
+                        child: Image.network(
+                          category.image,
+                          width: 60.0,
+                          height: 60.0,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     title: ResponsiveText(
@@ -138,7 +151,7 @@ class Category {
       column: json['column'] as String? ?? '',
       href: json['href'] as String? ?? '',
       image: json['image'] as String? ?? '',
-      categoryId: json['categoryId'] as String? ?? '',
+      categoryId: json['category_id'] as String? ?? '',
     );
   }
 }

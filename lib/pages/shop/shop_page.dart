@@ -192,8 +192,8 @@ class _ShopPageState extends State<ShopPage> {
                                 product.name +
                                     "\nNT\$" +
                                     displayPrice.toString(),
-                                baseFontSize: 28,
-                                maxLines: 4,
+                                baseFontSize: 36,
+                                maxLines: 6,
                               ),
                             ),
                             subtitle: Row(
@@ -243,8 +243,8 @@ class _ShopPageState extends State<ShopPage> {
                                   },
                                 ),
                                 ResponsiveText(
-                                  '数量: ${product.quantity}',
-                                  baseFontSize: 24,
+                                  '數量: ${product.quantity}',
+                                  baseFontSize: 26,
                                 ),
                                 IconButton(
                                     icon: const Icon(
