@@ -56,7 +56,15 @@ class _CategoryPageState extends State<CategoryPage> {
                 itemBuilder: (context, index) {
                   Category category = categories[index];
                   return ExpansionTile(
-                    leading: GestureDetector(
+                    leading: ClipOval(
+                      child: Image.network(
+                        category.image,
+                        width: 60.0,
+                        height: 60.0,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    title: InkWell(
                       onTap: () {
                         Navigator.push(
                           context,
@@ -68,22 +76,14 @@ class _CategoryPageState extends State<CategoryPage> {
                           ),
                         );
                       },
-                      child: ClipOval(
-                        child: Image.network(
-                          category.image,
-                          width: 60.0,
-                          height: 60.0,
-                          fit: BoxFit.cover,
-                        ),
+                      child: ResponsiveText(
+                        category.name,
+                        baseFontSize: 32,
                       ),
-                    ),
-                    title: ResponsiveText(
-                      category.name,
-                      baseFontSize: 32,
                     ),
                     children: category.children.map((childCategory) {
                       return Padding(
-                        padding: const EdgeInsets.only(left: 40.0), // 增加左邊的空白
+                        padding: const EdgeInsets.only(left: 40.0),
                         child: ListTile(
                           leading: ClipOval(
                             child: Image.network(

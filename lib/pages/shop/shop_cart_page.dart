@@ -520,9 +520,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                 width: 80,
                               ),
                               title: ResponsiveText(
-                                product.name +
-                                    "\nNT\$" +
-                                    product.price.toString(),
+                                product.name,
                                 baseFontSize: 36,
                                 maxLines: 4,
                               ),

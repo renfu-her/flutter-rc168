@@ -189,11 +189,9 @@ class _ShopPageState extends State<ShopPage> {
                                   vertical: 10), // 添加垂直方向的填充
                               alignment: Alignment.centerLeft,
                               child: ResponsiveText(
-                                product.name +
-                                    "\nNT\$" +
-                                    displayPrice.toString(),
+                                product.name,
                                 baseFontSize: 36,
-                                maxLines: 6,
+                                maxLines: 8,
                               ),
                             ),
                             subtitle: Row(
@@ -244,7 +242,7 @@ class _ShopPageState extends State<ShopPage> {
                                 ),
                                 ResponsiveText(
                                   '數量: ${product.quantity}',
-                                  baseFontSize: 26,
+                                  baseFontSize: 30,
                                 ),
                                 IconButton(
                                     icon: const Icon(
