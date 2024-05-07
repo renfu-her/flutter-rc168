@@ -273,8 +273,12 @@ class _ShopCartPageState extends State<ShopCartPage> {
         context: context, // 确保你有一个BuildContext实例名为context
         builder: (BuildContext context) {
           return AlertDialog(
-            title: ResponsiveText('溫馨提醒!', baseFontSize: 36),
-            content: ResponsiveText('您尚未選定付款方式或物流方式。', baseFontSize: 30),
+            title: ResponsiveText('溫馨提醒!', baseFontSize: 38),
+            content: ResponsiveText(
+              '您尚未選定付款方式或物流方式。',
+              baseFontSize: 36,
+              maxLines: 5,
+            ),
             actions: <Widget>[
               TextButton(
                 child: ResponsiveText('確定', baseFontSize: 36),

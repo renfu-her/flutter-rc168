@@ -43,11 +43,12 @@ class _RegisterPageState extends State<RegisterPage> {
         return AlertDialog(
           title: ResponsiveText(
             title,
-            baseFontSize: 36,
+            baseFontSize: 38,
           ),
           content: ResponsiveText(
             message,
-            baseFontSize: 30,
+            baseFontSize: 36,
+            maxLines: 5,
           ),
           actions: <Widget>[
             TextButton(
@@ -140,29 +141,30 @@ class _RegisterPageState extends State<RegisterPage> {
       'password': _passwordController.text,
       'confirm': _confirmController.text,
       'telephone': _telephoneController.text,
-      'address_1': _address1Controller.text,
-      'city': _cityController.text,
-      'country_id': _selectedCountryId.toString(),
-      'zone_id': _selectedZoneId.toString(),
-      'postcode': _postcodeController.text,
-      'fax': '',
-      'company': '',
-      'address_2': '',
-      'newsletter': 0,
-      'custom_field': {
-        'account': '{1: 711}',
-        'address': '{1: 711}',
-      }
+      // 'address_1': _address1Controller.text,
+      // 'city': _cityController.text,
+      // 'country_id': _selectedCountryId.toString(),
+      // 'zone_id': _selectedZoneId.toString(),
+      // 'postcode': _postcodeController.text,
+      // 'fax': '',
+      // 'company': '',
+      // 'address_2': '',
+      // 'newsletter': 0,
+      // 'custom_field': {
+      //   'account': '{1: 711}',
+      //   'address': '{1: 711}',
+      // }
     });
 
     try {
       final response = await dio.post(
-        '${appUri}/gws_customer/add&api_key=${apiKey}',
+        '${appUri}/gws_appcustomer/add&api_key=${apiKey}',
         data: formData,
       );
 
+      print(response.data);
       if (response.data['message'][0]['msg_status'] == true) {
-        // _showDialog('更新', '已經更新');
+        _showDialog('新加入', '已經加入成功');
         Navigator.pop(context);
       } else {
         // Handle the error
@@ -272,95 +274,95 @@ class _RegisterPageState extends State<RegisterPage> {
                   return null;
                 },
               ),
-              TextFormField(
-                controller: _address1Controller,
-                decoration: const InputDecoration(
-                  labelText: '地址 *',
-                  hintText: '請輸入地址',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '請輸入地址';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _cityController,
-                decoration: const InputDecoration(
-                  labelText: '城市 *',
-                  hintText: '請輸入城市',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '請輸入城市';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _postcodeController,
-                decoration: const InputDecoration(
-                  labelText: '郵遞區號 *',
-                  hintText: '請輸入郵遞區號',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '請輸入郵遞區號';
-                  }
-                  return null;
-                },
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Visibility(
-                      visible:
-                          false, // Set the visibility to true or false based on your requirement
-                      child: DropdownButtonFormField<String>(
-                        value: _selectedCountryId,
-                        items: _countries.map((Country country) {
-                          return DropdownMenuItem<String>(
-                            value: country.id,
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width - 56,
-                              child: Text(
-                                country.name,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) => _onCountrySelected(value!),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Visibility(
-                      visible:
-                          true, // Set the visibility to true or false based on your requirement
-                      child: DropdownButtonFormField<String>(
-                        value: _selectedZoneId,
-                        items: _zones.map((Zone zone) {
-                          return DropdownMenuItem<String>(
-                            value: zone.id,
-                            child: Text(
-                              zone.name,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) =>
-                            setState(() => _selectedZoneId = value!),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              // TextFormField(
+              //   controller: _address1Controller,
+              //   decoration: const InputDecoration(
+              //     labelText: '地址 *',
+              //     hintText: '請輸入地址',
+              //   ),
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return '請輸入地址';
+              //     }
+              //     return null;
+              //   },
+              // ),
+              // TextFormField(
+              //   controller: _cityController,
+              //   decoration: const InputDecoration(
+              //     labelText: '城市 *',
+              //     hintText: '請輸入城市',
+              //   ),
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return '請輸入城市';
+              //     }
+              //     return null;
+              //   },
+              // ),
+              // TextFormField(
+              //   controller: _postcodeController,
+              //   decoration: const InputDecoration(
+              //     labelText: '郵遞區號 *',
+              //     hintText: '請輸入郵遞區號',
+              //   ),
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return '請輸入郵遞區號';
+              //     }
+              //     return null;
+              //   },
+              // ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Visibility(
+              //         visible:
+              //             false, // Set the visibility to true or false based on your requirement
+              //         child: DropdownButtonFormField<String>(
+              //           value: _selectedCountryId,
+              //           items: _countries.map((Country country) {
+              //             return DropdownMenuItem<String>(
+              //               value: country.id,
+              //               child: SizedBox(
+              //                 width: MediaQuery.of(context).size.width - 56,
+              //                 child: Text(
+              //                   country.name,
+              //                   overflow: TextOverflow.ellipsis,
+              //                 ),
+              //               ),
+              //             );
+              //           }).toList(),
+              //           onChanged: (value) => _onCountrySelected(value!),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Visibility(
+              //         visible:
+              //             true, // Set the visibility to true or false based on your requirement
+              //         child: DropdownButtonFormField<String>(
+              //           value: _selectedZoneId,
+              //           items: _zones.map((Zone zone) {
+              //             return DropdownMenuItem<String>(
+              //               value: zone.id,
+              //               child: Text(
+              //                 zone.name,
+              //                 overflow: TextOverflow.ellipsis,
+              //               ),
+              //             );
+              //           }).toList(),
+              //           onChanged: (value) =>
+              //               setState(() => _selectedZoneId = value!),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
               const SizedBox(
                 height: 100,
               ),

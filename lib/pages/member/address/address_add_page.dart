@@ -38,24 +38,25 @@ class _AddressAddPageState extends State<AddressAddPage> {
   }
 
   void _showDialog(String title, String message) {
-    showDialog(
+    (
       context: context,
       builder: (context) => AlertDialog(
-        title: ResponsiveText(
-          title,
-          baseFontSize: 36,
-        ),
-        content: ResponsiveText(
-          message,
-          baseFontSize: 30,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: ResponsiveText('確定', baseFontSize: 36),
+            title: ResponsiveText(
+              title,
+              baseFontSize: 38,
+            ),
+            content: ResponsiveText(
+              message,
+              baseFontSize: 36,
+              maxLines: 5,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: ResponsiveText('確定', baseFontSize: 36),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 

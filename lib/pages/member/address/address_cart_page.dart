@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:rc168/pages/member/address/address_add_page.dart';
 import 'package:rc168/pages/shop/shop_cart_page.dart';
+import 'package:rc168/responsive_text.dart';
 
 class AddressCartAddPage extends StatefulWidget {
   @override
@@ -31,8 +32,15 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
+        title: ResponsiveText(
+          title,
+          baseFontSize: 38,
+        ),
+        content: ResponsiveText(
+          message,
+          baseFontSize: 36,
+          maxLines: 5,
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),

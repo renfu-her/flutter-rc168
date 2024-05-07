@@ -46,11 +46,12 @@ class _AddressEditPageState extends State<AddressEditPage> {
       builder: (context) => AlertDialog(
         title: ResponsiveText(
           title,
-          baseFontSize: 36,
+          baseFontSize: 38,
         ),
         content: ResponsiveText(
           message,
-          baseFontSize: 30,
+          baseFontSize: 36,
+          maxLines: 5,
         ),
         actions: [
           TextButton(

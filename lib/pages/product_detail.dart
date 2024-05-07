@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-// import 'package:share_plus/share_plus.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as dom;
 import 'package:rc168/responsive_text.dart';
@@ -172,13 +172,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         color: Colors.green, // Icon size
                         onPressed: () async {
                           // Chrome.start([fetchData1['link']]);
-                          print(fetchData1['link']);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LineMessengerPage(
-                                    htmlUrl: fetchData1['link'])),
-                          );
+                          Share.share(
+                              "分享連接：https://social-plugins.line.me/lineit/share?url=https%3A%2F%2Focapi.remember1688.com%2F%2Findex.php%3Froute%3Dproduct%2Fproduct%26product_id%3D${widget.productId}");
                         },
                       ),
                     if (fetchData2['status'] == '1')
@@ -191,12 +186,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         color: Colors.blue, // Icon size
                         onPressed: () async {
                           // Chrome.start(fetchData2['link']);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FBMessengerPage(
-                                    htmlUrl: fetchData2['link'])),
-                          );
+                          Share.share(
+                              'https://www.addtoany.com/add_to/facebook?linkurl=https%3A%2F%2Focapi.remember1688.com%2F%2Findex.php%3Froute%3Dproduct%2Fproduct%26product_id%3D${widget.productId}&linkname=&linknote=');
                         },
                       ),
                   ],

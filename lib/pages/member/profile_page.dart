@@ -52,6 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
           content: ResponsiveText(
             message,
             baseFontSize: 30,
+            maxLines: 5,
           ),
           actions: <Widget>[
             TextButton(

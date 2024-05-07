@@ -90,11 +90,12 @@ class _LoginPageState extends State<LoginPage> {
         return AlertDialog(
           title: ResponsiveText(
             title,
-            baseFontSize: 36,
+            baseFontSize: 38,
           ),
           content: ResponsiveText(
             message,
-            baseFontSize: 39,
+            baseFontSize: 36,
+            maxLines: 5,
           ),
           actions: <Widget>[
             TextButton(
