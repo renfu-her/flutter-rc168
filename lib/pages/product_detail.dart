@@ -471,7 +471,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           child: ElevatedButton(
             onPressed: () async {
               if (isLogin == true) {
-                await addToCart(widget.productId, _selectedQuantity);
+                await addToCart(
+                    widget.productId, _selectedQuantity, selectedOptionValues);
                 selectedIndex = 3;
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => MyApp()));
@@ -524,7 +525,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
               foregroundColor: Colors.white, // 文本颜色为白色
-              minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
+              minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
               ),
@@ -726,10 +727,12 @@ class RatingStarWidget extends StatelessWidget {
   }
 }
 
-Future<void> addToCart(String productId, int quantity) async {
+Future<void> addToCart(
+    String productId, int quantity, selectedOptionValues) async {
   final formData = FormData.fromMap({
     'product_id': productId,
     'quantity': quantity,
+    'option': selectedOptionValues,
   });
 
   final addCartUrl =

@@ -4,6 +4,7 @@ import 'package:rc168/main.dart';
 import 'package:rc168/pages/shop/shop_cart_page.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:rc168/responsive_text.dart';
+import 'package:rc168/pages/product_detail.dart';
 
 class ShopPage extends StatefulWidget {
   @override
@@ -179,14 +180,24 @@ class _ShopPageState extends State<ShopPage> {
                               : product.price;
 
                           return ListTile(
-                            leading: Image.network(
-                              '${imgUrl}' + product.thumbUrl,
-                              width: 80,
+                            leading: InkWell(
+                              onTap: () {
+                                // 在这里添加您的导航逻辑，比如打开一个新页面或者打开一个网页链接
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductDetailPage(
+                                        productId: product.productId),
+                                  ),
+                                );
+                              },
+                              child: Image.network(
+                                '${imgUrl}' + product.thumbUrl,
+                                width: 80,
+                              ),
                             ),
                             title: Container(
-                              height: 100, // 设置 Container 的高度
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10), // 添加垂直方向的填充
+                              height: 100,
+                              padding: EdgeInsets.symmetric(vertical: 10),
                               alignment: Alignment.centerLeft,
                               child: ResponsiveText(
                                 product.name,
@@ -194,81 +205,118 @@ class _ShopPageState extends State<ShopPage> {
                                 maxLines: 8,
                               ),
                             ),
-                            subtitle: Row(
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                IconButton(
-                                  icon: Icon(Icons.remove, size: 14),
-                                  onPressed: () async {
-                                    if (product.quantity == 1) {
-                                      // 當數量為1時，顯示確認對話框
-                                      final confirmDelete =
-                                          await showDialog<bool>(
-                                        context: context, // 這裡需要提供BuildContext
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: Text('確認',
-                                                style: TextStyle(fontSize: 18)),
-                                            content: Text('是否要刪除該項目？'),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                child: Text('取消'),
-                                                onPressed: () =>
-                                                    Navigator.of(context)
-                                                        .pop(false), // 不刪除
-                                              ),
-                                              TextButton(
-                                                child: Text('確定刪除'),
-                                                onPressed: () =>
-                                                    Navigator.of(context)
-                                                        .pop(true), // 確認刪除
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-
-                                      if (confirmDelete ?? false) {
-                                        await updateQuantity(product.cartId, 0);
-                                      }
-                                    } else {
-                                      // 若數量不為1，正常增加數量
-                                      setState(() {
-                                        product.decrementQuantity();
-                                      });
-                                      await updateQuantity(
-                                          product.cartId, product.quantity);
-                                    }
-                                  },
-                                ),
                                 ResponsiveText(
-                                  '數量: ${product.quantity}',
-                                  baseFontSize: 30,
+                                  product.special != false
+                                      ? '特價 NT\$${(product.special * product.quantity).toStringAsFixed(0)}'
+                                      : 'NT\$${(product.price * product.quantity).toStringAsFixed(0)}',
+                                  baseFontSize: 36,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                IconButton(
-                                    icon: const Icon(
-                                      Icons.add,
-                                      size: 14,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.remove, size: 24),
+                                      onPressed: () async {
+                                        if (product.quantity > 1) {
+                                          setState(() {
+                                            product.decrementQuantity();
+                                          });
+                                          await updateQuantity(
+                                              product.cartId, product.quantity);
+                                        } else {
+                                          // 当数量为1时，询问用户是否删除
+                                          final confirmDelete =
+                                              await showDialog<bool>(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text('確認',
+                                                    style: TextStyle(
+                                                        fontSize: 18)),
+                                                content: Text('是否要刪除該項目？'),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    child: Text('取消'),
+                                                    onPressed: () =>
+                                                        Navigator.of(context)
+                                                            .pop(false),
+                                                  ),
+                                                  TextButton(
+                                                    child: Text('確定刪除'),
+                                                    onPressed: () =>
+                                                        Navigator.of(context)
+                                                            .pop(true),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+
+                                          if (confirmDelete ?? false) {
+                                            await updateQuantity(
+                                                product.cartId, 0);
+                                          }
+                                        }
+                                      },
                                     ),
-                                    onPressed: () async {
-                                      // 若數量不為1，正常增加數量
-                                      setState(() {
-                                        product.incrementQuantity();
-                                      });
-                                      await updateQuantity(
-                                          product.cartId, product.quantity);
-                                    }),
+                                    ResponsiveText(
+                                      '數量: ${product.quantity}',
+                                      baseFontSize: 30,
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.add, size: 24),
+                                      onPressed: () async {
+                                        setState(() {
+                                          product.incrementQuantity();
+                                        });
+                                        await updateQuantity(
+                                            product.cartId, product.quantity);
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.delete,
+                                          size: 24, color: Colors.red),
+                                      onPressed: () async {
+                                        final confirmDelete =
+                                            await showDialog<bool>(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text('確認',
+                                                  style:
+                                                      TextStyle(fontSize: 18)),
+                                              content: Text('是否要刪除該項目？'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: Text('取消'),
+                                                  onPressed: () =>
+                                                      Navigator.of(context)
+                                                          .pop(false),
+                                                ),
+                                                TextButton(
+                                                  child: Text('確定刪除'),
+                                                  onPressed: () =>
+                                                      Navigator.of(context)
+                                                          .pop(true),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+
+                                        if (confirmDelete ?? false) {
+                                          await updateQuantity(
+                                              product.cartId, 0);
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ],
-                            ),
-                            trailing: ResponsiveText(
-                              product.special != false
-                                  ? 'NT\$' +
-                                      (product.special * product.quantity)
-                                          .toString()
-                                  : 'NT\$' +
-                                      (product.price * product.quantity)
-                                          .toString(),
-                              baseFontSize: 28,
-                              fontWeight: FontWeight.bold,
                             ),
                           );
                         },
