@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rc168/pages/product_detail.dart';
 
 class OrderPage extends StatefulWidget {
   const OrderPage({Key? key}) : super(key: key);
@@ -115,12 +117,26 @@ class _OrderPageState extends State<OrderPage> {
                         icon: const Icon(FontAwesomeIcons
                             .circleInfo), // 詳情圖標，請確保已經加載了 FontAwesome
                         onPressed: () {
-                          
                           // Navigator.push(
                           //   context,
                           //   MaterialPageRoute(
                           //     builder: (context) => ProductDetailPage(
-                          //       productId: order.orderInfo!.orderId,
+                          //       productId: order.products.toString(),
+                          //     ),
+                          //   ),
+                          // );
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(FontAwesomeIcons
+                            .cartShopping), // 詳情圖標，請確保已經加載了 FontAwesome
+                        onPressed: () {
+                          getOrder(order.orderId);
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => ProductDetailPage(
+                          //       productId: order.products.toString(),
                           //     ),
                           //   ),
                           // );
@@ -154,6 +170,37 @@ Future<List<Order>> fetchOrders() async {
   }
 }
 
+Future<void> getOrder(String orderId) async {
+  final response = await dio.get(
+      '$appUri/gws_appcustomer_order/info&&order_id=$orderId&customer_id=$customerId&api_key=$apiKey');
+
+  if (response.statusCode == 200) {
+    // print(response.data['products']);
+
+    List<dynamic> products = response.data['products'];
+
+    for (var product in products) {
+      String reorderUrl = product['reorder'].replaceAll('&amp;', '&');
+      var reorderResponse = await dio.get(reorderUrl + '&api_key=$apiKey');
+      if (reorderResponse.statusCode == 200) {
+        print('Reordered product successfully: ${product['name']}');
+      } else {
+        print('Failed to reorder product: ${product['name']}');
+      }
+    }
+    // print(data);
+
+    // return data;
+    // // List<Order> orders = (response.data['order'] as List)
+    // //     .map((order) => Order.fromJson(order))
+    // //     .toList();
+
+    // // print(orders);
+    // return orders;
+  } else {
+    throw Exception('Failed to load orders');
+  }
+}
 
 class Order {
   final String orderId;
@@ -163,14 +210,14 @@ class Order {
   final int products;
   final String total;
 
-  Order(
-      {required this.orderId,
-      required this.name,
-      required this.status,
-      required this.dateAdded,
-      required this.products,
-      required this.total,
-      });
+  Order({
+    required this.orderId,
+    required this.name,
+    required this.status,
+    required this.dateAdded,
+    required this.products,
+    required this.total,
+  });
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(

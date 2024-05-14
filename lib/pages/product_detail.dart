@@ -268,11 +268,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               return DropdownMenuItem<String>(
                                 value: value.id,
                                 child: value.price == 0
-                                    ? ResponsiveText("${value.name}",
-                                        baseFontSize: 34)
+                                    ? ResponsiveText(
+                                        "${value.name}",
+                                        baseFontSize: 34,
+                                        maxLines: 10,
+                                      )
                                     : ResponsiveText(
                                         "${value.name}(${value.pricePrefix}NT\$${value.price.toString()})",
-                                        baseFontSize: 34),
+                                        baseFontSize: 34,
+                                        maxLines: 10,
+                                      ),
                               );
                             }).toList(),
                           ),
