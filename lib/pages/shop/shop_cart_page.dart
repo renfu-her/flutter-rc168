@@ -485,7 +485,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                               builder: (context) =>
                                                   AddressCartAddPage()),
                                         );
-                                        print('地址: $selectedAddress');
+                                        // print('地址: $selectedAddress');
                                         if (selectedAddress != null) {
                                           // 更新地址信息
                                           fetchCustomerAddress(

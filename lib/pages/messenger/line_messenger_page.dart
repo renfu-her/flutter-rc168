@@ -41,19 +41,7 @@ class _LineMessengerPageState extends State<LineMessengerPage> {
         },
         onPageFinished: (String url) async {
           // 获取页面HTML
-          // final String htmlContent = await _controller.evaluateJavascript(
-          //     "document.documentElement.outerHTML.toString()");
-          // print(url);
-          // // 根据HTML内容进行逻辑处理，例如触发本地通知
-          // // 此处添加判断逻辑，根据实际情况触发通知
-          // if (url.contains("success")) {
-          //   final Uri uri = Uri.parse(url);
-          //   final String orderId = uri.queryParameters['orderId'] ?? '';
-          //   await showOrderPlacedNotification(orderId);
-          // }
-          // if (url.contains("fail")) {
-          //   await showOrderCancelledNotification();
-          // }
+          // 
         },
       ),
     );

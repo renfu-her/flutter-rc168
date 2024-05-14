@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
+import 'package:rc168/pages/shop/shop_page.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rc168/pages/product_detail.dart';
+import 'package:rc168/responsive_text.dart';
 
 class OrderPage extends StatefulWidget {
   const OrderPage({Key? key}) : super(key: key);
@@ -19,6 +21,36 @@ class _OrderPageState extends State<OrderPage> {
   void initState() {
     super.initState();
     futureOrders = fetchOrders();
+  }
+
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: ResponsiveText(
+            title,
+            baseFontSize: 36,
+          ),
+          content: ResponsiveText(
+            message,
+            baseFontSize: 30,
+            maxLines: 5,
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: ResponsiveText(
+                '確定',
+                baseFontSize: 36,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -132,14 +164,11 @@ class _OrderPageState extends State<OrderPage> {
                             .cartShopping), // 詳情圖標，請確保已經加載了 FontAwesome
                         onPressed: () {
                           getOrder(order.orderId);
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => ProductDetailPage(
-                          //       productId: order.products.toString(),
-                          //     ),
-                          //   ),
-                          // );
+
+                          _showDialog('重新下單成功', '已經重新下單。');
+
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ShopPage()));
                         },
                       ),
                     ],
@@ -188,15 +217,6 @@ Future<void> getOrder(String orderId) async {
         print('Failed to reorder product: ${product['name']}');
       }
     }
-    // print(data);
-
-    // return data;
-    // // List<Order> orders = (response.data['order'] as List)
-    // //     .map((order) => Order.fromJson(order))
-    // //     .toList();
-
-    // // print(orders);
-    // return orders;
   } else {
     throw Exception('Failed to load orders');
   }
