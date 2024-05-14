@@ -166,7 +166,8 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
                               icon: const Icon(Icons.add_circle),
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ShopCartPage()));
+                                    builder: (context) => ShopCartPage(
+                                        addressId: address.addressId)));
                               },
                             ),
                             IconButton(

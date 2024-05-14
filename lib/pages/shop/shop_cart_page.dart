@@ -7,8 +7,8 @@ import 'package:text_responsive/text_responsive.dart';
 import 'package:rc168/responsive_text.dart';
 
 class ShopCartPage extends StatefulWidget {
-  // final String? addressId;
-  // const ShopCartPage({super.key, required this.addressId});
+  final String? addressId;
+  const ShopCartPage({super.key, this.addressId});
 
   @override
   _ShopCartPageState createState() => _ShopCartPageState();
@@ -27,33 +27,38 @@ class _ShopCartPageState extends State<ShopCartPage> {
   void initState() {
     super.initState();
     fetchCartItems();
-    getCustomerDataAndFetchAddress();
-    // if (widget.addressId != null) {
-    //   String? address = widget.addressId;
-    //   print('address: ${widget.addressId}');
-    //   fetchCustomerAddress(defaultAddressId: address!);
-    // } else {
-    //   getCustomerDataAndFetchAddress();
-    // }
+    getCustomerDataAndFetchAddress(widget.addressId);
+    if (widget.addressId != null) {
+      String? address = widget.addressId;
+      setState(() {
+        fetchCustomerAddress(defaultAddressId: address!);
+      });
+    } else {
+      getCustomerDataAndFetchAddress(widget.addressId);
+    }
     // fetchShippingMethods();
   }
 
-  Future<void> getCustomerDataAndFetchAddress() async {
-    try {
-      // 從 gws_customer 獲取用戶資料
-      var customerResponse = await dio.get('${appUri}/gws_customer',
-          queryParameters: {'customer_id': customerId, 'api_key': apiKey});
-      var customer = customerResponse.data;
-
-      // 提取 default_address_id
-      String defaultAddressId =
-          customer['customer'][0]['default_address_id'] ?? '';
-      customerData = customer;
-      // 使用提取的 default_address_id 調用 fetchCustomerAddress
+  Future<void> getCustomerDataAndFetchAddress(String? defaultAddressId) async {
+    if (defaultAddressId != null) {
       await fetchCustomerAddress(defaultAddressId: defaultAddressId);
-    } catch (e) {
-      print(e);
-      // 處理異常或顯示錯誤信息
+    } else {
+      try {
+        // 從 gws_customer 獲取用戶資料
+        var customerResponse = await dio.get('${appUri}/gws_customer',
+            queryParameters: {'customer_id': customerId, 'api_key': apiKey});
+        var customer = customerResponse.data;
+
+        // 提取 default_address_id
+        String defaultAddressId =
+            customer['customer'][0]['default_address_id'] ?? '';
+        customerData = customer;
+        // 使用提取的 default_address_id 調用 fetchCustomerAddress
+        await fetchCustomerAddress(defaultAddressId: defaultAddressId);
+      } catch (e) {
+        print(e);
+        // 處理異常或顯示錯誤信息
+      }
     }
   }
 
@@ -117,6 +122,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
     try {
       // 如果有提供 defaultAddressId，則直接使用
       String addressId = defaultAddressId;
+      print('addressId 1: ${addressId}');
 
       if (addressId.isEmpty) {
         // 如果沒有提供 defaultAddressId，則從 gws_customer 獲取
@@ -152,7 +158,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
           // 如果 status 為 false，選擇最新地址或其他邏輯
         }
 
-        print('customerAddress: ${customerAddress}addressId：${addressId}，');
+        print('customerAddress: ${customerAddress} addressId：${addressId}，');
       });
     } catch (e) {
       print(e);
@@ -473,25 +479,28 @@ class _ShopCartPageState extends State<ShopCartPage> {
                                           '${zoneDetails['name']}, ${countryDetails['name']} \n' +
                                           '${customerAddress!['postcode']}',
                                       baseFontSize: 30,
+                                      maxLines: 10,
                                     ),
                                     trailing: IconButton(
                                       icon: const Icon(Icons.edit),
                                       onPressed: () async {
                                         // 編輯地址的邏輯
-                                        final selectedAddress =
-                                            await Navigator.push(
+
+                                        await Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   AddressCartAddPage()),
                                         );
                                         // print('地址: $selectedAddress');
-                                        if (selectedAddress != null) {
-                                          // 更新地址信息
-                                          fetchCustomerAddress(
-                                              defaultAddressId:
-                                                  selectedAddress.id);
-                                        }
+                                        // if (selectedAddress != null) {
+                                        //   // 更新地址信息
+                                        //   setState(() {
+                                        //     fetchCustomerAddress(
+                                        //         defaultAddressId:
+                                        //             selectedAddress.id);
+                                        //   });
+                                        // }
                                       },
                                     ),
                                   );
