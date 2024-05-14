@@ -272,7 +272,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 title: const Text('線上客服'),
                 onTap: () {
                   FlutterWebBrowser.openWebPage(
-                    url: "https://flutter.io/",
+                    url: "https://lin.ee/sQL6TZp",
                     customTabsOptions: CustomTabsOptions(
                       colorScheme: CustomTabsColorScheme.dark,
                       darkColorSchemeParams: CustomTabsColorSchemeParams(
