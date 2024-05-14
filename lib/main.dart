@@ -16,6 +16,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rc168/firebase_options.dart';
 import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
+import 'package:web_browser/web_browser.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
 
 // 创建一个全局的通知插件实例
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -269,8 +271,25 @@ class _MyHomePageState extends State<MyHomePage> {
                 leading: const Icon(FontAwesomeIcons.headset),
                 title: const Text('線上客服'),
                 onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => MyApp()));
+                  FlutterWebBrowser.openWebPage(
+                    url: "https://flutter.io/",
+                    customTabsOptions: CustomTabsOptions(
+                      colorScheme: CustomTabsColorScheme.dark,
+                      darkColorSchemeParams: CustomTabsColorSchemeParams(
+                        toolbarColor: Colors.deepPurple,
+                        secondaryToolbarColor: Colors.green,
+                        navigationBarColor: Colors.amber,
+                        navigationBarDividerColor: Colors.cyan,
+                      ),
+                      shareState: CustomTabsShareState.on,
+                      instantAppsEnabled: true,
+                      showTitle: true,
+                      urlBarHidingEnabled: true,
+                    ),
+                  );
+
+                  // Navigator.of(context)
+                  //     .push(MaterialPageRoute(builder: (context) => MyApp()));
                 },
               ),
           ],

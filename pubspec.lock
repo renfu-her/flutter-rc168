@@ -65,6 +65,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+  charcode:
+    dependency: transitive
+    description:
+      name: charcode
+      sha256: fb98c0f6d12c920a02ee2d998da788bca066ca5f148492b7085ee23372b12306
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.1"
   checked_yaml:
     dependency: transitive
     description:
@@ -113,6 +121,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  csp:
+    dependency: transitive
+    description:
+      name: csp
+      sha256: a7d2249568171b0dcd509fbb0aed8ee0d57008946d15aa71437ad1a599d980d4
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
   csslib:
     dependency: transitive
     description:
@@ -121,6 +137,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.17.3"
+  cupertino_icons:
+    dependency: transitive
+    description:
+      name: cupertino_icons
+      sha256: ba631d1c7f7bef6b729a622b7b752645a2d076dba9976925b8f25725a30e1ee6
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.8"
   dbus:
     dependency: transitive
     description:
@@ -331,6 +355,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_browser:
+    dependency: "direct main"
+    description:
+      name: flutter_web_browser
+      sha256: a5564b736253f745e147b8c4eff86de436324d081974cc1f16bff881134a400f
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.17.1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -384,6 +416,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.0"
+  kind:
+    dependency: transitive
+    description:
+      name: kind
+      sha256: "03f94f97a766f55b0a745c0929d74665163823fb15173e0defc42bc34263b7ae"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.2"
   leak_tracker:
     dependency: transitive
     description:
@@ -584,6 +624,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  protobuf:
+    dependency: transitive
+    description:
+      name: protobuf
+      sha256: "01dd9bd0fa02548bf2ceee13545d4a0ec6046459d847b6b061d8a27237108a08"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   responsive_sizer:
     dependency: "direct main"
     description:
@@ -592,6 +640,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  share:
+    dependency: transitive
+    description:
+      name: share
+      sha256: "97e6403f564ed1051a01534c2fc919cb6e40ea55e60a18ec23cee6e0ce19f4be"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.4"
   share_plus:
     dependency: "direct main"
     description:
@@ -757,6 +813,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+  universal_html:
+    dependency: transitive
+    description:
+      name: universal_html
+      sha256: "56536254004e24d9d8cfdb7dbbf09b74cf8df96729f38a2f5c238163e3d58971"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.4"
   universal_io:
     dependency: transitive
     description:
@@ -861,6 +925,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+  web_browser:
+    dependency: "direct main"
+    description:
+      name: web_browser
+      sha256: "2186092f703fd476970758f0faaaab771797547b3b34f572d417bacf498a1507"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.0"
+  web_node:
+    dependency: transitive
+    description:
+      name: web_node
+      sha256: "163ad4d9488842db140562e8f7e264a74880af562326e1548b4c4211d15ca437"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   webkit_inspection_protocol:
     dependency: transitive
     description:
