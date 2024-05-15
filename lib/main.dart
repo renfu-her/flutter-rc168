@@ -357,20 +357,20 @@ void showShareDialog(BuildContext context) async {
                 mainAxisAlignment: MainAxisAlignment
                     .spaceEvenly, // Center the icons horizontally
                 children: <Widget>[
-                  if (fetchData1['status'] == '1')
-                    IconButton(
-                        icon: Icon(FontAwesomeIcons.line,
-                            color: Colors.green, size: 40),
-                        onPressed: () {
-                          launchLINE();
-                        }),
-                  if (fetchData2['status'] == '1')
-                    IconButton(
-                        icon: Icon(FontAwesomeIcons.facebook,
-                            color: Colors.green, size: 40),
-                        onPressed: () {
-                          launchFacebook();
-                        }),
+                  // if (fetchData1['status'] == '1')
+                  IconButton(
+                      icon: Icon(FontAwesomeIcons.line,
+                          color: Colors.green, size: 40),
+                      onPressed: () {
+                        launchLINE();
+                      }),
+                  // if (fetchData2['status'] == '1')
+                  IconButton(
+                      icon: Icon(FontAwesomeIcons.facebookMessenger,
+                          color: Colors.green, size: 40),
+                      onPressed: () {
+                        launchFacebook();
+                      }),
                 ],
               ),
             ],
@@ -391,7 +391,7 @@ Future<void> launchLINE() async {
 }
 
 Future<void> launchFacebook() async {
-  const url = 'https://lin.ee/sQL6TZp';
+  const url = 'https://m.me/107852265523612';
   if (await canLaunchUrl(Uri.parse(url))) {
     await launchUrl(Uri.parse(url));
   } else {
