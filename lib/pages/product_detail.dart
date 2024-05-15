@@ -8,10 +8,6 @@ import 'package:html/dom.dart' as dom;
 import 'package:rc168/responsive_text.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:browser_launcher/browser_launcher.dart';
-import 'package:rc168/pages/messenger/fb_messenger_page.dart';
-import 'package:rc168/pages/messenger/line_messenger_page.dart';
-// import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -349,12 +345,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 MyHtmlWidget(
-                                  htmlContent: '<h1>測試商品01</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240210230805.png" >' +
-                                      '<p></p><h1>測試商品02</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240105141314.png" >' +
-                                      '<p></p><h1>測試商品03</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/ST10PRO.png">' +
-                                      '<h1>測試商品01</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240210230805.png" >' +
-                                      '<p></p><h1>測試商品02</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/WeChat%20%E6%88%AA%E5%9C%96_20240105141314.png" >' +
-                                      '<p></p><h1>測試商品03</h1><h1>測試測試測試</h1><img src="https://ocapi.remember1688.com/image/catalog/%E7%94%A2%E5%93%81%E5%9C%96/ST10PRO.png" >',
+                                  htmlContent: snapshot.data['details']
+                                      ['description'],
                                   baseFontSize: 18,
                                 ),
                               ],
