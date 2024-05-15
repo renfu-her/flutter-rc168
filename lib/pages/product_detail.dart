@@ -140,65 +140,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return service;
   }
 
-  // TODO: 加入客服中心
-  void showShareDialog(BuildContext context) async {
-    Map<String, dynamic> fetchData1 = await fetchCustomerServiceData(1);
-    Map<String, dynamic> fetchData2 = await fetchCustomerServiceData(2);
-    print(fetchData1);
-    print(fetchData2);
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0)), // Rounded corners
-          child: Container(
-            padding: EdgeInsets.all(20.0),
-            height: 120, // Set the height of the dialog
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment
-                      .spaceEvenly, // Center the icons horizontally
-                  children: <Widget>[
-                    if (fetchData1['status'] == '1')
-                      IconButton(
-                        icon: Image.network(
-                          fetchData1['thumb'],
-                          width: 40,
-                          height: 40,
-                        ),
-                        color: Colors.green, // Icon size
-                        onPressed: () async {
-                          // Chrome.start([fetchData1['link']]);
-                          Share.share(
-                              "分享連接：https://social-plugins.line.me/lineit/share?url=https%3A%2F%2Focapi.remember1688.com%2F%2Findex.php%3Froute%3Dproduct%2Fproduct%26product_id%3D${widget.productId}");
-                        },
-                      ),
-                    if (fetchData2['status'] == '1')
-                      IconButton(
-                        icon: Image.network(
-                          fetchData2['thumb'],
-                          width: 40,
-                          height: 40,
-                        ),
-                        color: Colors.blue, // Icon size
-                        onPressed: () async {
-                          // Chrome.start(fetchData2['link']);
-                          Share.share(
-                              'https://www.addtoany.com/add_to/facebook?linkurl=https%3A%2F%2Focapi.remember1688.com%2F%2Findex.php%3Froute%3Dproduct%2Fproduct%26product_id%3D${widget.productId}&linkname=&linknote=');
-                        },
-                      ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +158,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           IconButton(
               icon: Icon(FontAwesomeIcons.shareNodes),
               onPressed: () {
-                showShareDialog(context);
+                Share.share(
+                    "分享連接：https://social-plugins.line.me/lineit/share?url=https%3A%2F%2Focapi.remember1688.com%2F%2Findex.php%3Froute%3Dproduct%2Fproduct%26product_id%3D${widget.productId}");
               }),
         ],
       ),

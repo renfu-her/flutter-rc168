@@ -16,7 +16,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rc168/firebase_options.dart';
 import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
-import 'package:open_browser/open_webview.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // 创建一个全局的通知插件实例
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -265,14 +265,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               },
             ),
-            if (isLogin) // 条件语句，仅在 isLogin == true 时包含此 ListTile
-              ListTile(
-                leading: const Icon(FontAwesomeIcons.headset),
-                title: const Text('線上客服'),
-                onTap: () {
-                  OpenWebview().openBrowser('https://lin.ee/sQL6TZp');
-                },
-              ),
+            // 条件语句，仅在 isLogin == true 时包含此 ListTile
+            ListTile(
+              leading: const Icon(FontAwesomeIcons.headset),
+              title: const Text('線上客服'),
+              onTap: () {
+                showShareDialog(context);
+              },
+            ),
           ],
         ),
       ),
@@ -307,6 +307,64 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onItemTapped,
       ),
     );
+  }
+}
+
+// TODO: 加入客服中心
+void showShareDialog(BuildContext context) async {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0)), // Rounded corners
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          height: 120, // Set the height of the dialog
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment
+                    .spaceEvenly, // Center the icons horizontally
+                children: <Widget>[
+                  IconButton(
+                      icon: Icon(FontAwesomeIcons.line,
+                          color: Colors.green, size: 40),
+                      onPressed: () {
+                        launchLINE();
+                      }),
+                  IconButton(
+                      icon: Icon(FontAwesomeIcons.facebook,
+                          color: Colors.blue, size: 40),
+                      onPressed: () {
+                        launchFacebook();
+                      }),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Future<void> launchLINE() async {
+  const url = 'https://lin.ee/sQL6TZp';
+  if (await canLaunchUrl(Uri.parse(url))) {
+    await launchUrl(Uri.parse(url));
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+Future<void> launchFacebook() async {
+  const url = 'https://lin.ee/sQL6TZp';
+  if (await canLaunchUrl(Uri.parse(url))) {
+    await launchUrl(Uri.parse(url));
+  } else {
+    throw 'Could not launch $url';
   }
 }
 
