@@ -113,35 +113,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return parts.join(separator);
   }
 
-  Future<Map<String, dynamic>> fetchCustomerServiceData(int number) async {
-    var dio = Dio();
-    Map<String, dynamic> service = {};
-    try {
-      var response = await dio.get(
-          '${appUri}/gws_appservice/onlineCustomerService&api_key=${apiKey}');
-      if (response.statusCode == 200) {
-        var data = response.data;
-        if (data['status'] == 0 || data['status'] == null) {
-          // 根据number选择返回哪个服务信息
-          service = data[number == 1
-              ? 'online_customer_service_1'
-              : 'online_customer_service_2'];
-        } else {
-          print('Status is not 0 or null.');
-        }
-      } else {
-        print('Failed to fetch data: HTTP status ${response.statusCode}');
-      }
-    } on DioError catch (e) {
-      print('Dio error: ${e.message}');
-    } catch (e) {
-      print('Error: $e');
-    }
-    return service;
-  }
-
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

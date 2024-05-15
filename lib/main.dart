@@ -310,8 +310,37 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+Future<Map<String, dynamic>> fetchCustomerServiceData(int number) async {
+  var dio = Dio();
+  Map<String, dynamic> service = {};
+  try {
+    var response = await dio.get(
+        '${appUri}/gws_appservice/onlineCustomerService&api_key=${apiKey}');
+    if (response.statusCode == 200) {
+      var data = response.data;
+      if (data['status'] == 0 || data['status'] == null) {
+        // 根据number选择返回哪个服务信息
+        service = data[number == 1
+            ? 'online_customer_service_1'
+            : 'online_customer_service_2'];
+      } else {
+        print('Status is not 0 or null.');
+      }
+    } else {
+      print('Failed to fetch data: HTTP status ${response.statusCode}');
+    }
+  } on DioError catch (e) {
+    print('Dio error: ${e.message}');
+  } catch (e) {
+    print('Error: $e');
+  }
+  return service;
+}
+
 // TODO: 加入客服中心
 void showShareDialog(BuildContext context) async {
+  Map<String, dynamic> fetchData1 = await fetchCustomerServiceData(1);
+  Map<String, dynamic> fetchData2 = await fetchCustomerServiceData(2);
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -328,18 +357,20 @@ void showShareDialog(BuildContext context) async {
                 mainAxisAlignment: MainAxisAlignment
                     .spaceEvenly, // Center the icons horizontally
                 children: <Widget>[
-                  IconButton(
-                      icon: Icon(FontAwesomeIcons.line,
-                          color: Colors.green, size: 40),
-                      onPressed: () {
-                        launchLINE();
-                      }),
-                  IconButton(
-                      icon: Icon(FontAwesomeIcons.facebook,
-                          color: Colors.blue, size: 40),
-                      onPressed: () {
-                        launchFacebook();
-                      }),
+                  if (fetchData1['status'] == '1')
+                    IconButton(
+                        icon: Icon(FontAwesomeIcons.line,
+                            color: Colors.green, size: 40),
+                        onPressed: () {
+                          launchLINE();
+                        }),
+                  if (fetchData2['status'] == '1')
+                    IconButton(
+                        icon: Icon(FontAwesomeIcons.facebook,
+                            color: Colors.green, size: 40),
+                        onPressed: () {
+                          launchFacebook();
+                        }),
                 ],
               ),
             ],
