@@ -236,44 +236,46 @@ class _MyHomePageState extends State<MyHomePage> {
         // ],
         iconTheme: IconThemeData(color: Colors.white),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+      drawer: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.7, // 設置寬度為屏幕寬度的 50%
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text('您好',
+                      style: TextStyle(fontSize: 24, color: Colors.white)),
+                ),
               ),
-              child: Align(
-                alignment: Alignment.center,
-                child: Text('您好',
-                    style: TextStyle(fontSize: 24, color: Colors.white)),
+              ListTile(
+                leading: const Icon(FontAwesomeIcons.circleUser),
+                title: const Text('會員中心'),
+                onTap: () {
+                  if (isLogin == true) {
+                    selectedIndex = 4;
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => MyApp()));
+                  } else {
+                    selectedIndex = 4;
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => MyApp()));
+                  }
+                },
               ),
-            ),
-            ListTile(
-              leading: const Icon(FontAwesomeIcons.circleUser),
-              title: const Text('會員中心'),
-              onTap: () {
-                if (isLogin == true) {
-                  selectedIndex = 4;
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => MyApp()));
-                } else {
-                  selectedIndex = 4;
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => MyApp()));
-                }
-              },
-            ),
-            // 条件语句，仅在 isLogin == true 时包含此 ListTile
-            ListTile(
-              leading: const Icon(FontAwesomeIcons.headset),
-              title: const Text('線上客服'),
-              onTap: () {
-                showShareDialog(context);
-              },
-            ),
-          ],
+              ListTile(
+                leading: const Icon(FontAwesomeIcons.headset),
+                title: const Text('線上客服'),
+                onTap: () {
+                  showShareDialog(context);
+                },
+              ),
+            ],
+          ),
         ),
       ),
       body: Center(
@@ -367,7 +369,7 @@ void showShareDialog(BuildContext context) async {
                   // if (fetchData2['status'] == '1')
                   IconButton(
                       icon: Icon(FontAwesomeIcons.facebookMessenger,
-                          color: Colors.green, size: 40),
+                          color: Colors.blue, size: 40),
                       onPressed: () {
                         launchFacebook();
                       }),
