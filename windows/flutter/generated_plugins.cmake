@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   firebase_core
   local_auth_windows
+  open_browser
   share_plus
   url_launcher_windows
 )
