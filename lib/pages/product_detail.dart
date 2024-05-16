@@ -8,6 +8,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:rc168/responsive_text.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -26,11 +27,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int _current = 0;
   int _selectedQuantity = 1;
   List service = [];
+  String? productName;
 
   @override
   void initState() {
     super.initState();
     productDetail = getProductDetail().then((data) {
+      productName = data['details']['name'];
       var options = data['options'] as List<ProductOption>;
       for (var option in options) {
         if (option.values.isNotEmpty) {
@@ -41,39 +44,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       }
       return data;
     });
-  }
-
-  String convertHtmlToString(String htmlContent) {
-    var document = html_parser.parse(htmlContent);
-
-    // Format headings
-    document.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((element) {
-      element.replaceWith(dom.Text('${element.text}\n'));
-    });
-
-    // Format paragraphs
-    document.querySelectorAll('p').forEach((element) {
-      element.replaceWith(dom.Text(
-          '${element.text}\n\n')); // Added an extra newline for paragraph spacing
-    });
-
-    // Replace 'li' with bullet points
-    document.querySelectorAll('li').forEach((element) {
-      element.replaceWith(dom.Text('• ${element.text}\n'));
-    });
-
-    // Extract 'src' from 'img' tags and include it in the text
-    document.querySelectorAll('img').forEach((element) {
-      var imgSrc = element.attributes['src'];
-      if (imgSrc != null) {
-        // This will insert the URL text directly into the output.
-        // You may want to format it or handle it differently depending on your needs.
-        element.replaceWith(dom.Text('Image: $imgSrc\n'));
-      }
-    });
-
-    return document.body!.text
-        .trim(); // Trim to remove any leading/trailing whitespace
   }
 
   Future<dynamic> getProductDetail() async {
@@ -125,8 +95,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           IconButton(
               icon: Icon(FontAwesomeIcons.shareNodes),
               onPressed: () {
-                Share.share(
-                    "分享連接：https://social-plugins.line.me/lineit/share?url=https%3A%2F%2Focapi.remember1688.com%2F%2Findex.php%3Froute%3Dproduct%2Fproduct%26product_id%3D${widget.productId}");
+                displayShareDialog(context, productName!);
+                // Share.share(
+                //     "分享連接：https://social-plugins.line.me/lineit/share?url=https%3A%2F%2Focapi.remember1688.com%2F%2Findex.php%3Froute%3Dproduct%2Fproduct%26product_id%3D${widget.productId}");
               }),
         ],
       ),
@@ -441,6 +412,118 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
+//TODO： 分享對話框
+  void displayShareDialog(BuildContext context, String productName) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0)), // Rounded corners
+          child: Container(
+            padding: EdgeInsets.all(20.0),
+            height: 120, // Set the height of the dialog
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment
+                      .spaceEvenly, // Center the icons horizontally
+                  children: <Widget>[
+                    IconButton(
+                        icon: Icon(FontAwesomeIcons.shareNodes,
+                            color: Colors.blue, size: 40),
+                        onPressed: () {
+                          String url;
+                          if (isLogin == true) {
+                            url =
+                                "分享連接：https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${widget.productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou";
+                          } else {
+                            url =
+                                "分享連接：https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${widget.productId}";
+                          }
+
+                          Share.share(url);
+                        }),
+                    IconButton(
+                        icon: Icon(FontAwesomeIcons.line,
+                            color: Colors.green, size: 40),
+                        onPressed: () {
+                          launchLINE(widget.productId, productName);
+                        }),
+                    // if (fetchData2['status'] == '1')
+                    IconButton(
+                        icon: Icon(FontAwesomeIcons.facebookMessenger,
+                            color: Colors.blue, size: 40),
+                        onPressed: () {
+                          launchFacebook(widget.productId, productName);
+                        }),
+                    IconButton(
+                        icon: Icon(FontAwesomeIcons.twitter,
+                            color: Colors.blue, size: 40),
+                        onPressed: () {
+                          launchTwitter(widget.productId, productName);
+                        }),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> launchLINE(String productId, String productName) async {
+    String url;
+    if (isLogin == true) {
+      url =
+          "https://www.addtoany.com/add_to/line?linkurl=https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou&linkname=${productName}&linknote=";
+    } else {
+      url =
+          "https://www.addtoany.com/add_to/line?linkurl=https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${productId}&linkname=${productName}&linknote=";
+    }
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> launchFacebook(String productId, String productName) async {
+    String url;
+    if (isLogin == true) {
+      url =
+          "https://www.addtoany.com/add_to/facebook?linkurl=https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou&linkname=${productName}&linknote=";
+    } else {
+      url =
+          "https://www.addtoany.com/add_to/facebook?linkurl=https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${productId}&linkname=${productName}&linknote=";
+    }
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> launchTwitter(String productId, String productName) async {
+    String url;
+    if (isLogin == true) {
+      url =
+          "https://www.addtoany.com/add_to/twitter?linkurl=https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou&linkname=${productName}&linknote=";
+    } else {
+      url =
+          "https://www.addtoany.com/add_to/twitter?linkurl=https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${productId}&linkname=${productName}&linknote=";
+    }
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   Widget buildIndicator(int currentIndex, int itemCount) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -468,17 +551,9 @@ List<Widget> convertHtmlToWidgets(String htmlContent,
   List<Widget> widgetsList = [];
 
   document.body!.nodes.forEach((node) {
+    // print(node);
     if (node is dom.Element) {
       switch (node.localName) {
-        case 'h1':
-          widgetsList.add(Text(node.text,
-              style: TextStyle(
-                  fontSize: baseFontSize, fontWeight: FontWeight.bold)));
-          break;
-        case 'p':
-          widgetsList
-              .add(Text(node.text, style: TextStyle(fontSize: baseFontSize)));
-          break;
         case 'img':
           var imgSrc = node.attributes['src'];
           if (imgSrc != null) {
@@ -488,6 +563,16 @@ List<Widget> convertHtmlToWidgets(String htmlContent,
             ));
           }
           break;
+        case 'h1':
+          widgetsList.add(Text(node.text,
+              style: TextStyle(
+                  fontSize: baseFontSize, fontWeight: FontWeight.bold)));
+          break;
+        case 'p':
+          widgetsList
+              .add(Text(node.text, style: TextStyle(fontSize: baseFontSize)));
+          break;
+
         // ... Handle other HTML tags
       }
     } else if (node is dom.Text) {
@@ -496,7 +581,99 @@ List<Widget> convertHtmlToWidgets(String htmlContent,
     }
   });
 
+  // print(widgetsList);
+
   return widgetsList;
+}
+
+List<Widget> convertHtml(String htmlContent, {double baseFontSize = 14}) {
+  var document = html_parser.parse(htmlContent);
+  List<Widget> widgets = [];
+
+  // 處理各種 HTML 標籤並轉換為 Widget
+  for (var node in document.body!.nodes) {
+    if (node is dom.Element) {
+      switch (node.localName) {
+        case 'img':
+          var src = node.attributes['src'];
+          if (src != null && src.isNotEmpty) {
+            print('Trying to load image from: $src'); // 確保這裡的 URL 被打印出來
+            widgets.add(Image.network(
+              src,
+              fit: BoxFit.cover,
+              errorBuilder: (BuildContext context, Object exception,
+                  StackTrace? stackTrace) {
+                print('Failed to load image: $src'); // 如果圖片加載失敗，這會被打印
+                return const Text('Failed to load image');
+              },
+            ));
+          } else {
+            print('No src found for image'); // 如果 src 屬性不存在或為空
+          }
+          break;
+        case 'h1':
+        case 'h2':
+        case 'h3':
+        case 'h4':
+        case 'h5':
+        case 'h6':
+          widgets.add(Text(
+            node.text,
+            style:
+                TextStyle(fontSize: baseFontSize, fontWeight: FontWeight.bold),
+          ));
+          break;
+        case 'p':
+          widgets.add(Text(
+            node.text.trim(),
+            style: TextStyle(fontSize: baseFontSize),
+          ));
+          break;
+        case 'li':
+          widgets.add(Row(
+            children: <Widget>[
+              Text('• ', style: TextStyle(fontSize: baseFontSize)),
+              Expanded(
+                  child:
+                      Text(node.text, style: TextStyle(fontSize: baseFontSize)))
+            ],
+          ));
+          break;
+
+        case 'ol':
+        case 'ul':
+          widgets.add(Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: node.children
+                .map((child) => convertHtml(child.outerHtml))
+                .expand((i) => i)
+                .toList(),
+          ));
+          break;
+        case 'b':
+        case 'strong':
+          widgets.add(Text(
+            node.text,
+            style:
+                TextStyle(fontSize: baseFontSize, fontWeight: FontWeight.bold),
+          ));
+          break;
+        case 'br':
+          widgets.add(SizedBox(height: baseFontSize / 2));
+          break;
+        default:
+          if (node.text.trim().isNotEmpty) {
+            widgets.add(Text(
+              node.text,
+              style: TextStyle(fontSize: baseFontSize),
+            ));
+          }
+          break;
+      }
+    }
+  }
+
+  return widgets;
 }
 
 class MyHtmlWidget extends StatelessWidget {
@@ -508,8 +685,8 @@ class MyHtmlWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgets =
-        convertHtmlToWidgets(htmlContent, baseFontSize: baseFontSize);
+    print(htmlContent);
+    List<Widget> widgets = convertHtml(htmlContent, baseFontSize: baseFontSize);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

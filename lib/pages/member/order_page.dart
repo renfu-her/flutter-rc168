@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
+import 'package:rc168/pages/shop/shop_cart_page.dart';
 import 'package:rc168/pages/shop/shop_page.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -149,28 +150,27 @@ class _OrderPageState extends State<OrderPage> {
                         icon: const Icon(FontAwesomeIcons
                             .circleInfo), // 詳情圖標，請確保已經加載了 FontAwesome
                         onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => ProductDetailPage(
-                          //       productId: order.products.toString(),
-                          //     ),
-                          //   ),
-                          // );
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(FontAwesomeIcons
-                            .cartShopping), // 詳情圖標，請確保已經加載了 FontAwesome
-                        onPressed: () {
                           getOrder(order.orderId);
 
                           _showDialog('重新下單成功', '已經重新下單。');
 
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ShopPage()));
+                          selectedIndex = 3;
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => MyApp()));
                         },
                       ),
+                      // IconButton(
+                      //   icon: const Icon(FontAwesomeIcons
+                      //       .cartShopping), // 詳情圖標，請確保已經加載了 FontAwesome
+                      //   onPressed: () {
+                      //     getOrder(order.orderId);
+
+                      //     _showDialog('重新下單成功', '已經重新下單。');
+
+                      //     Navigator.of(context).push(MaterialPageRoute(
+                      //         builder: (context) => ShopPage()));
+                      //   },
+                      // ),
                     ],
                   ),
                 );
