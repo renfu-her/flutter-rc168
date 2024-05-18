@@ -7,6 +7,7 @@ import 'package:text_responsive/text_responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rc168/pages/product_detail.dart';
 import 'package:rc168/responsive_text.dart';
+import 'package:rc168/pages/shop/shop_reporchase.dart';
 
 class OrderPage extends StatefulWidget {
   const OrderPage({Key? key}) : super(key: key);
@@ -150,13 +151,17 @@ class _OrderPageState extends State<OrderPage> {
                         icon: const Icon(FontAwesomeIcons
                             .circleInfo), // 詳情圖標，請確保已經加載了 FontAwesome
                         onPressed: () {
-                          getOrder(order.orderId);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ShopRepurchasePage(
+                                    orderId: order.orderId,
+                                  )));
+                          //   getOrder(order.orderId);
 
-                          _showDialog('重新下單成功', '已經重新下單。');
+                          //   _showDialog('重新下單成功', '已經重新下單。');
 
-                          selectedIndex = 3;
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => MyApp()));
+                          //   selectedIndex = 3;
+                          //   Navigator.of(context).push(
+                          //       MaterialPageRoute(builder: (context) => MyApp()));
                         },
                       ),
                       // IconButton(
