@@ -43,7 +43,7 @@ class _ShopRepurchasePageState extends State<ShopRepurchasePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('產品'),
+        title: const Text('訂單詳情'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
@@ -57,117 +57,97 @@ class _ShopRepurchasePageState extends State<ShopRepurchasePage> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text("No products found"));
           } else {
-            return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                childAspectRatio: 0.7,
-              ),
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: snapshot.data!.length,
+            double totalPrice = 0;
+            for (var product in snapshot.data!) {
+              totalPrice += product.price * product.quantity;
+            }
+
+            return ListView.builder(
+              itemCount: snapshot.data!.length + 1,
               itemBuilder: (context, index) {
-                Product product = snapshot.data![index];
-                return Card(
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero, // 移除圓角
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Expanded(
-                        child: InkWell(
-                          // 使用 InkWell 包裹圖片
-                          onTap: () {
-                            // 添加 onTap 事件
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProductDetailPage(
-                                  productId: product.productId,
-                                ),
-                              ),
-                            );
-                          },
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: Image.network(
-                              product.image,
-                              fit: BoxFit.cover,
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              },
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.error),
+                if (index < snapshot.data!.length) {
+                  Product product = snapshot.data![index];
+                  return Card(
+                    clipBehavior: Clip.antiAlias,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero, // 移除圓角
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailPage(
+                              productId: product.productId,
                             ),
                           ),
+                        );
+                      },
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.all(8.0),
+                        leading: Image.network(
+                          product.image,
+                          width: 100,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          },
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.error),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.center, // 將對齊方式改為置中
-                          children: <Widget>[
-                            InlineTextWidget(
-                              product.name,
+                        title: Text(
+                          product.name,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '\$${product.price}',
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                            ),
+                            Text(
+                              'x ${product.quantity}',
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
                             ),
-                            Column(children: [
-                              ResponsiveText("",
-                                  baseFontSize: 28,
-                                  textAlign: TextAlign.center,
-                                  decoration: TextDecoration.lineThrough,
-                                  color: Colors.grey),
-                              ResponsiveText(
-                                product.price,
-                                baseFontSize: 36,
-                                fontWeight: FontWeight.bold,
-                                textAlign: TextAlign.center,
-                              )
-                            ])
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: ElevatedButton(
-                          child: InlineTextWidget(
-                            '加入購物車',
-                            style: const TextStyle(
-                                fontSize: 18, color: Colors.white),
-                          ),
-                          onPressed: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProductDetailPage(
-                                  productId: product.productId,
-                                ),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(6), // 設定圓角半徑為 10
-                            ),
-                          ),
-                        ),
+                    ),
+                  );
+                } else {
+                  return ListTile(
+                    title: Text(
+                      '總金額',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
-                );
+                    ),
+                    trailing: Text(
+                      '\$${totalPrice.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                }
               },
             );
           }
@@ -182,7 +162,8 @@ class Product {
   final String href;
   final String image;
   final String productId;
-  final String price;
+  final int price;
+  final int quantity;
 
   Product({
     required this.name,
@@ -190,23 +171,33 @@ class Product {
     required this.image,
     required this.productId,
     required this.price,
+    required this.quantity,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
-    // 替換 href 中的 &amp; 為 &
+    // 替换 href 中的 &amp; 为 &
     String href = json['href'] as String;
     href = href.replaceAll('&amp;', '&');
 
-    // 提取 product_id 從 href 字段中
+    // 提取 product_id 从 href 字段中
     final uri = Uri.parse(href);
     final productId = uri.queryParameters['product_id'] ?? '';
 
+    // 去掉价格中的 $ 和 , 符号并转换为数字
+    String priceString = json['price'] as String? ?? '';
+    priceString = priceString.replaceAll('\$', '').replaceAll(',', '');
+    int price = int.tryParse(priceString) ?? 0;
+
+    // 将数量转换为整数
+    int quantity = int.tryParse(json['quantity'] as String? ?? '') ?? 0;
+
     return Product(
       name: json['name'] as String? ?? '',
-      href: json['href'] as String? ?? '',
+      href: href,
       image: json['image'] as String? ?? '',
       productId: productId,
-      price: json['price'] as String? ?? '',
+      price: price,
+      quantity: quantity,
     );
   }
 }
