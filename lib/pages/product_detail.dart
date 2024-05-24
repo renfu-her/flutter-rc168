@@ -27,6 +27,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int _current = 0;
   int _selectedQuantity = 1;
   List service = [];
+  int stockStatus = 0;
   String? productName;
 
   @override
@@ -42,6 +43,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               selectedOptionValues[option.id] ?? option.values.first.id;
         }
       }
+      stockStatus = data['details']['stock_status'] == '有現貨' ? 1 : 0;
       return data;
     });
   }
@@ -108,6 +110,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             if (snapshot.hasData) {
               var product = snapshot.data['details'];
               var options = snapshot.data['options'] as List<ProductOption>;
+              stockStatus = 1;
+              // if (product['stock_status'] == '有現貨') {
+              //   stockStatus = 1;
+              // } else {
+              //   stockStatus = 0;
+              // }
 
               List<Widget> contentWidgets = [];
 
@@ -346,60 +354,68 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
           child: ElevatedButton(
             onPressed: () async {
-              if (isLogin == true) {
+              if (isLogin == true && stockStatus == 1) {
                 await addToCart(
                     widget.productId, _selectedQuantity, selectedOptionValues);
                 selectedIndex = 3;
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => MyApp()));
               } else {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: ResponsiveText(
-                        '您尚未登入會員 ',
-                        baseFontSize: 40,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      content: SingleChildScrollView(
-                        child: ListBody(
-                          children: <Widget>[
-                            ResponsiveText(
-                              '請先登入會員！',
-                              baseFontSize: 36,
-                            ),
-                          ],
+                if (stockStatus == 1)
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: ResponsiveText(
+                          '您尚未登入會員 ',
+                          baseFontSize: 40,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text('取消'),
-                          onPressed: () {
-                            Navigator.of(context).pop(); // 关闭对话框
-                          },
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: <Widget>[
+                              ResponsiveText(
+                                '請先登入會員！',
+                                baseFontSize: 36,
+                              ),
+                            ],
+                          ),
                         ),
-                        TextButton(
-                          child: Text('登入'),
-                          onPressed: () {
-                            // 可以在这里添加跳转到登录页面的代码
-                            Navigator.of(context).pop(); // 先关闭对话框
-                            // 假设你有一个名为LoginPage的登录页面
-                            selectedIndex = 4;
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => MyApp()));
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('取消'),
+                            onPressed: () {
+                              Navigator.of(context).pop(); // 关闭对话框
+                            },
+                          ),
+                          TextButton(
+                            child: Text('登入'),
+                            onPressed: () {
+                              // 可以在这里添加跳转到登录页面的代码
+                              Navigator.of(context).pop(); // 先关闭对话框
+                              // 假设你有一个名为LoginPage的登录页面
+                              selectedIndex = 4;
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => MyApp()));
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
               }
             },
-            child: InlineTextWidget('加入購物車',
-                style: TextStyle(fontSize: 18, color: Colors.white)),
+            child: stockStatus == 1
+                ? InlineTextWidget('加入購物車',
+                    style: TextStyle(fontSize: 18, color: Colors.white))
+                : InlineTextWidget('商品已售完',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    )),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
+              backgroundColor:
+                  stockStatus == 1 ? Colors.blue : Colors.grey, // 按钮背景颜色为蓝色
               foregroundColor: Colors.white, // 文本颜色为白色
               minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
               shape: RoundedRectangleBorder(
@@ -412,7 +428,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-//TODO： 分享對話框
+  //TODO： 分享對話框
   void displayShareDialog(BuildContext context, String productName) async {
     showDialog(
       context: context,

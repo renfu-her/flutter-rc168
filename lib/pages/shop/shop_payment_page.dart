@@ -44,6 +44,7 @@ class _ShopPaymentPageState extends State<ShopPaymentPage> {
           final String htmlContent = await _controller.evaluateJavascript(
               "document.documentElement.outerHTML.toString()");
           print(url);
+          print(widget.htmlUrl);
           // 根据HTML内容进行逻辑处理，例如触发本地通知
           // 此处添加判断逻辑，根据实际情况触发通知
           if (url.contains("success")) {
