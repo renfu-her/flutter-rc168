@@ -27,7 +27,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int _current = 0;
   int _selectedQuantity = 1;
   List service = [];
-  int stockStatus = 0;
+  int stockStatus = 1;
   String? productName;
 
   @override
@@ -43,7 +43,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               selectedOptionValues[option.id] ?? option.values.first.id;
         }
       }
-      stockStatus = data['details']['stock_status'] == '有現貨' ? 1 : 0;
+      // stockStatus = data['details']['stock_status'] == '有現貨' ? 1 : 0;
       return data;
     });
   }

@@ -367,13 +367,11 @@ class _ShopCartPageState extends State<ShopCartPage> {
       data: orderData,
     );
 
-    print(orderData);
-
     if (response.statusCode == 200) {
       final responseData = response.data['data'];
       final htmlUrl =
           '${demoUrl}/api/product/payment?customerId=${customerId}&orderId=' +
-              responseData['order']['order_id'];
+              responseData['order']['order_id'] + '&amount=' + totalAmount.toString();
 
       Navigator.push(
         context,
