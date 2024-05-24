@@ -817,8 +817,12 @@ Future<void> addToCart(
     'option': selectedOptionValues,
   });
 
+  print(productId);
+  print(quantity);
+  print(selectedOptionValues);
+
   final addCartUrl =
-      '${appUri}/gws_customer_cart/add&customer_id=${customerId}&api_key=${apiKey}';
+      '${appUri}/gws_appcustomer_cart/add&customer_id=${customerId}&api_key=${apiKey}';
   try {
     var response = await dio.post(
       addCartUrl,

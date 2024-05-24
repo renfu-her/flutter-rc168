@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -25,7 +24,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FirebaseMessaging messaging = FirebaseMessaging.instance;
 
 var dio = Dio();
-String appUrl = 'https://ocapi.remember1688.com';
+String appUrl = 'https://ismartdemo.com.tw';
 String appUri = '${appUrl}/index.php?route=extension/module/api';
 String imgUrl = '${appUrl}/image/';
 String apiKey =
@@ -217,6 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: logoImg != null
             ? Image.network(
                 logoImg,
+                height: 45,
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) return child;

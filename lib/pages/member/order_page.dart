@@ -190,7 +190,7 @@ class _OrderPageState extends State<OrderPage> {
 
 Future<List<Order>> fetchOrders() async {
   final response = await dio.get(
-      '$appUri/gws_customer_order&customer_id=$customerId&api_key=$apiKey');
+      '$appUri/gws_appcustomer_order&customer_id=$customerId&api_key=$apiKey');
 
   if (response.statusCode == 200) {
     List<Order> orders = (response.data['orders'] as List)

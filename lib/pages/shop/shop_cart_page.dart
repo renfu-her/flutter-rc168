@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
@@ -85,23 +86,59 @@ class _ShopCartPageState extends State<ShopCartPage> {
           var productData = productResponse.data;
 
           if (productData['message'][0]['msg_status'] == true) {
-            // 創建一個組合了所有必要數據的新 Map
+            // Parse cart item option
+            var cartItemOption = jsonDecode(cartItem['option']);
+            var productOptions = productData['product'][0]['options'];
+
+            var selectedOptions = [];
+            productOptions.forEach((option) {
+              var productOptionId = option['product_option_id'].toString();
+              if (cartItemOption.containsKey(productOptionId)) {
+                var productOptionValueId = cartItemOption[productOptionId];
+                var optionValue = option['product_option_value'].firstWhere(
+                    (value) =>
+                        value['product_option_value_id'].toString() ==
+                        productOptionValueId,
+                    orElse: () => null);
+
+                if (optionValue != null) {
+                  selectedOptions.add({
+                    'product_option_id': option['product_option_id'].toString(),
+                    'product_option_value_id':
+                        optionValue['product_option_value_id'].toString(),
+                    'type': option['type'],
+                    'value': optionValue['name'],
+                    'name': option['name'],
+                  });
+                }
+              }
+            });
+
+            // Print selected options
+            selectedOptions.forEach((selectedOption) {
+              print(
+                  'value: ${selectedOption['value']}, name: ${selectedOption['name']}, type: ${selectedOption['type']}, product_option_id: ${selectedOption['product_option_id']}, product_option_value_id: ${selectedOption['product_option_value_id']}');
+            });
+
+            // Create combined data map
             var combinedData =
                 Map<String, dynamic>.from(productData['product'][0])
                   ..addAll({
                     'quantity': cartItem['quantity'],
                     'cart_id': cartItem['cart_id'],
+                    'options':
+                        selectedOptions // Add selected options to the combined data
                   });
 
             var product = Product.fromJson(combinedData);
 
             setState(() {
               products.add(product);
-              product.special != false
+              product.special != 0.0
                   ? totalAmount += product.special * product.quantity
                   : totalAmount += product.price * product.quantity;
 
-              product.special != false
+              product.special != 0.0
                   ? _tempTotalAmount += product.special * product.quantity
                   : _tempTotalAmount += product.price * product.quantity;
             });
@@ -311,7 +348,17 @@ class _ShopCartPageState extends State<ShopCartPage> {
           'total': product.special != false
               ? product.special * product.quantity
               : product.price * product.quantity,
-          'name': product.name
+          'name': product.name,
+          'options': product.options.map((option) {
+            return {
+              'product_option_id': option.productOptionId,
+              'product_option_value_id': option.productOptionValueId,
+              'type': 'select', // Assuming type is always 'select'
+              'value': option
+                  .productOptionValueId, // Assuming value is option value ID
+              'name': option.productOptionId, // Assuming name is option ID
+            };
+          }).toList(),
         };
       }).toList(),
       'shipping_sort_order': _selectedShippingMethodCode,
@@ -324,6 +371,8 @@ class _ShopCartPageState extends State<ShopCartPage> {
       '${demoUrl}/api/product/submit',
       data: orderData,
     );
+
+    print(orderData);
 
     if (response.statusCode == 200) {
       final responseData = response.data['data'];
@@ -630,6 +679,7 @@ class Product {
   int quantity;
   final String cartId;
   final dynamic special;
+  final List<Option> options; // 添加 options 属性
 
   void incrementQuantity() {
     quantity++;
@@ -649,10 +699,41 @@ class Product {
     required this.quantity,
     required this.cartId,
     required this.special,
+    required this.options, // 添加 options 参数
   });
 
-  // 工廠構造函數
   factory Product.fromJson(Map<String, dynamic> combinedJson) {
+    // 解析 options
+    List<Option> options = [];
+    if (combinedJson['option'] != null) {
+      try {
+        var optionData = combinedJson['option'];
+        if (optionData is String) {
+          // 嘗試將 option 字符串解碼為 Map
+          Map<String, dynamic> optionMap = json.decode(optionData);
+          options = optionMap.entries.map((entry) {
+            return Option(
+              productOptionId: entry.key,
+              productOptionValueId: entry.value,
+            );
+          }).toList();
+        } else if (optionData is List) {
+          // 如果 option 數據是列表，則相應處理
+          options = optionData.map((entry) {
+            return Option(
+              productOptionId: entry['product_option_id'],
+              productOptionValueId: entry['product_option_value_id'],
+            );
+          }).toList();
+        } else {
+          // 處理其他意外類型
+          print('意外的 option 數據類型: ${optionData.runtimeType}');
+        }
+      } catch (e) {
+        print('解析 option 數據時出錯: $e');
+      }
+    }
+
     return Product(
       productId: combinedJson['product_id'],
       name: combinedJson['name'],
@@ -665,8 +746,19 @@ class Product {
           ? false
           : int.parse(
               combinedJson['special'].replaceAll(RegExp(r'[^0-9\.]'), '')),
+      options: options, // 添加 options 初始化
     );
   }
+}
+
+class Option {
+  final String productOptionId;
+  final String productOptionValueId;
+
+  Option({
+    required this.productOptionId,
+    required this.productOptionValueId,
+  });
 }
 
 class ShippingMethod {
