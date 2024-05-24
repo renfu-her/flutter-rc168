@@ -88,7 +88,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
           data: formData,
         );
 
-        print(response.data);
+        // print{response.data);
         if (response.statusCode == 200) {
           _showDialog('編輯地址', '編輯地址完成');
         } else {
@@ -105,7 +105,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
       final response = await dio.post(
           '$appUri/gws_customer_address&customer_id=${customerId}&address_id=${addressId}&api_key=${apiKey}');
 
-      print(response.statusCode);
+      // print{response.statusCode);
       if (response.statusCode == 200) {
         var addressData = response.data['customer_address'];
         // // 現在更新所有的控制器和變量

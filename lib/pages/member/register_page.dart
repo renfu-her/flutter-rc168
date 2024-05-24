@@ -162,7 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
         data: formData,
       );
 
-      print(response.data);
+      // print{response.data);
       if (response.data['message'][0]['msg_status'] == true) {
         _showDialog('新加入', '已經加入成功');
         Navigator.pop(context);

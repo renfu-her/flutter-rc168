@@ -266,8 +266,8 @@ Future<void> addToCart(String productId, int quantity) async {
     'quantity': quantity,
   });
 
-  print(productId);
-  print(quantity);
+  // print{productId);
+  // print{quantity);
 
   final addCartUrl =
       '${appUri}/gws_customer_cart/add&customer_id=${customerId}&api_key=${apiKey}';

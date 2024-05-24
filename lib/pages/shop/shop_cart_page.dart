@@ -89,7 +89,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
             // Parse cart item option
             var cartItemOption = jsonDecode(cartItem['option']);
             var productOptions = productData['product'][0]['options'];
-            print(productOptions);
+            // print{productOptions);
 
             var selectedOptions = [];
             productOptions.forEach((option) {
@@ -154,7 +154,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
     try {
       // 如果有提供 defaultAddressId，則直接使用
       String addressId = defaultAddressId;
-      print('addressId 1: ${addressId}');
+      // print{'addressId 1: ${addressId}');
 
       if (addressId.isEmpty) {
         // 如果沒有提供 defaultAddressId，則從 gws_customer 獲取
@@ -190,7 +190,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
           // 如果 status 為 false，選擇最新地址或其他邏輯
         }
 
-        print('customerAddress: ${customerAddress} addressId：${addressId}，');
+        // print{'customerAddress: ${customerAddress} addressId：${addressId}，');
       });
     } catch (e) {
       print(e);
@@ -371,7 +371,9 @@ class _ShopCartPageState extends State<ShopCartPage> {
       final responseData = response.data['data'];
       final htmlUrl =
           '${demoUrl}/api/product/payment?customerId=${customerId}&orderId=' +
-              responseData['order']['order_id'] + '&amount=' + totalAmount.toString();
+              responseData['order']['order_id'] +
+              '&amount=' +
+              totalAmount.toString();
 
       Navigator.push(
         context,
@@ -499,7 +501,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                         padding: const EdgeInsets.only(bottom: 100.0),
                         itemBuilder: (context, index) {
                           if (index == 0 && customerAddress != null) {
-                            print(customerAddress);
+                            // print{customerAddress);
                             // 在列表的最上方显示地址信息
                             return FutureBuilder<Map<String, dynamic>?>(
                               future: fetchCountryAndZoneDetails(

@@ -52,7 +52,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     try {
       var response =
           await dio.get('${demoUrl}/api/product/detail/${widget.productId}');
-      // print(widget.productId);
+      //// print{widget.productId);
       if (response.statusCode == 200) {
         var productOptions = response.data['data']['options'] as List;
         var productOptionsParsed =
@@ -613,13 +613,13 @@ List<Widget> convertHtml(String htmlContent, {double baseFontSize = 14}) {
         case 'img':
           var src = node.attributes['src'];
           if (src != null && src.isNotEmpty) {
-            print('Trying to load image from: $src'); // 確保這裡的 URL 被打印出來
+            // print{'Trying to load image from: $src'); // 確保這裡的 URL 被打印出來
             widgets.add(Image.network(
               src,
               fit: BoxFit.cover,
               errorBuilder: (BuildContext context, Object exception,
                   StackTrace? stackTrace) {
-                print('Failed to load image: $src'); // 如果圖片加載失敗，這會被打印
+                // print{'Failed to load image: $src'); // 如果圖片加載失敗，這會被打印
                 return const Text('Failed to load image');
               },
             ));
@@ -701,7 +701,7 @@ class MyHtmlWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(htmlContent);
+    // print{htmlContent);
     List<Widget> widgets = convertHtml(htmlContent, baseFontSize: baseFontSize);
 
     return Column(
@@ -833,9 +833,9 @@ Future<void> addToCart(
     'option': selectedOptionValues,
   });
 
-  print(productId);
-  print(quantity);
-  print(selectedOptionValues);
+  // print{productId);
+  // print{quantity);
+  // print{selectedOptionValues);
 
   final addCartUrl =
       '${appUri}/gws_appcustomer_cart/add&customer_id=${customerId}&api_key=${apiKey}';

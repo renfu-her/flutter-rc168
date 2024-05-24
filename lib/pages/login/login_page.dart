@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
         data: formData,
       );
 
-      print(response.data['login'][0]['status']);
+      // print{response.data['login'][0]['status']);
 
       if (response.data['login'][0]['status'] == true) {
         email = _emailController.text;
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
         saveLoginState(isLogin);
 
         await prefs.setString('email', _emailController.text);
-        print(email);
+        // print{email);
 
         Navigator.pop(context);
       } else {

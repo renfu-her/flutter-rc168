@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
           // },
         ),
         items: banners.map((banner) {
-          print(banner);
+          // print{banner);
           return GestureDetector(
             onTap: () {
               _launchURL(banner.link);
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
             FutureBuilder<dynamic>(
               future: fetchBanners(),
               builder: (context, snapshot) {
-                print(snapshot.data);
+                // print{snapshot.data);
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     return Column(
@@ -412,7 +412,7 @@ class _HomePageState extends State<HomePage> {
     if (url.isNotEmpty && await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
-      print('Could not launch');
+      // print{'Could not launch');
     }
   }
 }
@@ -425,7 +425,7 @@ Future<List<Product>> fetchProducts() async {
         .map((p) => Product.fromJson(p))
         .toList();
   } catch (e) {
-    print(e);
+    // print{e);
     throw e;
   }
 }
@@ -438,7 +438,7 @@ Future<List<Product>> fetchPopularProducts() async {
         .map((p) => Product.fromJson(p))
         .toList();
   } catch (e) {
-    print(e);
+    // print{e);
     throw e;
   }
 }
@@ -449,7 +449,7 @@ Future<List<BannerModel>> fetchBanners() async {
 
   if (response.statusCode == 200) {
     List<dynamic> bannersJson = response.data['home_top_banner'];
-    print(bannersJson);
+    // print{bannersJson);
     return bannersJson.map((json) => BannerModel.fromJson(json)).toList();
   } else {
     throw Exception('Failed to load banners');
@@ -504,8 +504,8 @@ Future<void> addToCart(String productId, int quantity) async {
     'quantity': quantity,
   });
 
-  print(productId);
-  print(quantity);
+  // print{productId);
+  // print{quantity);
 
   final addCartUrl =
       '${appUri}/gws_customer_cart/add&customer_id=${customerId}&api_key=${apiKey}';
@@ -521,6 +521,6 @@ Future<void> addToCart(String productId, int quantity) async {
     }
   } on DioException catch (e) {
     // 错误处理
-    print(e);
+    // print{e);
   }
 }

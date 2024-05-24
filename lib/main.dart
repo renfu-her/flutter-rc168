@@ -49,8 +49,8 @@ void main() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
   final bool useFingerprint = prefs.getBool('useFingerprint') ?? false;
-  print(isLoggedIn);
-  print(useFingerprint);
+  // print{isLoggedIn);
+  // print{useFingerprint);
 
   // firebase message notification
   await Firebase.initializeApp(
@@ -176,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
     late String? token;
     token = await messaging.getToken();
     if (token != null) {
-      print("token: $token");
+      // print{"token: $token");
       setState(() {
         // _push_token = token!;
       });
@@ -204,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
           await Dio().get('${appUri}/gws_store_settings&api_key=${apiKey}');
       return response.data['settings']['config_logo'];
     } catch (e) {
-      print(e);
+      // print{e);
       throw (e);
     }
   }
@@ -546,7 +546,7 @@ Future<void> authenticateWithFingerprint() async {
 
 Future<void> _firebaseMessagingBackgroundHandler(message) async {
   await Firebase.initializeApp();
-  print('Handling a background message ${message.messageId}');
+  // print{'Handling a background message ${message.messageId}');
 }
 
 void fetchAndRemoveCartItems() async {
