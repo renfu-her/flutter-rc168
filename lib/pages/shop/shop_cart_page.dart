@@ -89,6 +89,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
             // Parse cart item option
             var cartItemOption = jsonDecode(cartItem['option']);
             var productOptions = productData['product'][0]['options'];
+            print(productOptions);
 
             var selectedOptions = [];
             productOptions.forEach((option) {
@@ -114,12 +115,6 @@ class _ShopCartPageState extends State<ShopCartPage> {
               }
             });
 
-            // Print selected options
-            selectedOptions.forEach((selectedOption) {
-              print(
-                  'value: ${selectedOption['value']}, name: ${selectedOption['name']}, type: ${selectedOption['type']}, product_option_id: ${selectedOption['product_option_id']}, product_option_value_id: ${selectedOption['product_option_value_id']}');
-            });
-
             // Create combined data map
             var combinedData =
                 Map<String, dynamic>.from(productData['product'][0])
@@ -134,11 +129,11 @@ class _ShopCartPageState extends State<ShopCartPage> {
 
             setState(() {
               products.add(product);
-              product.special != 0.0
+              product.special != false
                   ? totalAmount += product.special * product.quantity
                   : totalAmount += product.price * product.quantity;
 
-              product.special != 0.0
+              product.special != false
                   ? _tempTotalAmount += product.special * product.quantity
                   : _tempTotalAmount += product.price * product.quantity;
             });
