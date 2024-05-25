@@ -234,7 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
         //   IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: () {}),
         //   IconButton(icon: Icon(FontAwesomeIcons.comments), onPressed: () {}),
         // ],
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Color(0xFF4F4E4C)),
       ),
       drawer: SizedBox(
         width: MediaQuery.of(context).size.width * 0.7, // 設置寬度為屏幕寬度的 50%
@@ -249,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text('您好',
-                      style: TextStyle(fontSize: 24, color: Colors.white)),
+                      style: TextStyle(fontSize: 24, color: Color(0xFF4F4E4C))),
                 ),
               ),
               ListTile(

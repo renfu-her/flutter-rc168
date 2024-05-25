@@ -139,7 +139,7 @@ class _AddressPageState extends State<AddressPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('地址${customerId}'),
+        title: Text('地址'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         leading: IconButton(

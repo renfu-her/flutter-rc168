@@ -27,7 +27,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int _current = 0;
   int _selectedQuantity = 1;
   List service = [];
-  int stockStatus = 1;
+  int stockStatus = 0;
   String? productName;
 
   @override
@@ -87,13 +87,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       appBar: AppBar(
         title: const Text('產品明細'),
         backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        foregroundColor: const Color(0xFF4F4E4C),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: () {}),
+          IconButton(
+              icon: Icon(FontAwesomeIcons.heart, color: Color(0xFFD72873)),
+              onPressed: () {}),
           IconButton(
               icon: Icon(FontAwesomeIcons.shareNodes),
               onPressed: () {
@@ -110,12 +112,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             if (snapshot.hasData) {
               var product = snapshot.data['details'];
               var options = snapshot.data['options'] as List<ProductOption>;
-              stockStatus = 1;
-              // if (product['stock_status'] == '有現貨') {
-              //   stockStatus = 1;
-              // } else {
-              //   stockStatus = 0;
-              // }
+              // stockStatus = 1;
+              if (product['stock_status'] == '有現貨') {
+                stockStatus = 1;
+              } else {
+                stockStatus = 0;
+              }
 
               List<Widget> contentWidgets = [];
 

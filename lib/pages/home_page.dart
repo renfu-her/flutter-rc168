@@ -216,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                                 child: InlineTextWidget(
                                   '加入購物車',
                                   style: const TextStyle(
-                                      fontSize: 18, color: Colors.white),
+                                      fontSize: 18, color: Colors.red),
                                 ),
                                 onPressed: () async {
                                   Navigator.push(
@@ -229,11 +229,15 @@ class _HomePageState extends State<HomePage> {
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.white, // 按鈕背景色設置為白色
+                                  foregroundColor: Colors.red, // 按鈕文字顏色設置為紅色
+                                  side: BorderSide(
+                                    color: Colors.red, // 邊框顏色設置為紅色
+                                    width: 2, // 邊框寬度設置為2
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius:
-                                        BorderRadius.circular(6), // 設定圓角半徑為 10
+                                        BorderRadius.circular(6), // 設定圓角半徑為6
                                   ),
                                 ),
                               ),
@@ -370,7 +374,7 @@ class _HomePageState extends State<HomePage> {
                                 child: InlineTextWidget(
                                   '加入購物車',
                                   style: TextStyle(
-                                      fontSize: 16, color: Colors.white),
+                                      fontSize: 16, color: Colors.red),
                                 ),
                                 onPressed: () async {
                                   Navigator.push(
@@ -383,8 +387,12 @@ class _HomePageState extends State<HomePage> {
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.red,
+                                  side: BorderSide(
+                                    color: Colors.red, // 邊框顏色設置為紅色
+                                    width: 2, // 邊框寬度設置為2
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.circular(6), // 設定圓角半徑為 10

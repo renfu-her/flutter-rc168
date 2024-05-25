@@ -106,7 +106,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
       appBar: AppBar(
         title: InlineTextWidget('產品列表 - ${widget.categoryName}'),
         backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        foregroundColor: const Color(0xFF4F4E4C),
       ),
       body: Column(children: [
         Center(
@@ -192,7 +192,8 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                             child: ElevatedButton(
                               child: InlineTextWidget(
                                 '加入購物車',
-                                style: const TextStyle(fontSize: 18),
+                                style: const TextStyle(
+                                    fontSize: 18, color: Colors.red),
                               ),
                               onPressed: () async {
                                 Navigator.push(
@@ -205,8 +206,12 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                                 );
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.red,
+                                side: BorderSide(
+                                  color: Colors.red, // 邊框顏色設置為紅色
+                                  width: 2, // 邊框寬度設置為2
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(6),
                                 ),
