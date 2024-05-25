@@ -348,10 +348,9 @@ class _ShopCartPageState extends State<ShopCartPage> {
             return {
               'product_option_id': option.productOptionId,
               'product_option_value_id': option.productOptionValueId,
-              'type': 'select', // Assuming type is always 'select'
-              'value': option
-                  .productOptionValueId, // Assuming value is option value ID
-              'name': option.productOptionId, // Assuming name is option ID
+              'type': option.type,
+              'value': option.value,
+              'name': option.name,
             };
           }).toList(),
         };
@@ -362,18 +361,23 @@ class _ShopCartPageState extends State<ShopCartPage> {
       'amount': totalAmount,
     };
 
-    final response = await dio.post(
-      '${demoUrl}/api/product/submit',
-      data: orderData,
-    );
+    dio.post('${demoUrl}/api/product/order/data/${customerId}',
+        data: orderData);
+
+    final response =
+        await dio.get('${demoUrl}/api/product/submit/${customerId}');
+
+    // print(orderData);
 
     if (response.statusCode == 200) {
       final responseData = response.data['data'];
+
+      print(
+          'Order submitted successfully: ${responseData['order']['order_id']}');
+
       final htmlUrl =
           '${demoUrl}/api/product/payment?customerId=${customerId}&orderId=' +
-              responseData['order']['order_id'] +
-              '&amount=' +
-              totalAmount.toString();
+              responseData['order']['order_id'];
 
       Navigator.push(
         context,
@@ -700,32 +704,21 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> combinedJson) {
     // 解析 options
     List<Option> options = [];
-    if (combinedJson['option'] != null) {
-      try {
-        var optionData = combinedJson['option'];
-        if (optionData is String) {
-          // 嘗試將 option 字符串解碼為 Map
-          Map<String, dynamic> optionMap = json.decode(optionData);
-          options = optionMap.entries.map((entry) {
-            return Option(
-              productOptionId: entry.key,
-              productOptionValueId: entry.value,
-            );
-          }).toList();
-        } else if (optionData is List) {
-          // 如果 option 數據是列表，則相應處理
-          options = optionData.map((entry) {
-            return Option(
-              productOptionId: entry['product_option_id'],
-              productOptionValueId: entry['product_option_value_id'],
-            );
-          }).toList();
-        } else {
-          // 處理其他意外類型
-          print('意外的 option 數據類型: ${optionData.runtimeType}');
-        }
-      } catch (e) {
-        print('解析 option 數據時出錯: $e');
+    if (combinedJson['options'] != null) {
+      var optionData = combinedJson['options'];
+      if (optionData is List) {
+        options = optionData.map((entry) {
+          return Option(
+            productOptionId: entry['product_option_id'],
+            productOptionValueId: entry['product_option_value_id'],
+            type: entry['type'],
+            value: entry['value'],
+            name: entry['name'],
+          );
+        }).toList();
+      } else {
+        // 处理其他意外类型
+        print('Unexpected options data type: ${optionData.runtimeType}');
       }
     }
 
@@ -749,10 +742,16 @@ class Product {
 class Option {
   final String productOptionId;
   final String productOptionValueId;
+  final String type;
+  final String value;
+  final String name;
 
   Option({
     required this.productOptionId,
     required this.productOptionValueId,
+    required this.type,
+    required this.value,
+    required this.name,
   });
 }
 

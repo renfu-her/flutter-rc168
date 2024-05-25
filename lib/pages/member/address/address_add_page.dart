@@ -19,6 +19,8 @@ class _AddressAddPageState extends State<AddressAddPage> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _customFieldController = TextEditingController();
   final TextEditingController _zoneIdController = TextEditingController();
+  final TextEditingController _cellphone = TextEditingController();
+  final TextEditingController _pickupstore = TextEditingController();
 
   String _countryId = '206'; // 应该从一个下拉菜单中选择
   String _zoneId = '3139'; // 应该从一个下拉菜单中选择
@@ -66,10 +68,12 @@ class _AddressAddPageState extends State<AddressAddPage> {
       final formData = FormData.fromMap({
         'firstname': _firstNameController.text,
         'lastname': _lastNameController.text,
-        'company': _companyController.text,
+        'company': _pickupstore.text,
         'address_1': _address1Controller.text,
         'address_2': _address2Controller.text,
         'postcode': _postcodeController.text,
+        'cellphone': _cellphone.text,
+        'pickupstore': _pickupstore.text,
         'country_id': _selectedCountryId.toString(),
         'zone_id': _selectedZoneId.toString(),
         'city': _cityController.text,
@@ -82,7 +86,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
       // // Send the POST request
       try {
         final response = await dio.post(
-          '${appUri}/gws_customer_address/add&customer_id=${customerId}&api_key=${apiKey}',
+          '${appUri}/gws_appcustomer_address/add&customer_id=${customerId}&api_key=${apiKey}',
           data: formData,
         );
         if (response.statusCode == 200) {
@@ -111,6 +115,8 @@ class _AddressAddPageState extends State<AddressAddPage> {
     _address2Controller.dispose();
     _cityController.dispose();
     _customFieldController.dispose();
+    _cellphone.dispose();
+    _pickupstore.dispose();
     super.dispose();
   }
 
@@ -230,8 +236,52 @@ class _AddressAddPageState extends State<AddressAddPage> {
                   return null;
                 },
               ),
+              // TextFormField(
+              //   controller: _companyController,
+              //   decoration: const InputDecoration(
+              //       labelText: '超商店到店物流',
+              //       labelStyle: TextStyle(
+              //         fontSize: 14, // 这里可以更改标签字体大小
+              //       ),
+              //       // 如果你还想更改用户输入的文本大小，那么添加下面这行
+              //       hintStyle: TextStyle(
+              //         fontSize: 14, // 更改提示文字大小
+              //       ),
+              //       hintText: '請输入 7-11 門市或者全家門市'),
+              //   style: const TextStyle(
+              //     fontSize: 14, // 更改用户输入的文本大小
+              //   ),
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return '請輸入 7-11 門市或者全家門市';
+              //     }
+              //     return null;
+              //   },
+              // ),
               TextFormField(
-                controller: _companyController,
+                controller: _cellphone,
+                decoration: const InputDecoration(
+                    labelText: '手機號碼',
+                    labelStyle: TextStyle(
+                      fontSize: 14, // 这里可以更改标签字体大小
+                    ),
+                    // 如果你还想更改用户输入的文本大小，那么添加下面这行
+                    hintStyle: TextStyle(
+                      fontSize: 14, // 更改提示文字大小
+                    ),
+                    hintText: '請输入手機號碼'),
+                style: const TextStyle(
+                  fontSize: 14, // 更改用户输入的文本大小
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '請输入手機號碼';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _pickupstore,
                 decoration: const InputDecoration(
                     labelText: '超商店到店物流',
                     labelStyle: TextStyle(
@@ -352,6 +402,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
                 }).toList(),
                 onChanged: (value) => setState(() => _selectedZoneId = value!),
               ),
+              SizedBox(height: 60),
             ],
           ),
         ),

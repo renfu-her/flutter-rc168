@@ -22,6 +22,8 @@ class _AddressEditPageState extends State<AddressEditPage> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _customFieldController = TextEditingController();
   final TextEditingController _zoneIdController = TextEditingController();
+  final TextEditingController _cellphone = TextEditingController();
+  final TextEditingController _pickupstore = TextEditingController();
 
   String _countryId = '206'; // 应该从一个下拉菜单中选择
   String _zoneId = '3139'; // 应该从一个下拉菜单中选择
@@ -71,7 +73,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
         'address_id': addressId,
         'firstname': _firstNameController.text,
         'lastname': _lastNameController.text,
-        'company': _companyController.text,
+        'company': _pickupstore.text,
         'address_1': _address1Controller.text,
         'address_2': _address2Controller.text,
         'postcode': _postcodeController.text,
@@ -79,12 +81,14 @@ class _AddressEditPageState extends State<AddressEditPage> {
         'country_id': _selectedCountryId,
         'zone_id': _selectedZoneId,
         'custom_field': '{1: 711}',
+        'cellphone': _cellphone.text,
+        'pickupstore': _pickupstore.text,
         'default': _isDefault ? '1' : '0',
       });
 
       try {
         final response = await dio.post(
-          '$appUri/gws_customer_address/edit&customer_id=${customerId}&address_id=${addressId}&api_key=${apiKey}',
+          '$appUri/gws_appcustomer_address/edit&customer_id=${customerId}&address_id=${addressId}&api_key=${apiKey}',
           data: formData,
         );
 
@@ -103,7 +107,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
   Future<void> showAddress(String addressId) async {
     try {
       final response = await dio.post(
-          '$appUri/gws_customer_address&customer_id=${customerId}&address_id=${addressId}&api_key=${apiKey}');
+          '$appUri/gws_appcustomer_address&customer_id=${customerId}&address_id=${addressId}&api_key=${apiKey}');
 
       // print{response.statusCode);
       if (response.statusCode == 200) {
@@ -118,6 +122,8 @@ class _AddressEditPageState extends State<AddressEditPage> {
         _cityController.text = addressData[0]['city'] ?? '';
         _selectedCountryId = addressData[0]['country_id'] ?? '206';
         _selectedZoneId = addressData[0]['zone_id'] ?? '3139';
+        _cellphone.text = addressData[0]['cellphone'] ?? '';
+        _pickupstore.text = addressData[0]['pickupstore'] ?? '';
         // 記得更新國家和地區選項
         _loadZones(_selectedCountryId);
       } else {
@@ -139,6 +145,8 @@ class _AddressEditPageState extends State<AddressEditPage> {
     _address2Controller.dispose();
     _cityController.dispose();
     _customFieldController.dispose();
+    _cellphone.dispose();
+    _pickupstore.dispose();
     super.dispose();
   }
 
@@ -260,8 +268,52 @@ class _AddressEditPageState extends State<AddressEditPage> {
                   return null;
                 },
               ),
+              // TextFormField(
+              //   controller: _companyController,
+              //   decoration: const InputDecoration(
+              //       labelText: '超商店到店物流',
+              //       labelStyle: TextStyle(
+              //         fontSize: 14, // 这里可以更改标签字体大小
+              //       ),
+              //       // 如果你还想更改用户输入的文本大小，那么添加下面这行
+              //       hintStyle: TextStyle(
+              //         fontSize: 14, // 更改提示文字大小
+              //       ),
+              //       hintText: '請输入 7-11 門市或者全家門市'),
+              //   style: const TextStyle(
+              //     fontSize: 14, // 更改用户输入的文本大小
+              //   ),
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return '請輸入 7-11 門市或者全家門市';
+              //     }
+              //     return null;
+              //   },
+              // ),
               TextFormField(
-                controller: _companyController,
+                controller: _cellphone,
+                decoration: const InputDecoration(
+                    labelText: '手機號碼',
+                    labelStyle: TextStyle(
+                      fontSize: 14, // 这里可以更改标签字体大小
+                    ),
+                    // 如果你还想更改用户输入的文本大小，那么添加下面这行
+                    hintStyle: TextStyle(
+                      fontSize: 14, // 更改提示文字大小
+                    ),
+                    hintText: '請输入手機號碼'),
+                style: const TextStyle(
+                  fontSize: 14, // 更改用户输入的文本大小
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '請輸入手機號碼';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _pickupstore,
                 decoration: const InputDecoration(
                     labelText: '超商店到店物流',
                     labelStyle: TextStyle(

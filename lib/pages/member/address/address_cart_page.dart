@@ -53,7 +53,7 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
 
   Future<List<CustomerAddress>> fetchAddresses() async {
     final response = await dio.get(
-        '${appUri}/gws_customer_address&customer_id=${customerId}&api_key=${apiKey}');
+        '${appUri}/gws_appcustomer_address&customer_id=${customerId}&api_key=${apiKey}');
 
     if (response.statusCode == 200) {
       var responseData = response.data;
@@ -96,7 +96,7 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
 
   Future<bool> deleteAddress(String customerId, String addressId) async {
     final response = await dio.get(
-        '${appUri}/gws_customer_address/remove&customer_id=${customerId}&address_id=${addressId}&api_key=${apiKey}');
+        '${appUri}/gws_appcustomer_address/remove&customer_id=${customerId}&address_id=${addressId}&api_key=${apiKey}');
 
     if (response.statusCode == 200) {
       var res = response.data;
@@ -238,6 +238,8 @@ class CustomerAddress {
   String customField;
   String zoneName;
   String countryName;
+  String cellphone;
+  String pickupstore;
 
   CustomerAddress({
     required this.addressId,
@@ -254,6 +256,8 @@ class CustomerAddress {
     required this.customField,
     required this.zoneName,
     required this.countryName,
+    required this.cellphone,
+    required this.pickupstore,
   });
 
   factory CustomerAddress.fromJson(Map<String, dynamic> json) {
@@ -272,6 +276,8 @@ class CustomerAddress {
       customField: json['custom_field'],
       countryName: '',
       zoneName: '',
+      cellphone: json['cellphone'],
+      pickupstore: json['pickupstore'],
     );
   }
 
