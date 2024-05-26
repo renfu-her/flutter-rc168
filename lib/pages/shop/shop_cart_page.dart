@@ -402,6 +402,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('購物車'),
         backgroundColor: Colors.white,

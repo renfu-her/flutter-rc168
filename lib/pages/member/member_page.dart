@@ -102,6 +102,7 @@ class _MemberPageState extends State<MemberPage> {
   Widget build(BuildContext context) {
     isLogin = UserPreferences.isLoggedIn();
     return Scaffold(
+      backgroundColor: Colors.white, // 设置背景颜色为白色
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: isLogin ? _buildUserInformation() : _buildLoginInterface(),
@@ -111,153 +112,159 @@ class _MemberPageState extends State<MemberPage> {
 
   Widget _buildLoginInterface() {
     // 返回未登錄狀態下的介面
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(height: 16),
-        Text(
-          '請登入會員帳號',
-          style: TextStyle(fontSize: 18.px),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 4.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => RegisterPage()));
-                  },
-                  child: Text('註冊'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Color(0xFF4F4E4C),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: BorderSide(color: Colors.black),
+    return Container(
+      color: Colors.white, // 确保背景颜色为白色
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(height: 16),
+          Text(
+            '請登入會員帳號',
+            style: TextStyle(fontSize: 18.px),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 4.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RegisterPage()));
+                    },
+                    child: Text('註冊'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Color(0xFF4F4E4C),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: BorderSide(color: Colors.black),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 4.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(
-                      MaterialPageRoute(
-                          builder: (context) => LoginPage(
-                              onLoginSuccess:
-                                  _updateAfterLogin)), // 假设您有一个新页面叫做NewPage
-                    )
-                        .then((_) {
-                      setState(() {
-                        fetchCustomer();
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(
+                        MaterialPageRoute(
+                            builder: (context) => LoginPage(
+                                onLoginSuccess:
+                                    _updateAfterLogin)), // 假设您有一个新页面叫做NewPage
+                      )
+                          .then((_) {
+                        setState(() {
+                          fetchCustomer();
+                        });
                       });
-                    });
-                  },
-                  child: Text('登入'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Color(0xFF4F4E4C),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: BorderSide(color: Colors.black),
+                    },
+                    child: Text('登入'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Color(0xFF4F4E4C),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: BorderSide(color: Colors.black),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 18),
-        const Padding(
-          padding: EdgeInsets.only(left: 16.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '相關說明',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            ],
+          ),
+          const SizedBox(height: 18),
+          const Padding(
+            padding: EdgeInsets.only(left: 16.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '相關說明',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-        ),
-        Expanded(
-          child: _listView(),
-        ),
-      ],
+          Expanded(
+            child: _listView(),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildUserInformation() {
     // 返回登錄後的用戶信息介面
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        const SizedBox(height: 20),
-        logoImg.isNotEmpty
-            ? Image.network(
-                logoImg,
-                width: 160,
-              )
-            : SizedBox(height: 160), // 如果 logoImg 为空，则显示一个占位符
-        const SizedBox(height: 16),
-        ResponsiveText('${fullName}',
-            baseFontSize: 36, fontWeight: FontWeight.bold),
-        const SizedBox(height: 2),
-        Text(
-          email,
-          style: const TextStyle(fontSize: 14),
-        ),
-        const SizedBox(height: 18),
-        // 我的会员资料
-        _buildOptionItem(Icons.account_circle, '會員資料', () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ProfilePage()),
-          );
-        }),
-        // 我的订单
-        _buildOptionItem(Icons.list_alt, '訂單', () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => OrderPage()),
-          );
-        }),
-        // 我的地址
-        _buildOptionItem(Icons.location_on, '地址', () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddressPage()),
-          );
-        }),
-        _buildOptionItem(Icons.logout, '登出', () async {
-          await UserPreferences.logout();
-          Navigator.of(context)
-              .pushReplacement(MaterialPageRoute(builder: (_) => (MyApp())));
-        }),
-        const SizedBox(height: 22),
-        Padding(
-          padding: EdgeInsets.only(left: 16.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: ResponsiveText(
-              '相關說明',
-              baseFontSize: 40,
-              fontWeight: FontWeight.bold,
+    return Container(
+      color: Colors.white, // 确保背景颜色为白色
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          const SizedBox(height: 20),
+          logoImg.isNotEmpty
+              ? Image.network(
+                  logoImg,
+                  width: 160,
+                )
+              : SizedBox(height: 160), // 如果 logoImg 为空，则显示一个占位符
+          const SizedBox(height: 16),
+          ResponsiveText('${fullName}',
+              baseFontSize: 36, fontWeight: FontWeight.bold),
+          const SizedBox(height: 2),
+          Text(
+            email,
+            style: const TextStyle(fontSize: 14),
+          ),
+          const SizedBox(height: 18),
+          // 我的会员资料
+          _buildOptionItem(Icons.account_circle, '會員資料', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage()),
+            );
+          }),
+          // 我的订单
+          _buildOptionItem(Icons.list_alt, '訂單', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => OrderPage()),
+            );
+          }),
+          // 我的地址
+          _buildOptionItem(Icons.location_on, '地址', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddressPage()),
+            );
+          }),
+          _buildOptionItem(Icons.logout, '登出', () async {
+            await UserPreferences.logout();
+            Navigator.of(context)
+                .pushReplacement(MaterialPageRoute(builder: (_) => (MyApp())));
+          }),
+          const SizedBox(height: 22),
+          Padding(
+            padding: EdgeInsets.only(left: 16.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: ResponsiveText(
+                '相關說明',
+                baseFontSize: 40,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: _listView(),
-        ),
-      ],
+          Expanded(
+            child: _listView(),
+          ),
+        ],
+      ),
     );
   }
 

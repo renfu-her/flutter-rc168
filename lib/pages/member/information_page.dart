@@ -42,6 +42,7 @@ class _InformationPageState extends State<InformationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('相關說明 - ${htmlDateTitle}'),
         backgroundColor: Colors.white,

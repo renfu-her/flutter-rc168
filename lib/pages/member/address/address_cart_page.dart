@@ -124,6 +124,7 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('地址'),
         backgroundColor: Colors.white,

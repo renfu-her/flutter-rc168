@@ -21,6 +21,7 @@ class _ShopPaymentPageState extends State<ShopPaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('付款頁面'),
         backgroundColor: Colors.white,

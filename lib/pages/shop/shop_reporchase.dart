@@ -33,6 +33,7 @@ class _ShopRepurchasePageState extends State<ShopRepurchasePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('訂單詳情'),
         backgroundColor: Colors.white,

@@ -162,70 +162,74 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // 设置背景颜色为白色
       appBar: AppBar(
         title: Text('登入'),
         backgroundColor: Colors.white,
-        foregroundColor: Color(0xFF4F4E4C), // 根據您的截圖，AppBar是紅色的
+        foregroundColor: Color(0xFF4F4E4C), // 设置前景颜色为深灰色
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                hintText: '請輸入您的電子郵件',
+        child: Container(
+          color: Colors.white, // 确保背景颜色为白色
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  hintText: '請輸入您的電子郵件',
+                ),
+                keyboardType: TextInputType.emailAddress,
               ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            SizedBox(height: 16.0), // 添加間隔
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: '密碼',
-                hintText: '請輸入您的密碼',
+              SizedBox(height: 16.0), // 添加間隔
+              TextField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: '密碼',
+                  hintText: '請輸入您的密碼',
+                ),
+                obscureText: true, // 隱藏密碼輸入
               ),
-              obscureText: true, // 隱藏密碼輸入
-            ),
-            SizedBox(height: 24.0),
-            ElevatedButton(
-              onPressed: _isLoading ? null : _login, // 当加载时禁用按钮
-              child: Text(
-                _isLoading ? '登入中...' : '登入', // 当加载时显示登录中...
-                style: TextStyle(fontSize: 18),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Color(0xFF4F4E4C),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  side: BorderSide(color: Colors.black),
+              SizedBox(height: 24.0),
+              ElevatedButton(
+                onPressed: _isLoading ? null : _login, // 当加载时禁用按钮
+                child: Text(
+                  _isLoading ? '登入中...' : '登入', // 当加载时显示登录中...
+                  style: TextStyle(fontSize: 18),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Color(0xFF4F4E4C),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(color: Colors.black),
+                  ),
                 ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Navigator.of(context).push(MaterialPageRoute(
-                //     builder: (context) => const FingerprintPage()));
-                _authenticate();
-              },
-              child: Text(
-                '使用指紋登入',
-                style: TextStyle(fontSize: 18),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  side: BorderSide(color: Colors.black),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (context) => const FingerprintPage()));
+                  _authenticate();
+                },
+                child: Text(
+                  '使用指紋登入',
+                  style: TextStyle(fontSize: 18),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(color: Colors.black),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

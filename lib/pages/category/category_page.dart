@@ -24,7 +24,6 @@ class _CategoryPageState extends State<CategoryPage> {
         .get('${appUri}/gws_appservice/allCategories&api_key=${apiKey}');
     if (response.statusCode == 200) {
       List<dynamic> data = response.data['categories'];
-      // print(data);
       return data.map((category) => Category.fromJson(category)).toList();
     } else {
       throw Exception('Failed to load categories');
@@ -34,8 +33,10 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('分類'),
+        backgroundColor: Colors.white,
       ),
       body: FutureBuilder<List<Category>>(
         future: fetchCategories(),
@@ -51,68 +52,78 @@ class _CategoryPageState extends State<CategoryPage> {
             return Theme(
               data:
                   Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: ListView.builder(
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                  Category category = categories[index];
-                  return ExpansionTile(
-                    leading: ClipOval(
-                      child: Image.network(
-                        category.image,
-                        width: 60.0,
-                        height: 60.0,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    title: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CategoryDetailPage(
-                              categoryId: category.categoryId,
-                              categoryName: category.name,
-                            ),
+              child: Container(
+                color: Colors.white, // 设置整个列表的背景颜色为白色
+                child: ListView.builder(
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    Category category = categories[index];
+                    return Container(
+                      color: Colors.white, // 设置每个ExpansionTile的背景颜色为白色
+                      child: ExpansionTile(
+                        backgroundColor: Colors.white,
+                        leading: ClipOval(
+                          child: Image.network(
+                            category.image,
+                            width: 60.0,
+                            height: 60.0,
+                            fit: BoxFit.cover,
                           ),
-                        );
-                      },
-                      child: ResponsiveText(
-                        category.name,
-                        baseFontSize: 32,
-                      ),
-                    ),
-                    children: category.children.map((childCategory) {
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 40.0),
-                        child: ListTile(
-                          leading: ClipOval(
-                            child: Image.network(
-                              childCategory.image,
-                              width: 60.0,
-                              height: 60.0,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          title: ResponsiveText(
-                            childCategory.name,
-                            baseFontSize: 32,
-                          ),
+                        ),
+                        title: InkWell(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => CategoryDetailPage(
-                                  categoryId: childCategory.categoryId,
-                                  categoryName: childCategory.name,
+                                  categoryId: category.categoryId,
+                                  categoryName: category.name,
                                 ),
                               ),
                             );
                           },
+                          child: ResponsiveText(
+                            category.name,
+                            baseFontSize: 32,
+                          ),
                         ),
-                      );
-                    }).toList(),
-                  );
-                },
+                        children: category.children.map((childCategory) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 40.0),
+                            child: Container(
+                              color: Colors.white, // 设置子项的背景颜色为白色
+                              child: ListTile(
+                                leading: ClipOval(
+                                  child: Image.network(
+                                    childCategory.image,
+                                    width: 60.0,
+                                    height: 60.0,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                title: ResponsiveText(
+                                  childCategory.name,
+                                  baseFontSize: 32,
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CategoryDetailPage(
+                                        categoryId: childCategory.categoryId,
+                                        categoryName: childCategory.name,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  },
+                ),
               ),
             );
           }

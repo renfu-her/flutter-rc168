@@ -103,6 +103,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: InlineTextWidget('產品列表 - ${widget.categoryName}'),
         backgroundColor: Colors.white,

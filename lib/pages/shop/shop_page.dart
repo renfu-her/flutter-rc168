@@ -123,6 +123,7 @@ class _ShopPageState extends State<ShopPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // 设置背景颜色为白色
       // appBar: AppBar(
       //   title: Text('購物車'),
       // ),

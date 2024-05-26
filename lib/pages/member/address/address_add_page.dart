@@ -175,6 +175,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
   Widget build(BuildContext context) {
     // Build your form widget here using TextFormFields and a submit button
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('增加新地址'),
         backgroundColor: Colors.white,

@@ -177,6 +177,7 @@ class _FingerprintPageState extends State<FingerprintPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text('指紋辨識'),
           backgroundColor: Colors.white,

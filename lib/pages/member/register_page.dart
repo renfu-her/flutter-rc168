@@ -179,6 +179,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // 设置背景颜色为白色
       appBar: AppBar(
         title: Text('註冊頁面'),
         backgroundColor: Colors.white,
@@ -190,183 +191,97 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                controller: _firstNameController,
-                decoration: const InputDecoration(
-                  labelText: '名 *',
-                  hintText: '請輸入您的名',
+        child: Container(
+          color: Colors.white, // 确保背景颜色为白色
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  controller: _firstNameController,
+                  decoration: const InputDecoration(
+                    labelText: '名 *',
+                    hintText: '請輸入您的名',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '請輸入名';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '請輸入名';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _lastNameController,
-                decoration: const InputDecoration(
-                  labelText: '姓 *',
-                  hintText: '請輸入您的姓',
+                TextFormField(
+                  controller: _lastNameController,
+                  decoration: const InputDecoration(
+                    labelText: '姓 *',
+                    hintText: '請輸入您的姓',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '請輸入姓氏';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '請輸入姓氏';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'E-mail *',
-                  hintText: '請輸入 E-mail',
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'E-mail *',
+                    hintText: '請輸入 E-mail',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '請輸入 E-mai;';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '請輸入 E-mai;';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: '密碼 *',
-                  hintText: '請輸入密碼',
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    labelText: '密碼 *',
+                    hintText: '請輸入密碼',
+                  ),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '請輸入密碼';
+                    }
+                    return null;
+                  },
                 ),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '請輸入密碼';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _confirmController,
-                decoration: const InputDecoration(
-                  labelText: '確認密碼 *',
-                  hintText: '請輸入確認密碼',
+                TextFormField(
+                  controller: _confirmController,
+                  decoration: const InputDecoration(
+                    labelText: '確認密碼 *',
+                    hintText: '請輸入確認密碼',
+                  ),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '請輸入確認密碼';
+                    }
+                    return null;
+                  },
                 ),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '請輸入確認密碼';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _telephoneController,
-                decoration: const InputDecoration(
-                  labelText: '電話 *',
-                  hintText: '請輸入電話',
+                TextFormField(
+                  controller: _telephoneController,
+                  decoration: const InputDecoration(
+                    labelText: '電話 *',
+                    hintText: '請輸入電話',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '請輸入電話';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '請輸入電話';
-                  }
-                  return null;
-                },
-              ),
-              // TextFormField(
-              //   controller: _address1Controller,
-              //   decoration: const InputDecoration(
-              //     labelText: '地址 *',
-              //     hintText: '請輸入地址',
-              //   ),
-              //   validator: (value) {
-              //     if (value == null || value.isEmpty) {
-              //       return '請輸入地址';
-              //     }
-              //     return null;
-              //   },
-              // ),
-              // TextFormField(
-              //   controller: _cityController,
-              //   decoration: const InputDecoration(
-              //     labelText: '城市 *',
-              //     hintText: '請輸入城市',
-              //   ),
-              //   validator: (value) {
-              //     if (value == null || value.isEmpty) {
-              //       return '請輸入城市';
-              //     }
-              //     return null;
-              //   },
-              // ),
-              // TextFormField(
-              //   controller: _postcodeController,
-              //   decoration: const InputDecoration(
-              //     labelText: '郵遞區號 *',
-              //     hintText: '請輸入郵遞區號',
-              //   ),
-              //   validator: (value) {
-              //     if (value == null || value.isEmpty) {
-              //       return '請輸入郵遞區號';
-              //     }
-              //     return null;
-              //   },
-              // ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: Visibility(
-              //         visible:
-              //             false, // Set the visibility to true or false based on your requirement
-              //         child: DropdownButtonFormField<String>(
-              //           value: _selectedCountryId,
-              //           items: _countries.map((Country country) {
-              //             return DropdownMenuItem<String>(
-              //               value: country.id,
-              //               child: SizedBox(
-              //                 width: MediaQuery.of(context).size.width - 56,
-              //                 child: Text(
-              //                   country.name,
-              //                   overflow: TextOverflow.ellipsis,
-              //                 ),
-              //               ),
-              //             );
-              //           }).toList(),
-              //           onChanged: (value) => _onCountrySelected(value!),
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: Visibility(
-              //         visible:
-              //             true, // Set the visibility to true or false based on your requirement
-              //         child: DropdownButtonFormField<String>(
-              //           value: _selectedZoneId,
-              //           items: _zones.map((Zone zone) {
-              //             return DropdownMenuItem<String>(
-              //               value: zone.id,
-              //               child: Text(
-              //                 zone.name,
-              //                 overflow: TextOverflow.ellipsis,
-              //               ),
-              //             );
-              //           }).toList(),
-              //           onChanged: (value) =>
-              //               setState(() => _selectedZoneId = value!),
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              const SizedBox(
-                height: 100,
-              ),
-            ],
+                const SizedBox(
+                  height: 100,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -388,8 +303,8 @@ class _RegisterPageState extends State<RegisterPage> {
               style: const TextStyle(fontSize: 18),
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white, // 按钮背景颜色为蓝色
-              foregroundColor: Color(0xFF4F4E4C), // 文本颜色为白色
+              backgroundColor: Colors.white, // 按钮背景颜色为白色
+              foregroundColor: Color(0xFF4F4E4C), // 文本颜色为深灰色
               minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),

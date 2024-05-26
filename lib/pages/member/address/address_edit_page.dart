@@ -207,6 +207,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
   Widget build(BuildContext context) {
     // Build your form widget here using TextFormFields and a submit button
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('編輯地址'),
         backgroundColor: Colors.white,
