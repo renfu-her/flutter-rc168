@@ -62,12 +62,25 @@ class _CategoryPageState extends State<CategoryPage> {
                       color: Colors.white, // 设置每个ExpansionTile的背景颜色为白色
                       child: ExpansionTile(
                         backgroundColor: Colors.white,
-                        leading: ClipOval(
-                          child: Image.network(
-                            category.image,
-                            width: 60.0,
-                            height: 60.0,
-                            fit: BoxFit.cover,
+                        leading: Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.white, // 背景颜色为白色
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.3), // 边框颜色为红色
+                              width: 2, // 边框宽度为3
+                            ),
+                          ),
+                          child: ClipOval(
+                            child: Image.network(
+                              category.image,
+                              width: 60.0,
+                              height: 60.0,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         title: InkWell(
@@ -93,12 +106,24 @@ class _CategoryPageState extends State<CategoryPage> {
                             child: Container(
                               color: Colors.white, // 设置子项的背景颜色为白色
                               child: ListTile(
-                                leading: ClipOval(
-                                  child: Image.network(
-                                    childCategory.image,
-                                    width: 60.0,
-                                    height: 60.0,
-                                    fit: BoxFit.cover,
+                                leading: Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white, // 背景颜色为白色
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.red, // 边框颜色为红色
+                                      width: 3, // 边框宽度为3
+                                    ),
+                                  ),
+                                  child: ClipOval(
+                                    child: Image.network(
+                                      childCategory.image,
+                                      width: 60.0,
+                                      height: 60.0,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                                 title: ResponsiveText(

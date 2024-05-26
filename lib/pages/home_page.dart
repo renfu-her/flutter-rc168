@@ -71,348 +71,362 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            FutureBuilder<dynamic>(
-              future: fetchBanners(),
-              builder: (context, snapshot) {
-                // print{snapshot.data);
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasData) {
-                    return Column(
-                      children: [
-                        buildBannerCarousel(snapshot.data),
-                      ],
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text("Error: ${snapshot.error}");
-                  }
-                }
-                return const Center(child: CircularProgressIndicator());
-              },
-            ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: InlineTextWidget(
-                '最新商品',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            FutureBuilder<List<Product>>(
-              future: fetchProducts(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text("Error: ${snapshot.error}"));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text("No products found"));
-                } else {
-                  return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      childAspectRatio: 0.7,
-                    ),
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      Product product = snapshot.data![index];
-                      return Card(
-                        clipBehavior: Clip.antiAlias,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero, // 移除圓角
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Expanded(
-                              child: InkWell(
-                                // 使用 InkWell 包裹圖片
-                                onTap: () {
-                                  // 添加 onTap 事件
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductDetailPage(
-                                        productId: product.id,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: Image.network(
-                                    '${imgUrl}' + product.thumb,
-                                    fit: BoxFit.cover,
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return const Center(
-                                          child: CircularProgressIndicator());
-                                    },
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            const Icon(Icons.error),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.center, // 將對齊方式改為置中
-                                children: <Widget>[
-                                  InlineTextWidget(
-                                    product.name,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  product.special == false
-                                      ? Column(children: [
-                                          ResponsiveText("",
-                                              baseFontSize: 28,
-                                              textAlign: TextAlign.center,
-                                              decoration:
-                                                  TextDecoration.lineThrough,
-                                              color: Colors.grey),
-                                          ResponsiveText(
-                                            product.price,
-                                            baseFontSize: 36,
-                                            fontWeight: FontWeight.bold,
-                                            textAlign: TextAlign.center,
-                                          )
-                                        ])
-                                      : Column(
-                                          children: [
-                                            ResponsiveText(product.price,
-                                                baseFontSize: 28,
-                                                textAlign: TextAlign.center,
-                                                decoration:
-                                                    TextDecoration.lineThrough,
-                                                color: Colors.grey),
-                                            ResponsiveText(
-                                              product.special,
-                                              baseFontSize: 36,
-                                              textAlign: TextAlign.center,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ],
-                                        ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: ElevatedButton(
-                                child: InlineTextWidget(
-                                  '加入購物車',
-                                  style: const TextStyle(
-                                      fontSize: 18, color: Colors.red),
-                                ),
-                                onPressed: () async {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductDetailPage(
-                                        productId: product.id,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white, // 按鈕背景色設置為白色
-                                  foregroundColor: Colors.red, // 按鈕文字顏色設置為紅色
-                                  side: BorderSide(
-                                    color: Colors.red, // 邊框顏色設置為紅色
-                                    width: 2, // 邊框寬度設置為2
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(6), // 設定圓角半徑為6
-                                  ),
-                                ),
-                              ),
-                            ),
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Container(
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                FutureBuilder<dynamic>(
+                  future: fetchBanners(),
+                  builder: (context, snapshot) {
+                    // print{snapshot.data);
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        return Column(
+                          children: [
+                            buildBannerCarousel(snapshot.data),
                           ],
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text("Error: ${snapshot.error}");
+                      }
+                    }
+                    return const Center(child: CircularProgressIndicator());
+                  },
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: InlineTextWidget(
+                    '最新商品',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                FutureBuilder<List<Product>>(
+                  future: fetchProducts(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Error: ${snapshot.error}"));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text("No products found"));
+                    } else {
+                      return GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          childAspectRatio: 0.7,
                         ),
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: InlineTextWidget(
-                '熱門商品',
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            FutureBuilder<List<Product>>(
-              future: fetchPopularProducts(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text("Error: ${snapshot.error}"));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text("No products found"));
-                } else {
-                  return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      childAspectRatio: 0.7,
-                    ),
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      Product product = snapshot.data![index];
-                      return Card(
-                        clipBehavior: Clip.antiAlias,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero, // 移除圓角
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Expanded(
-                              child: InkWell(
-                                // 使用 InkWell 包裹圖片
-                                onTap: () {
-                                  // 添加 onTap 事件
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductDetailPage(
-                                        productId: product.id,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: Image.network(
-                                    '${imgUrl}' + product.thumb,
-                                    fit: BoxFit.cover,
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return const Center(
-                                          child: CircularProgressIndicator());
-                                    },
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            const Icon(Icons.error),
-                                  ),
-                                ),
-                              ),
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          Product product = snapshot.data![index];
+                          return Card(
+                            color: Colors.white,
+                            clipBehavior: Clip.antiAlias,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero, // 移除圓角
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.center, // 將對齊方式改為置中
-                                children: <Widget>[
-                                  InlineTextWidget(
-                                    product.name,
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center, // 文本對齊也設置為居中
-                                  ),
-                                  product.special == false
-                                      ? Column(children: [
-                                          ResponsiveText("",
-                                              baseFontSize: 28,
-                                              textAlign: TextAlign.center,
-                                              decoration:
-                                                  TextDecoration.lineThrough,
-                                              color: Colors.grey),
-                                          ResponsiveText(
-                                            product.price,
-                                            baseFontSize: 36,
-                                            fontWeight: FontWeight.bold,
-                                            textAlign: TextAlign.center,
-                                          )
-                                        ])
-                                      : Column(
-                                          children: [
-                                            ResponsiveText(product.price,
-                                                baseFontSize: 28,
-                                                textAlign: TextAlign.center,
-                                                decoration:
-                                                    TextDecoration.lineThrough,
-                                                color: Colors.grey),
-                                            ResponsiveText(
-                                              product.special,
-                                              baseFontSize: 36,
-                                              textAlign: TextAlign.center,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ],
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Expanded(
+                                  child: InkWell(
+                                    // 使用 InkWell 包裹圖片
+                                    onTap: () {
+                                      // 添加 onTap 事件
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductDetailPage(
+                                            productId: product.id,
+                                          ),
                                         ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: ElevatedButton(
-                                child: InlineTextWidget(
-                                  '加入購物車',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.red),
-                                ),
-                                onPressed: () async {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductDetailPage(
-                                        productId: product.id,
+                                      );
+                                    },
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Image.network(
+                                        '${imgUrl}' + product.thumb,
+                                        fit: BoxFit.cover,
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return const Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        },
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                const Icon(Icons.error),
                                       ),
                                     ),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.red,
-                                  side: BorderSide(
-                                    color: Colors.red, // 邊框顏色設置為紅色
-                                    width: 2, // 邊框寬度設置為2
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(6), // 設定圓角半徑為 10
                                   ),
                                 ),
-                              ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center, // 將對齊方式改為置中
+                                    children: <Widget>[
+                                      InlineTextWidget(
+                                        product.name,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      product.special == false
+                                          ? Column(children: [
+                                              ResponsiveText("",
+                                                  baseFontSize: 28,
+                                                  textAlign: TextAlign.center,
+                                                  decoration: TextDecoration
+                                                      .lineThrough,
+                                                  color: Colors.grey),
+                                              ResponsiveText(
+                                                product.price,
+                                                baseFontSize: 36,
+                                                fontWeight: FontWeight.bold,
+                                                textAlign: TextAlign.center,
+                                              )
+                                            ])
+                                          : Column(
+                                              children: [
+                                                ResponsiveText(product.price,
+                                                    baseFontSize: 28,
+                                                    textAlign: TextAlign.center,
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                    color: Colors.grey),
+                                                ResponsiveText(
+                                                  product.special,
+                                                  baseFontSize: 36,
+                                                  textAlign: TextAlign.center,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ],
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: ElevatedButton(
+                                    child: InlineTextWidget(
+                                      '加入購物車',
+                                      style: const TextStyle(
+                                          fontSize: 18, color: Colors.red),
+                                    ),
+                                    onPressed: () async {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductDetailPage(
+                                            productId: product.id,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Colors.white, // 按鈕背景色設置為白色
+                                      foregroundColor:
+                                          Colors.red, // 按鈕文字顏色設置為紅色
+                                      side: BorderSide(
+                                        color: Colors.red, // 邊框顏色設置為紅色
+                                        width: 2, // 邊框寬度設置為2
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            6), // 設定圓角半徑為6
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       );
-                    },
-                  );
-                }
-              },
+                    }
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: InlineTextWidget(
+                    '熱門商品',
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                FutureBuilder<List<Product>>(
+                  future: fetchPopularProducts(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Error: ${snapshot.error}"));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text("No products found"));
+                    } else {
+                      return GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          childAspectRatio: 0.7,
+                        ),
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          Product product = snapshot.data![index];
+                          return Card(
+                            clipBehavior: Clip.antiAlias,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero, // 移除圓角
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Expanded(
+                                  child: InkWell(
+                                    // 使用 InkWell 包裹圖片
+                                    onTap: () {
+                                      // 添加 onTap 事件
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductDetailPage(
+                                            productId: product.id,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Image.network(
+                                        '${imgUrl}' + product.thumb,
+                                        fit: BoxFit.cover,
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return const Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        },
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                const Icon(Icons.error),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center, // 將對齊方式改為置中
+                                    children: <Widget>[
+                                      InlineTextWidget(
+                                        product.name,
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign:
+                                            TextAlign.center, // 文本對齊也設置為居中
+                                      ),
+                                      product.special == false
+                                          ? Column(children: [
+                                              ResponsiveText("",
+                                                  baseFontSize: 28,
+                                                  textAlign: TextAlign.center,
+                                                  decoration: TextDecoration
+                                                      .lineThrough,
+                                                  color: Colors.grey),
+                                              ResponsiveText(
+                                                product.price,
+                                                baseFontSize: 36,
+                                                fontWeight: FontWeight.bold,
+                                                textAlign: TextAlign.center,
+                                              )
+                                            ])
+                                          : Column(
+                                              children: [
+                                                ResponsiveText(product.price,
+                                                    baseFontSize: 28,
+                                                    textAlign: TextAlign.center,
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                    color: Colors.grey),
+                                                ResponsiveText(
+                                                  product.special,
+                                                  baseFontSize: 36,
+                                                  textAlign: TextAlign.center,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ],
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: ElevatedButton(
+                                    child: InlineTextWidget(
+                                      '加入購物車',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.red),
+                                    ),
+                                    onPressed: () async {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductDetailPage(
+                                            productId: product.id,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      foregroundColor: Colors.red,
+                                      side: BorderSide(
+                                        color: Colors.red, // 邊框顏色設置為紅色
+                                        width: 2, // 邊框寬度設置為2
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            6), // 設定圓角半徑為 10
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 
   void _launchURL(String url) async {
