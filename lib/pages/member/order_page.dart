@@ -60,7 +60,7 @@ class _OrderPageState extends State<OrderPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('訂單資訊'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: Color(0xFF4F4E4C),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

@@ -105,7 +105,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: InlineTextWidget('產品列表 - ${widget.categoryName}'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: const Color(0xFF4F4E4C),
       ),
       body: Column(children: [

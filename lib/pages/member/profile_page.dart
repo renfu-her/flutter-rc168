@@ -118,7 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('會員資料'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: Color(0xFF4F4E4C),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

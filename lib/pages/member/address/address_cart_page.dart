@@ -126,7 +126,7 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('地址'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: Color(0xFF4F4E4C),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -210,7 +210,7 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
           },
           child: Text('增加新的地址'),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.white,
             foregroundColor: Color(0xFF4F4E4C),
             minimumSize: const Size(double.infinity, 36),
             shape: RoundedRectangleBorder(

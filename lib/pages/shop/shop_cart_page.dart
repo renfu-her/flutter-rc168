@@ -404,7 +404,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('購物車'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: Color(0xFF4F4E4C),
       ),
       body: isLoading
@@ -641,11 +641,12 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       child: InlineTextWidget('逛逛賣場',
                           style: TextStyle(fontSize: 16)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
+                        backgroundColor: Colors.white, // 按钮背景颜色为蓝色
                         foregroundColor: Color(0xFF4F4E4C), // 文本颜色为白色
                         minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
+                          borderRadius: BorderRadius.circular(6),
+                          side: const BorderSide(color: Colors.black),
                         ),
                       ),
                     )

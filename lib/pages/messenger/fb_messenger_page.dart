@@ -23,7 +23,7 @@ class _FBMessengerPageState extends State<FBMessengerPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('LINE Messenger'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: Color(0xFF4F4E4C),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

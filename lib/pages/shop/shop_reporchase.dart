@@ -35,7 +35,7 @@ class _ShopRepurchasePageState extends State<ShopRepurchasePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('訂單詳情'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: Color(0xFF4F4E4C),
       ),
       body: FutureBuilder<OrderDetail>(

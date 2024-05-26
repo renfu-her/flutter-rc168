@@ -44,7 +44,7 @@ class _InformationPageState extends State<InformationPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('相關說明 - ${htmlDateTitle}'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: Color(0xFF4F4E4C),
       ),
       body: htmlData.isEmpty

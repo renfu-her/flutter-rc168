@@ -361,11 +361,12 @@ class _ShopPageState extends State<ShopPage> {
                           style: TextStyle(
                               fontSize: 20, color: const Color(0xFF4F4E4C))),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
+                        backgroundColor: Colors.white, // 按钮背景颜色为蓝色
                         foregroundColor: Colors.white, // 文本颜色为白色
                         minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
+                          borderRadius: BorderRadius.circular(6),
+                          side: const BorderSide(color: Colors.black), // 圆角矩形按钮
                         ),
                       ),
                     )

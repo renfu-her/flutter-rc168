@@ -86,7 +86,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('產品明細'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: const Color(0xFF4F4E4C),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

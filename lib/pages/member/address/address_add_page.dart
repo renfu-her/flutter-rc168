@@ -177,7 +177,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('增加新地址'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: Color(0xFF4F4E4C),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

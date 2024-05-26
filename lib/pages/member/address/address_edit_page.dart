@@ -209,7 +209,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('編輯地址'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: Color(0xFF4F4E4C),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

@@ -228,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               )
             : SizedBox(),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: Color(0xFF4F4E4C),
         // actions: [
         //   IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: () {}),
@@ -244,12 +244,15 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               const DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Colors.white,
                 ),
                 child: Align(
                   alignment: Alignment.center,
                   child: Text('您好',
-                      style: TextStyle(fontSize: 24, color: Color(0xFF4F4E4C), )),
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Color(0xFF4F4E4C),
+                      )),
                 ),
               ),
               ListTile(
