@@ -132,10 +132,11 @@ class _MemberPageState extends State<MemberPage> {
                   },
                   child: Text('註冊'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Colors.white,
                     foregroundColor: Color(0xFF4F4E4C),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
+                      side: BorderSide(color: Colors.black),
                     ),
                   ),
                 ),
@@ -161,10 +162,11 @@ class _MemberPageState extends State<MemberPage> {
                   },
                   child: Text('登入'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Colors.white,
                     foregroundColor: Color(0xFF4F4E4C),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
+                      side: BorderSide(color: Colors.black),
                     ),
                   ),
                 ),

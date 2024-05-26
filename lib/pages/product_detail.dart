@@ -112,12 +112,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             if (snapshot.hasData) {
               var product = snapshot.data['details'];
               var options = snapshot.data['options'] as List<ProductOption>;
-              // stockStatus = 1;
-              if (product['stock_status'] == '有現貨') {
-                stockStatus = 1;
-              } else {
-                stockStatus = 0;
-              }
+              stockStatus = 1;
+              // if (product['stock_status'] == '有現貨') {
+              //   stockStatus = 1;
+              // } else {
+              //   stockStatus = 0;
+              // }
 
               List<Widget> contentWidgets = [];
 
@@ -409,8 +409,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             },
             child: stockStatus == 1
                 ? InlineTextWidget('加入購物車',
-                    style:
-                        TextStyle(fontSize: 18, color: const Color(0xFF4F4E4C)))
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: const Color(0xFF4F4E4C),
+                    ))
                 : InlineTextWidget('商品已售完',
                     style: TextStyle(
                       fontSize: 18,
@@ -418,11 +420,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     )),
             style: ElevatedButton.styleFrom(
               backgroundColor:
-                  stockStatus == 1 ? Colors.blue : Colors.grey, // 按钮背景颜色为蓝色
+                  stockStatus == 1 ? Colors.white : Colors.grey, // 按钮背景颜色为蓝色
               foregroundColor: Color(0xFF4F4E4C), // 文本颜色为白色
               minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
+                borderRadius: BorderRadius.circular(6),
+                side: BorderSide(
+                    color: stockStatus == 1
+                        ? Colors.black
+                        : Colors.grey), // 设置按钮圆角
               ),
             ),
           ),

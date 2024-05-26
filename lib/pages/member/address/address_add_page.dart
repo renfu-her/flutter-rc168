@@ -425,7 +425,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
               style: const TextStyle(fontSize: 18),
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
+              backgroundColor: Colors.white, // 按钮背景颜色为蓝色
               foregroundColor: Color(0xFF4F4E4C), // 文本颜色为白色
               minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
               shape: RoundedRectangleBorder(

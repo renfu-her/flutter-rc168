@@ -224,11 +224,12 @@ class _AddressPageState extends State<AddressPage> {
           },
           child: Text('增加新的地址', style: TextStyle(fontSize: 20.px)),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.white,
             foregroundColor: Color(0xFF4F4E4C),
             minimumSize: Size(double.infinity, 36),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6),
+              side: BorderSide(color: Colors.black),
             ),
           ),
         ),

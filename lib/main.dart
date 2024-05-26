@@ -249,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text('您好',
-                      style: TextStyle(fontSize: 24, color: Color(0xFF4F4E4C))),
+                      style: TextStyle(fontSize: 24, color: Color(0xFF4F4E4C), )),
                 ),
               ),
               ListTile(

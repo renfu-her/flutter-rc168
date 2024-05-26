@@ -341,11 +341,12 @@ class _ShopPageState extends State<ShopPage> {
                         const TextStyle(fontSize: 16, color: Color(0xFF4F4E4C)),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey, // 按钮背景颜色为灰色
+                    backgroundColor: Colors.white, // 按钮背景颜色为灰色
                     foregroundColor: Colors.white, // 文本颜色为白色
                     minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
+                      borderRadius: BorderRadius.circular(6),
+                      side: BorderSide(color: Colors.black), // 圆角矩形按钮
                     ),
                   ),
                 )
@@ -377,14 +378,15 @@ class _ShopPageState extends State<ShopPage> {
                       child: InlineTextWidget(
                         '結 帳',
                         style: const TextStyle(
-                            fontSize: 18, color: const Color(0xFF4F4E4C)),
+                            fontSize: 18, color: Color(0xFF4F4E4C)),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
-                        foregroundColor: Colors.white, // 文本颜色为白色
+                        backgroundColor: Colors.white, // 按钮背景颜色为蓝色
+                        foregroundColor: const Color(0xFF4F4E4C), // 文本颜色为白色
                         minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
+                          borderRadius: BorderRadius.circular(6),
+                          side: BorderSide(color: Colors.black),
                         ),
                       ),
                     ),
