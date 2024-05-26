@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:rc168/main.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-
 var dio = Dio();
 
 class InformationPage extends StatefulWidget {
@@ -46,7 +45,7 @@ class _InformationPageState extends State<InformationPage> {
       appBar: AppBar(
         title: Text('相關說明 - ${htmlDateTitle}'),
         backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        foregroundColor: Color(0xFF4F4E4C),
       ),
       body: htmlData.isEmpty
           ? Center(child: CircularProgressIndicator())

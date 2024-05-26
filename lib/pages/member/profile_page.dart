@@ -119,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: Text('會員資料'),
         backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        foregroundColor: Color(0xFF4F4E4C),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
@@ -248,10 +248,11 @@ class _ProfilePageState extends State<ProfilePage> {
               _showDialog('提示', '請填寫必填的密碼欄位。');
             }
           },
-          child: ResponsiveText('儲存', baseFontSize: 36, color: Colors.white),
+          child:
+              ResponsiveText('儲存', baseFontSize: 36, color: Color(0xFF4F4E4C)),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
+            foregroundColor: Color(0xFF4F4E4C),
             minimumSize: Size(double.infinity, 36),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6),

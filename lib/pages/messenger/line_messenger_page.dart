@@ -24,7 +24,7 @@ class _LineMessengerPageState extends State<LineMessengerPage> {
       appBar: AppBar(
         title: const Text('LINE Messenger'),
         backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        foregroundColor: Color(0xFF4F4E4C),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.push(
@@ -41,7 +41,7 @@ class _LineMessengerPageState extends State<LineMessengerPage> {
         },
         onPageFinished: (String url) async {
           // 获取页面HTML
-          // 
+          //
         },
       ),
     );

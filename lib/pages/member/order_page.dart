@@ -61,7 +61,7 @@ class _OrderPageState extends State<OrderPage> {
       appBar: AppBar(
         title: const Text('訂單資訊'),
         backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        foregroundColor: Color(0xFF4F4E4C),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),

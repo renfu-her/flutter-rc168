@@ -182,7 +182,7 @@ class _RegisterPageState extends State<RegisterPage> {
       appBar: AppBar(
         title: Text('註冊頁面'),
         backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        foregroundColor: Color(0xFF4F4E4C),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
@@ -389,7 +389,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
-              foregroundColor: Colors.white, // 文本颜色为白色
+              foregroundColor: Color(0xFF4F4E4C), // 文本颜色为白色
               minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6), // 圆角矩形按钮

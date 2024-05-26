@@ -165,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: Text('登入'),
         backgroundColor: Colors.blue,
-        foregroundColor: Colors.white, // 根據您的截圖，AppBar是紅色的
+        foregroundColor: Color(0xFF4F4E4C), // 根據您的截圖，AppBar是紅色的
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -199,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
+                foregroundColor: Color(0xFF4F4E4C),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

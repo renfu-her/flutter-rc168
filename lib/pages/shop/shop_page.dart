@@ -337,7 +337,8 @@ class _ShopPageState extends State<ShopPage> {
                   },
                   child: InlineTextWidget(
                     '結 帳',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style:
+                        const TextStyle(fontSize: 16, color: Color(0xFF4F4E4C)),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey, // 按钮背景颜色为灰色
@@ -356,7 +357,8 @@ class _ShopPageState extends State<ShopPage> {
                             MaterialPageRoute(builder: (context) => MyApp()));
                       },
                       child: InlineTextWidget('逛逛賣場',
-                          style: TextStyle(fontSize: 20, color: Colors.white)),
+                          style: TextStyle(
+                              fontSize: 20, color: const Color(0xFF4F4E4C))),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
                         foregroundColor: Colors.white, // 文本颜色为白色
@@ -374,7 +376,8 @@ class _ShopPageState extends State<ShopPage> {
                       },
                       child: InlineTextWidget(
                         '結 帳',
-                        style: TextStyle(fontSize: 18, color: Colors.white),
+                        style: const TextStyle(
+                            fontSize: 18, color: const Color(0xFF4F4E4C)),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色

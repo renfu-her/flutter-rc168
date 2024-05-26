@@ -405,7 +405,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
       appBar: AppBar(
         title: const Text('購物車'),
         backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        foregroundColor: Color(0xFF4F4E4C),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -624,7 +624,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey, // 按钮背景颜色为灰色
-                    foregroundColor: Colors.white, // 文本颜色为白色
+                    foregroundColor: Color(0xFF4F4E4C), // 文本颜色为白色
                     minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
@@ -642,7 +642,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                           style: TextStyle(fontSize: 16)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
-                        foregroundColor: Colors.white, // 文本颜色为白色
+                        foregroundColor: Color(0xFF4F4E4C), // 文本颜色为白色
                         minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
@@ -654,10 +654,11 @@ class _ShopCartPageState extends State<ShopCartPage> {
                         submitOrder();
                       },
                       child: InlineTextWidget('確定下訂單',
-                          style: TextStyle(fontSize: 18, color: Colors.white)),
+                          style: const TextStyle(
+                              fontSize: 18, color: Color(0xFF4F4E4C))),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // 按钮背景颜色为蓝色
-                        foregroundColor: Colors.white, // 文本颜色为白色
+                        foregroundColor: Color(0xFF4F4E4C), // 文本颜色为白色
                         minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6), // 圆角矩形按钮

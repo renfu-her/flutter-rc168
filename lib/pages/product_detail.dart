@@ -409,7 +409,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             },
             child: stockStatus == 1
                 ? InlineTextWidget('加入購物車',
-                    style: TextStyle(fontSize: 18, color: Colors.white))
+                    style:
+                        TextStyle(fontSize: 18, color: const Color(0xFF4F4E4C)))
                 : InlineTextWidget('商品已售完',
                     style: TextStyle(
                       fontSize: 18,
@@ -418,7 +419,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             style: ElevatedButton.styleFrom(
               backgroundColor:
                   stockStatus == 1 ? Colors.blue : Colors.grey, // 按钮背景颜色为蓝色
-              foregroundColor: Colors.white, // 文本颜色为白色
+              foregroundColor: Color(0xFF4F4E4C), // 文本颜色为白色
               minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6), // 圆角矩形按钮

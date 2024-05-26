@@ -180,7 +180,7 @@ class _FingerprintPageState extends State<FingerprintPage> {
         appBar: AppBar(
           title: const Text('指紋辨識'),
           backgroundColor: Colors.blue,
-          foregroundColor: Colors.white,
+          foregroundColor: Color(0xFF4F4E4C),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.pop(context),

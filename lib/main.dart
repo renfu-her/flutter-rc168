@@ -229,7 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
               )
             : SizedBox(),
         backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        foregroundColor: Color(0xFF4F4E4C),
         // actions: [
         //   IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: () {}),
         //   IconButton(icon: Icon(FontAwesomeIcons.comments), onPressed: () {}),
