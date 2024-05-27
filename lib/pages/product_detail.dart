@@ -47,6 +47,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               selectedOptionValues[option.id] ?? option.values.first.id;
         }
       }
+
       checkWishlistStatus();
       stockStatus = data['details']['stock_status'] == '有現貨' ? 1 : 0;
       return data;
@@ -107,6 +108,36 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: ResponsiveText(
+            title,
+            baseFontSize: 36,
+          ),
+          content: ResponsiveText(
+            message,
+            baseFontSize: 30,
+            maxLines: 5,
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: ResponsiveText(
+                '確定',
+                baseFontSize: 36,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> addToWishlist() async {
     try {
       var response = await dio.get(
@@ -118,22 +149,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         setState(() {
           isInWishlist = true;
         });
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('已新增願望清單'),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('確定'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
+        _showDialog('願望清單', '已新增願望清單');
       }
     } catch (e) {
       print('Failed to add to wishlist: $e');
@@ -151,22 +167,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         setState(() {
           isInWishlist = false;
         });
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('已移除願望清單'),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('確定'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
+        _showDialog('願望清單', '已移除願望清單');
       }
     } catch (e) {
       print('Failed to remove from wishlist: $e');
@@ -194,7 +195,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 color: const Color(0xFFD72873),
               ),
               onPressed: () {
-                // isInWishlist ? removeFromWishlist() : addToWishlist();
+                isInWishlist ? removeFromWishlist() : addToWishlist();
               }),
           IconButton(
               icon: const Icon(FontAwesomeIcons.shareNodes),
