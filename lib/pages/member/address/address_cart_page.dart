@@ -211,13 +211,17 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
             onPressed: () {
               _openAddAddressCartAddPage();
             },
-            child: Text('增加新的地址'),
+            child: ResponsiveText(
+              '增加新的地址',
+              baseFontSize: 36,
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white, // 按鈕背景顏色
-              foregroundColor: Color(0xFF4F4E4C),
+              foregroundColor: const Color(0xFF4F4E4C),
               minimumSize: const Size(double.infinity, 36),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
+                side: const BorderSide(color: Colors.black),
               ),
             ),
           ),

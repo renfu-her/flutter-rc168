@@ -225,14 +225,17 @@ class _AddressPageState extends State<AddressPage> {
             onPressed: () {
               _openAddAddressPage();
             },
-            child: Text('增加新的地址', style: TextStyle(fontSize: 20.px)),
+            child: ResponsiveText(
+              '增加新的地址',
+              baseFontSize: 36,
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white, // 按鈕背景顏色為白色
-              foregroundColor: Color(0xFF4F4E4C),
-              minimumSize: Size(double.infinity, 36),
+              foregroundColor: const Color(0xFF4F4E4C),
+              minimumSize: const Size(double.infinity, 36),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
-                side: BorderSide(color: Colors.black),
+                side: const BorderSide(color: Colors.black),
               ),
             ),
           ),

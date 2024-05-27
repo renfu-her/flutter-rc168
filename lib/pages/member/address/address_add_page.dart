@@ -421,16 +421,17 @@ class _AddressAddPageState extends State<AddressAddPage> {
                 _showDialog('錯誤', '請填寫必填欄位。');
               }
             },
-            child: Text(
-              '增加新地址',
-              style: const TextStyle(fontSize: 18),
+            child: ResponsiveText(
+              '增加新的地址',
+              baseFontSize: 36,
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white, // 按钮背景颜色为蓝色
-              foregroundColor: Color(0xFF4F4E4C), // 文本颜色为白色
-              minimumSize: Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
+              foregroundColor: const Color(0xFF4F4E4C), // 文本颜色为白色
+              minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6), // 圆角矩形按钮
+                borderRadius: BorderRadius.circular(6),
+                side: const BorderSide(color: Colors.black),
               ),
             ),
           ),

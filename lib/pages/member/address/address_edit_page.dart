@@ -453,9 +453,9 @@ class _AddressEditPageState extends State<AddressEditPage> {
                 _showDialog('錯誤', '請填寫必填欄位。');
               }
             },
-            child: Text(
+            child: ResponsiveText(
               '編輯地址',
-              style: const TextStyle(fontSize: 18),
+              baseFontSize: 36,
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white, // 按钮背景颜色为蓝色
