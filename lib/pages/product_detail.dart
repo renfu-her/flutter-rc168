@@ -149,7 +149,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         setState(() {
           isInWishlist = true;
         });
-        _showDialog('願望清單', '已新增願望清單');
+        showNormalDialog(context, '願望清單', '已新增願望清單');
       }
     } catch (e) {
       print('Failed to add to wishlist: $e');
@@ -167,7 +167,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         setState(() {
           isInWishlist = false;
         });
-        _showDialog('願望清單', '已移除願望清單');
+        showNormalDialog(context, '願望清單', '已移除願望清單');
       }
     } catch (e) {
       print('Failed to remove from wishlist: $e');

@@ -16,6 +16,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:rc168/firebase_options.dart';
 import 'package:flutter_responsive_framework/flutter_responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:rc168/responsive_text.dart';
 
 // 创建一个全局的通知插件实例
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -384,6 +385,36 @@ void showShareDialog(BuildContext context) async {
             ],
           ),
         ),
+      );
+    },
+  );
+}
+
+void showNormalDialog(context, String title, String message) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: ResponsiveText(
+          title,
+          baseFontSize: 36,
+        ),
+        content: ResponsiveText(
+          message,
+          baseFontSize: 30,
+          maxLines: 5,
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: ResponsiveText(
+              '確定',
+              baseFontSize: 36,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       );
     },
   );
