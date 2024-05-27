@@ -837,8 +837,8 @@ class _QuantitySelectorState extends State<QuantitySelector> {
   int currentQuantity = 0;
 
   @override
-  void initState() {
-    super.initState();
+  void reassemble() {
+    super.reassemble();
     currentQuantity = widget.quantity;
   }
 
