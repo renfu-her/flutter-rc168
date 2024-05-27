@@ -145,6 +145,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
+                      color: Colors.white, // 設置卡片背景顏色為白色
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
@@ -176,7 +177,6 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16),
-                                  // maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                 ),
@@ -271,9 +271,6 @@ Future<void> addToCart(String productId, int quantity) async {
     'product_id': productId,
     'quantity': quantity,
   });
-
-  // print{productId);
-  // print{quantity);
 
   final addCartUrl =
       '${appUri}/gws_customer_cart/add&customer_id=${customerId}&api_key=${apiKey}';
