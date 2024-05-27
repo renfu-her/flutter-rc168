@@ -63,12 +63,11 @@ class _CategoryPageState extends State<CategoryPage> {
                       child: ExpansionTile(
                         backgroundColor: Colors.white,
                         leading: Container(
-                          width: 60,
+                          width: 56,
                           height: 60,
                           decoration: BoxDecoration(
                             color: Colors.white, // 背景颜色为白色
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(12),
+                            shape: BoxShape.circle,
                             border: Border.all(
                               color: Colors.grey.withOpacity(0.3), // 边框颜色为红色
                               width: 2, // 边框宽度为3
@@ -107,14 +106,15 @@ class _CategoryPageState extends State<CategoryPage> {
                               color: Colors.white, // 设置子项的背景颜色为白色
                               child: ListTile(
                                 leading: Container(
-                                  width: 60,
+                                  width: 56,
                                   height: 60,
                                   decoration: BoxDecoration(
                                     color: Colors.white, // 背景颜色为白色
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: Colors.red, // 边框颜色为红色
-                                      width: 3, // 边框宽度为3
+                                      color: Colors.grey
+                                          .withOpacity(0.3), // 边框颜色为红色
+                                      width: 2, // 边框宽度为3
                                     ),
                                   ),
                                   child: ClipOval(

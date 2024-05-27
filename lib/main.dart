@@ -240,6 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: SizedBox(
         width: MediaQuery.of(context).size.width * 0.7, // 設置寬度為屏幕寬度的 50%
         child: Drawer(
+          backgroundColor: Colors.white,
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[

@@ -29,21 +29,26 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   List service = [];
   int stockStatus = 0;
   String? productName;
+  bool isInWishlist = false;
 
   @override
   void initState() {
     super.initState();
+    fetchProductDetails();
+  }
+
+  Future<void> fetchProductDetails() async {
     productDetail = getProductDetail().then((data) {
-      productName = data['details']['name'];
       var options = data['options'] as List<ProductOption>;
       for (var option in options) {
         if (option.values.isNotEmpty) {
-          // 為每個選項設置預設值，如果已經有值則不覆蓋
+          // Set default values for each option if not already set
           selectedOptionValues[option.id] =
               selectedOptionValues[option.id] ?? option.values.first.id;
         }
       }
-      // stockStatus = data['details']['stock_status'] == '有現貨' ? 1 : 0;
+      checkWishlistStatus();
+      stockStatus = data['details']['stock_status'] == '有現貨' ? 1 : 0;
       return data;
     });
   }
@@ -81,6 +86,93 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return parts.join(separator);
   }
 
+  Future<void> checkWishlistStatus() async {
+    try {
+      var response = await dio.get(
+        '${appUri}/gws_customer_wishlist&customer_id=${customerId}&api_key=${apiKey}',
+      );
+
+      print('${customerId}');
+
+      if (response.statusCode == 200 &&
+          response.data['message'][0]['msg_status']) {
+        var wishlist = response.data['customer_wishlist'] as List;
+        setState(() {
+          isInWishlist =
+              wishlist.any((item) => item['product_id'] == widget.productId);
+        });
+      }
+    } catch (e) {
+      print('Failed to load wishlist status: $e');
+    }
+  }
+
+  Future<void> addToWishlist() async {
+    try {
+      var response = await dio.get(
+        '${appUri}/gws_customer_wishlist/add&customer_id=${customerId}&product_id=${widget.productId}&api_key=${apiKey}',
+      );
+
+      if (response.statusCode == 200 &&
+          response.data['message'][0]['msg_status']) {
+        setState(() {
+          isInWishlist = true;
+        });
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('已新增願望清單'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('確定'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      print('Failed to add to wishlist: $e');
+    }
+  }
+
+  Future<void> removeFromWishlist() async {
+    try {
+      var response = await dio.get(
+        '${appUri}/gws_customer_wishlist/remove&customer_id=${customerId}&product_id=${widget.productId}&api_key=${apiKey}',
+      );
+
+      if (response.statusCode == 200 &&
+          response.data['message'][0]['msg_status']) {
+        setState(() {
+          isInWishlist = false;
+        });
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('已移除願望清單'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('確定'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      print('Failed to remove from wishlist: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,10 +187,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
         actions: [
           IconButton(
-              icon: Icon(FontAwesomeIcons.heart, color: Color(0xFFD72873)),
-              onPressed: () {}),
+              icon: Icon(
+                isInWishlist
+                    ? FontAwesomeIcons.solidHeart
+                    : FontAwesomeIcons.heart,
+                color: const Color(0xFFD72873),
+              ),
+              onPressed: () {
+                // isInWishlist ? removeFromWishlist() : addToWishlist();
+              }),
           IconButton(
-              icon: Icon(FontAwesomeIcons.shareNodes),
+              icon: const Icon(FontAwesomeIcons.shareNodes),
               onPressed: () {
                 displayShareDialog(context, productName!);
                 // Share.share(
@@ -113,6 +212,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             if (snapshot.hasData) {
               var product = snapshot.data['details'];
               var options = snapshot.data['options'] as List<ProductOption>;
+
               // stockStatus = 1;
               if (product['stock_status'] == '有現貨') {
                 stockStatus = 1;
