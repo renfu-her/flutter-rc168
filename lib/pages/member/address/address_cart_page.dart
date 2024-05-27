@@ -203,19 +203,22 @@ class _AddressCartAddPageState extends State<AddressCartAddPage> {
           },
         ),
       ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-        child: ElevatedButton(
-          onPressed: () {
-            _openAddAddressCartAddPage();
-          },
-          child: Text('增加新的地址'),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: Color(0xFF4F4E4C),
-            minimumSize: const Size(double.infinity, 36),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6),
+      bottomSheet: Container(
+        color: Colors.white, // 設置背景顏色為白色
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+          child: ElevatedButton(
+            onPressed: () {
+              _openAddAddressCartAddPage();
+            },
+            child: Text('增加新的地址'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white, // 按鈕背景顏色
+              foregroundColor: Color(0xFF4F4E4C),
+              minimumSize: const Size(double.infinity, 36),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
             ),
           ),
         ),

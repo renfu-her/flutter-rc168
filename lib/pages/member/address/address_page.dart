@@ -217,20 +217,23 @@ class _AddressPageState extends State<AddressPage> {
           },
         ),
       ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-        child: ElevatedButton(
-          onPressed: () {
-            _openAddAddressPage();
-          },
-          child: Text('增加新的地址', style: TextStyle(fontSize: 20.px)),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: Color(0xFF4F4E4C),
-            minimumSize: Size(double.infinity, 36),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6),
-              side: BorderSide(color: Colors.black),
+      bottomSheet: Container(
+        color: Colors.white, // 設置整個背景顏色為白色
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+          child: ElevatedButton(
+            onPressed: () {
+              _openAddAddressPage();
+            },
+            child: Text('增加新的地址', style: TextStyle(fontSize: 20.px)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white, // 按鈕背景顏色為白色
+              foregroundColor: Color(0xFF4F4E4C),
+              minimumSize: Size(double.infinity, 36),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+                side: BorderSide(color: Colors.black),
+              ),
             ),
           ),
         ),
