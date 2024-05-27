@@ -290,6 +290,7 @@ class _HomePageState extends State<HomePage> {
                         itemBuilder: (context, index) {
                           Product product = snapshot.data![index];
                           return Card(
+                            color: Colors.white,
                             clipBehavior: Clip.antiAlias,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero, // 移除圓角
