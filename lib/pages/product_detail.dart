@@ -213,7 +213,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             if (snapshot.hasData) {
               var product = snapshot.data['details'];
               var options = snapshot.data['options'] as List<ProductOption>;
-
               // stockStatus = 1;
               if (product['stock_status'] == '有現貨') {
                 stockStatus = 1;
