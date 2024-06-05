@@ -22,7 +22,7 @@ class _ShopRepurchasePageState extends State<ShopRepurchasePage> {
 
   Future<OrderDetail> fetchOrderDetail() async {
     Response response = await dio.get(
-        '${appUri}/gws_appcustomer_order/info&customer_id=${customerId}&order_id=${widget.orderId}&&api_key=${apiKey}');
+        '${appUri}/gws_appcustomer_order/info&customer_id=${customerId}&order_id=${widget.orderId}&api_key=${apiKey}');
     if (response.statusCode == 200) {
       return OrderDetail.fromJson(response.data);
     } else {
@@ -51,7 +51,6 @@ class _ShopRepurchasePageState extends State<ShopRepurchasePage> {
           } else {
             final order = snapshot.data!.order;
             final products = snapshot.data!.products;
-            final histories = snapshot.data!.histories;
             final totals = snapshot.data!.totals;
 
             double totalPrice = 0;
@@ -88,7 +87,9 @@ class _ShopRepurchasePageState extends State<ShopRepurchasePage> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('規格: xxxxxx'),
+                            if (product.options.isNotEmpty)
+                              Text(
+                                  '規格: ${product.options.map((option) => "${option['name']}: ${option['value']}").join(', ')}'),
                             Text('x ${product.quantity}'),
                           ],
                         ),
@@ -104,62 +105,24 @@ class _ShopRepurchasePageState extends State<ShopRepurchasePage> {
                     ],
                   );
                 }).toList(),
-                // const Text(
-                //   'Order Histories:',
-                //   style: const TextStyle(
-                //       fontSize: 16, fontWeight: FontWeight.bold),
-                // ),
-                // ...histories.map((history) {
-                //   return ListTile(
-                //     title: Text(history.status),
-                //     subtitle: Text(history.dateAdded),
-                //   );
-                // }).toList(),
-                const ListTile(
-                  title: Text(
-                    '會員折扣(8%)',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  trailing: Text(
-                    '',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red),
-                  ),
-                ),
-                const ListTile(
-                  title: Text(
-                    '運費',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  trailing: Text(
-                    '\$60',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red),
-                  ),
-                ),
-                // ...totals.map((total) {
-                //   return ListTile(
-                //     title: Text(total.title),
-                //     trailing: Text(total.text),
-                //   );
-                // }).toList(),
-                ListTile(
-                  title: const Text(
-                    '訂單金額:',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  trailing: Text(
-                    '\$${totalPrice.toStringAsFixed(2)}',
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red),
-                  ),
-                ),
+                ...totals.map((total) {
+                  return ListTile(
+                    title: Text(
+                      total.title,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    trailing: Text(
+                      total.text,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: total.code == 'total'
+                              ? Colors.red
+                              : Colors.black),
+                    ),
+                  );
+                }).toList(),
               ],
             );
           }
@@ -172,13 +135,11 @@ class _ShopRepurchasePageState extends State<ShopRepurchasePage> {
 class OrderDetail {
   final Order order;
   final List<Product> products;
-  final List<History> histories;
   final List<Total> totals;
 
   OrderDetail({
     required this.order,
     required this.products,
-    required this.histories,
     required this.totals,
   });
 
@@ -187,8 +148,6 @@ class OrderDetail {
       order: Order.fromJson(json['order'][0]),
       products:
           (json['products'] as List).map((i) => Product.fromJson(i)).toList(),
-      histories:
-          (json['histories'] as List).map((i) => History.fromJson(i)).toList(),
       totals: (json['totals'] as List).map((i) => Total.fromJson(i)).toList(),
     );
   }
@@ -225,6 +184,7 @@ class Product {
   final String productId;
   final int price;
   final int quantity;
+  final List<Map<String, String>> options;
 
   Product({
     required this.name,
@@ -234,6 +194,7 @@ class Product {
     required this.productId,
     required this.price,
     required this.quantity,
+    required this.options,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -249,6 +210,13 @@ class Product {
 
     int quantity = int.tryParse(json['quantity'] as String? ?? '') ?? 0;
 
+    List<Map<String, String>> options = (json['option'] as List<dynamic>)
+        .map((option) => {
+              'name': option['name'] as String,
+              'value': option['value'] as String,
+            })
+        .toList();
+
     return Product(
       name: json['name'] as String? ?? '',
       model: json['model'] as String? ?? '',
@@ -257,38 +225,25 @@ class Product {
       productId: productId,
       price: price,
       quantity: quantity,
-    );
-  }
-}
-
-class History {
-  final String dateAdded;
-  final String status;
-
-  History({
-    required this.dateAdded,
-    required this.status,
-  });
-
-  factory History.fromJson(Map<String, dynamic> json) {
-    return History(
-      dateAdded: json['date_added'] as String,
-      status: json['status'] as String,
+      options: options,
     );
   }
 }
 
 class Total {
+  final String code;
   final String title;
   final String text;
 
   Total({
+    required this.code,
     required this.title,
     required this.text,
   });
 
   factory Total.fromJson(Map<String, dynamic> json) {
     return Total(
+      code: json['code'] as String,
       title: json['title'] as String,
       text: json['text'] as String,
     );

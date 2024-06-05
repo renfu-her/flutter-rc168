@@ -218,7 +218,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               } else {
                 stockStatus = 0;
               }
-              stockStatus = 1;
+              // stockStatus = 1;
 
               List<Widget> contentWidgets = [];
 
