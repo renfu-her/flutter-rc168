@@ -65,7 +65,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
 
   Future<void> fetchCartItems() async {
     final customerCartUrl =
-        '${appUri}/gws_customer_cart&customer_id=${customerId}&api_key=${apiKey}';
+        '${appUri}/gws_appcustomer_cart&customer_id=${customerId}&api_key=${apiKey}';
     final productDetailBaseUrl = '${appUri}/gws_product&product_id=';
 
     setState(() {
@@ -89,7 +89,6 @@ class _ShopCartPageState extends State<ShopCartPage> {
             // Parse cart item option
             var cartItemOption = jsonDecode(cartItem['option']);
             var productOptions = productData['product'][0]['options'];
-            // print{productOptions);
 
             var selectedOptions = [];
             productOptions.forEach((option) {
@@ -121,11 +120,12 @@ class _ShopCartPageState extends State<ShopCartPage> {
                   ..addAll({
                     'quantity': cartItem['quantity'],
                     'cart_id': cartItem['cart_id'],
-                    'options':
-                        selectedOptions // Add selected options to the combined data
+                    'options': selectedOptions,
+                    'totals': cartData['totals']
                   });
 
             var product = Product.fromJson(combinedData);
+            print(cartData['totals']);
 
             setState(() {
               products.add(product);
@@ -250,7 +250,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
               onChanged: (int? value) {
                 setState(() {
                   _selectedShippingMethodCode = value!;
-                  _selectedShippingCost = method.cost?.toDouble() ?? 0.0;
+                  _selectedShippingCost = method.cost.toDouble();
                   totalAmount = _tempTotalAmount;
                   totalAmount = totalAmount + _selectedShippingCost;
                 });
@@ -268,7 +268,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
             onTap: () {
               setState(() {
                 _selectedShippingMethodCode = method.sortOrder;
-                _selectedShippingCost = method.cost?.toDouble() ?? 0.0;
+                _selectedShippingCost = method.cost.toDouble();
                 totalAmount = _tempTotalAmount;
                 totalAmount = totalAmount + _selectedShippingCost;
               });
@@ -281,34 +281,34 @@ class _ShopCartPageState extends State<ShopCartPage> {
 
   Future<List<ShippingMethod>> fetchShippingMethods() async {
     final response = await dio.get(
-      '${appUri}/gws_taxshippingestimate',
+      '${appUri}/gws_appshipping_methods/index',
       queryParameters: {
-        'country_id': 206,
-        'zone_id': 3136,
         'api_key': apiKey,
+        'customer_id': customerId,
+        'address_id': customerAddress!['address_id'],
       },
     );
 
     if (response.statusCode == 200) {
-      final data = Map<String, dynamic>.from(response.data['shipping_method']);
-      List<ShippingMethod> shippingMethods = data.entries.map((e) {
-        // 解析每個物流方式並返回 ShippingMethod 對象
-        return ShippingMethod.fromJson(e.value);
-      }).where((method) {
-        // 確保 sortOrder 是正數並且沒有錯誤
-        return method.sortOrder! > 0 && !method.error;
-      }).toList();
-      return shippingMethods;
-    } else {
-      throw Exception('Failed to load shipping methods');
+      final data = Map<String, dynamic>.from(response.data);
+      if (data['message'][0]['msg_status'] == true) {
+        List<ShippingMethod> shippingMethods = List<ShippingMethod>.from(
+          data['shipping_methods'].map((item) => ShippingMethod.fromJson(item)),
+        ).where((method) {
+          // 確保 sortOrder 是正數並且沒有錯誤
+          return method.sortOrder! > 0 && !method.error;
+        }).toList();
+        return shippingMethods;
+      }
     }
+    throw Exception('Failed to load shipping methods');
   }
 
   Future<void> submitOrder() async {
     if (_selectedPaymentMethod == null || _selectedShippingMethodCode == null) {
-      // 使用Flutter的showDialog函数来显示警告对话框
+      // 顯示警告對話框
       showDialog(
-        context: context, // 确保你有一个BuildContext实例名为context
+        context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: ResponsiveText('溫馨提醒!', baseFontSize: 38),
@@ -321,7 +321,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
               TextButton(
                 child: ResponsiveText('確定', baseFontSize: 36),
                 onPressed: () {
-                  Navigator.of(context).pop(); // 关闭对话框
+                  Navigator.of(context).pop(); // 關閉對話框
                 },
               ),
             ],
@@ -331,7 +331,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
       return;
     }
 
-    // 构建请求体数据
+    // 構建請求體數據
     final orderData = {
       'address_id': customerAddress!['address_id'],
       'customer': customerData!['customer'],
@@ -358,16 +358,17 @@ class _ShopCartPageState extends State<ShopCartPage> {
       'shipping_sort_order': _selectedShippingMethodCode,
       'payment_method': _selectedPaymentMethod,
       'shipping_cost': _selectedShippingCost,
+      'totals': _extractTotalsFromProducts(products), // 提取 totals
       'amount': totalAmount,
     };
+
+    print(orderData['totals']);
 
     dio.post('${demoUrl}/api/product/order/data/${customerId}',
         data: orderData);
 
     final response =
         await dio.get('${demoUrl}/api/product/submit/${customerId}');
-
-    // print(orderData);
 
     if (response.statusCode == 200) {
       final responseData = response.data['data'];
@@ -387,6 +388,16 @@ class _ShopCartPageState extends State<ShopCartPage> {
     } else {
       print('Failed to submit order: ${response.statusCode}');
     }
+  }
+
+// 從產品列表中提取 totals
+  List<Map<String, dynamic>> _extractTotalsFromProducts(
+      List<Product> products) {
+    // 假設所有產品的 totals 是相同的，取第一個產品的 totals 作為範例
+    if (products.isNotEmpty && products[0].totals.isNotEmpty) {
+      return products[0].totals;
+    }
+    return [];
   }
 
   String splitByLengthAndJoin(String str, int length,
@@ -563,7 +574,11 @@ class _ShopCartPageState extends State<ShopCartPage> {
                             return FutureBuilder<List<ShippingMethod>>(
                               future: fetchShippingMethods(),
                               builder: (context, snapshot) {
-                                if (snapshot.hasData) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } else if (snapshot.hasData) {
                                   // 使用上面的 buildShippingMethodList 方法构建界面
                                   return buildShippingMethodList(
                                       snapshot.data!);
@@ -683,6 +698,7 @@ class Product {
   final String cartId;
   final dynamic special;
   final List<Option> options; // 添加 options 属性
+  final List<Map<String, dynamic>> totals; // 添加 totals 属性
 
   void incrementQuantity() {
     quantity++;
@@ -703,6 +719,7 @@ class Product {
     required this.cartId,
     required this.special,
     required this.options, // 添加 options 参数
+    required this.totals, // 添加 totals 参数
   });
 
   factory Product.fromJson(Map<String, dynamic> combinedJson) {
@@ -726,6 +743,24 @@ class Product {
       }
     }
 
+    // 解析 totals
+    List<Map<String, dynamic>> totals = [];
+    if (combinedJson['totals'] != null) {
+      var totalsData = combinedJson['totals'];
+      if (totalsData is List) {
+        totals = totalsData.map((entry) {
+          return {
+            'code': entry['code'],
+            'title': entry['title'],
+            'text': entry['text'],
+          };
+        }).toList();
+      } else {
+        // 处理其他意外类型
+        print('Unexpected totals data type: ${totalsData.runtimeType}');
+      }
+    }
+
     return Product(
       productId: combinedJson['product_id'],
       name: combinedJson['name'],
@@ -739,6 +774,7 @@ class Product {
           : int.parse(
               combinedJson['special'].replaceAll(RegExp(r'[^0-9\.]'), '')),
       options: options, // 添加 options 初始化
+      totals: totals, // 添加 totals 初始化
     );
   }
 }
@@ -761,15 +797,13 @@ class Option {
 
 class ShippingMethod {
   String title;
-  String costText;
+  int cost;
   String code;
-  int? cost;
   bool error;
   int? sortOrder;
 
   ShippingMethod({
     required this.title,
-    required this.costText,
     required this.code,
     required this.cost,
     required this.error,
@@ -777,16 +811,18 @@ class ShippingMethod {
   });
 
   factory ShippingMethod.fromJson(Map<String, dynamic> json) {
+    // 將 sort_order 字段轉換為整數
     var sortOrderString = json['sort_order']?.toString();
     int? sortOrder = int.tryParse(sortOrderString ?? '0');
-    var costString = json['quote'].values.first['cost']?.toString();
-    int? cost = int.tryParse(costString ?? '0');
+
+    // 將 cost 字段轉換為整數
+    var costString = json['cost']?.toString();
+    int cost = int.tryParse(costString ?? '0') ?? 0;
 
     return ShippingMethod(
       title: json['title'],
-      costText: json['quote'].values.first['text'],
-      code: json['quote'].values.first['code'],
-      cost: cost ?? 0,
+      code: json['code'],
+      cost: cost,
       error: json['error'],
       sortOrder: sortOrder ?? 0,
     );
