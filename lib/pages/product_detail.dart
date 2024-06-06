@@ -213,12 +213,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             if (snapshot.hasData) {
               var product = snapshot.data['details'];
               var options = snapshot.data['options'] as List<ProductOption>;
-              if (product['stock_status'] == '有現貨') {
+              int quantity = int.tryParse(product['quantity']) ?? 0;
+              int status = int.tryParse(product['status']) ?? 0;
+              if (quantity > 0 && status > 0) {
                 stockStatus = 1;
               } else {
                 stockStatus = 0;
               }
-              // stockStatus = 1;
 
               List<Widget> contentWidgets = [];
 
@@ -376,7 +377,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     horizontal: 8.0), // 調整文本周圍的空間
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: product['stock_status'] == '有現貨'
+                                    color: status > 0 && quantity > 0
                                         ? Colors.green
                                         : Colors.red, // 根據庫存狀態設定邊框顏色
                                     width: 1.0, // 邊框寬度
@@ -385,9 +386,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                       BorderRadius.circular(5.0), // 邊框圓角
                                 ),
                                 child: Text(
-                                  product['stock_status'],
+                                  status > 0 && quantity > 0 ? '有現貨' : '缺貨中',
                                   style: TextStyle(
-                                      color: product['stock_status'] == '有現貨'
+                                      color: status > 0 && quantity > 0
                                           ? Colors.green
                                           : Colors.red), // 文本顏色也可以相應改變
                                 ),
