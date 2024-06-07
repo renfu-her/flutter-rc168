@@ -23,10 +23,12 @@ class _ShopCartPageState extends State<ShopCartPage> {
   String? _selectedPaymentMethod;
   double _selectedShippingCost = 0.0;
   double _tempTotalAmount = 0.0;
+  List<DropdownMenuItem<String>> _dropdownItems = [];
 
   @override
   void initState() {
     super.initState();
+    _fetchPaymentMethods();
     fetchCartItems();
     getCustomerDataAndFetchAddress(widget.addressId);
     if (widget.addressId != null) {
@@ -390,7 +392,30 @@ class _ShopCartPageState extends State<ShopCartPage> {
     }
   }
 
-// 從產品列表中提取 totals
+  Future<void> _fetchPaymentMethods() async {
+    final response = await dio.get(
+        '${appUri}/gws_apppayment_methods/index&customer_id=${customerId}&api_key=${apiKey}');
+
+    print(response.data);
+
+    if (response.statusCode == 200) {
+      final data = response.data;
+      final paymentMethods = data['payment_methods'] as List;
+
+      setState(() {
+        _dropdownItems = paymentMethods.map((method) {
+          return DropdownMenuItem<String>(
+            value: method['code'],
+            child: Text(method['title']),
+          );
+        }).toList();
+      });
+    } else {
+      throw Exception('Failed to load payment methods');
+    }
+  }
+
+  // 從產品列表中提取 totals
   List<Map<String, dynamic>> _extractTotalsFromProducts(
       List<Product> products) {
     // 假設所有產品的 totals 是相同的，取第一個產品的 totals 作為範例
@@ -487,20 +512,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                             ),
                             isExpanded: true,
                             value: _selectedPaymentMethod,
-                            items: [
-                              // DropdownMenuItem(
-                              //   value: 'bank_transfer',
-                              //   child: ResponsiveText('銀行轉帳'),
-                              // ),
-                              DropdownMenuItem(
-                                value: 'linepay_sainent',
-                                child: Text('LINE Pay'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'ecpaypayment',
-                                child: Text('綠界金流'),
-                              ),
-                            ],
+                            items: _dropdownItems,
                             onChanged: (String? value) {
                               setState(() {
                                 _selectedPaymentMethod = value;

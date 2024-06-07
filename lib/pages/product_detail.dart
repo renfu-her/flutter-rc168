@@ -49,7 +49,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       }
 
       checkWishlistStatus();
-      stockStatus = data['details']['stock_status'] == '有現貨' ? 1 : 0;
+      // stockStatus = data['details']['stock_status'] == '有現貨' ? 1 : 0;
       return data;
     });
   }
@@ -377,7 +377,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     horizontal: 8.0), // 調整文本周圍的空間
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: status > 0 && quantity > 0
+                                    color: stockStatus == 1
                                         ? Colors.green
                                         : Colors.red, // 根據庫存狀態設定邊框顏色
                                     width: 1.0, // 邊框寬度
@@ -386,9 +386,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                       BorderRadius.circular(5.0), // 邊框圓角
                                 ),
                                 child: Text(
-                                  status > 0 && quantity > 0 ? '有現貨' : '缺貨中',
+                                  stockStatus == 1 ? '有現貨' : '缺貨中',
                                   style: TextStyle(
-                                      color: status > 0 && quantity > 0
+                                      color: stockStatus == 1
                                           ? Colors.green
                                           : Colors.red), // 文本顏色也可以相應改變
                                 ),
@@ -487,13 +487,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                         actions: <Widget>[
                           TextButton(
-                            child: Text('取消'),
+                            child: const Text('取消'),
                             onPressed: () {
                               Navigator.of(context).pop(); // 关闭对话框
                             },
                           ),
                           TextButton(
-                            child: Text('登入'),
+                            child: const Text('登入'),
                             onPressed: () {
                               // 可以在这里添加跳转到登录页面的代码
                               Navigator.of(context).pop(); // 先关闭对话框
@@ -509,21 +509,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   );
               }
             },
-            child: stockStatus == 1
-                ? InlineTextWidget('加入購物車',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: const Color(0xFF4F4E4C),
-                    ))
-                : InlineTextWidget('商品已售完',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                    )),
             style: ElevatedButton.styleFrom(
               backgroundColor:
                   stockStatus == 1 ? Colors.white : Colors.grey, // 按钮背景颜色为蓝色
-              foregroundColor: Color(0xFF4F4E4C), // 文本颜色为白色
+              foregroundColor: const Color(0xFF4F4E4C), // 文本颜色为白色
               minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
@@ -533,6 +522,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         : Colors.grey), // 设置按钮圆角
               ),
             ),
+            child: stockStatus == 1
+                ? const InlineTextWidget('加入購物車',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Color(0xFF4F4E4C),
+                    ))
+                : const InlineTextWidget('商品已售完',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    )),
           ),
         ),
       ),
@@ -548,7 +548,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0)), // Rounded corners
           child: Container(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             height: 120, // Set the height of the dialog
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -558,7 +558,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       .spaceEvenly, // Center the icons horizontally
                   children: <Widget>[
                     IconButton(
-                        icon: Icon(FontAwesomeIcons.shareNodes,
+                        icon: const Icon(FontAwesomeIcons.shareNodes,
                             color: Colors.blue, size: 40),
                         onPressed: () {
                           String url;
@@ -573,20 +573,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           Share.share(url);
                         }),
                     IconButton(
-                        icon: Icon(FontAwesomeIcons.line,
+                        icon: const Icon(FontAwesomeIcons.line,
                             color: Colors.green, size: 40),
                         onPressed: () {
                           launchLINE(widget.productId, productName);
                         }),
                     // if (fetchData2['status'] == '1')
                     IconButton(
-                        icon: Icon(FontAwesomeIcons.facebookMessenger,
+                        icon: const Icon(FontAwesomeIcons.facebookMessenger,
                             color: Colors.blue, size: 40),
                         onPressed: () {
                           launchFacebook(widget.productId, productName);
                         }),
                     IconButton(
-                        icon: Icon(FontAwesomeIcons.twitter,
+                        icon: const Icon(FontAwesomeIcons.twitter,
                             color: Colors.blue, size: 40),
                         onPressed: () {
                           launchTwitter(widget.productId, productName);
@@ -659,7 +659,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         (index) => Container(
           width: 8.0,
           height: 8.0,
-          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+          margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: currentIndex == index
@@ -872,9 +872,9 @@ class _QuantitySelectorState extends State<QuantitySelector> {
             mainAxisSize: MainAxisSize.max, // 將Row的大小限制為子元素所需的最小大小
             children: [
               IconButton(
-                icon: Icon(Icons.remove, color: Colors.black),
+                icon: const Icon(Icons.remove, color: Colors.black),
                 onPressed: decrementQuantity,
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   // 限制IconButton的大小
                   minWidth: 32.0, // 最小寬度
                   minHeight: 32.0, // 最小高度
@@ -894,9 +894,9 @@ class _QuantitySelectorState extends State<QuantitySelector> {
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.add, color: Colors.black),
+                icon: const Icon(Icons.add, color: Colors.black),
                 onPressed: incrementQuantity,
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   // 限制IconButton的大小
                   minWidth: 32.0, // 最小寬度
                   minHeight: 32.0, // 最小高度
