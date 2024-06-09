@@ -465,7 +465,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => MyApp()));
               } else {
-                if (stockStatus == 1)
+                if (stockStatus == 1) {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -507,19 +507,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       );
                     },
                   );
+                }
               }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor:
-                  stockStatus == 1 ? Colors.white : Colors.grey, // 按钮背景颜色为蓝色
-              foregroundColor: const Color(0xFF4F4E4C), // 文本颜色为白色
+                  stockStatus == 0 ? Colors.grey : Colors.white, // 按钮背景颜色为蓝色
+              foregroundColor: Colors.white, // 文本颜色为白色
               minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
                 side: BorderSide(
-                    color: stockStatus == 1
-                        ? Colors.black
-                        : Colors.grey), // 设置按钮圆角
+                    color: stockStatus == 0
+                        ? Colors.grey
+                        : Colors.black), // 设置按钮圆角
               ),
             ),
             child: stockStatus == 1
@@ -724,7 +725,7 @@ List<Widget> convertHtml(String htmlContent, {double baseFontSize = 14}) {
         case 'img':
           var src = node.attributes['src'];
           if (src != null && src.isNotEmpty) {
-            // print{'Trying to load image from: $src'); // 確保這裡的 URL 被打印出來
+            // 確保這裡的 URL 被打印出來
             widgets.add(Image.network(
               src,
               fit: BoxFit.cover,
@@ -812,7 +813,6 @@ class MyHtmlWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print{htmlContent);
     List<Widget> widgets = convertHtml(htmlContent, baseFontSize: baseFontSize);
 
     return Column(

@@ -364,7 +364,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
       'amount': totalAmount,
     };
 
-    print(orderData['totals']);
+    // print(orderData['totals']);
 
     dio.post('${demoUrl}/api/product/order/data/${customerId}',
         data: orderData);
@@ -375,12 +375,14 @@ class _ShopCartPageState extends State<ShopCartPage> {
     if (response.statusCode == 200) {
       final responseData = response.data['data'];
 
-      print(
-          'Order submitted successfully: ${responseData['order']['order_id']}');
+      // print(
+          // 'Order submitted successfully: ${responseData['order']['order_id']}');
 
+      //TODO: 跳轉到付款頁面
       final htmlUrl =
           '${demoUrl}/api/product/payment?customerId=${customerId}&orderId=' +
-              responseData['order']['order_id'];
+              responseData['order']['order_id'] +
+              '&api_key=${apiKey}';
 
       Navigator.push(
         context,
