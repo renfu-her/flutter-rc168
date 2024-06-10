@@ -48,8 +48,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         }
       }
 
-      checkWishlistStatus();
-      // stockStatus = data['details']['stock_status'] == '有現貨' ? 1 : 0;
+      setState(() {
+        checkWishlistStatus();
+        int quantity = int.tryParse(data['details']['quantity']) ?? 0;
+        int status = int.tryParse(data['details']['status']) ?? 0;
+        stockStatus = (quantity > 0 && status > 0) ? 1 : 0;
+      });
+
       return data;
     });
   }

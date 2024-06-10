@@ -66,18 +66,30 @@ class _ShopRepurchasePageState extends State<ShopRepurchasePage> {
                     children: [
                       ListTile(
                         contentPadding: const EdgeInsets.all(8.0),
-                        leading: Image.network(
-                          product.image,
-                          width: 60,
-                          height: 60,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return const Center(
-                                child: CircularProgressIndicator());
+                        leading: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProductDetailPage(
+                                  productId: product.productId,
+                                ),
+                              ),
+                            );
                           },
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.error),
+                          child: Image.network(
+                            product.image,
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            },
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.error),
+                          ),
                         ),
                         title: Text(
                           product.name,

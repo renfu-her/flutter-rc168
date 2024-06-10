@@ -6,6 +6,7 @@ import 'package:rc168/pages/shop/shop_payment_page.dart';
 import 'package:rc168/pages/member/address/address_cart_page.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:rc168/responsive_text.dart';
+import 'package:rc168/pages/shop/shop_payment_bankTransfer_page.dart';
 
 class ShopCartPage extends StatefulWidget {
   final String? addressId;
@@ -298,7 +299,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
           data['shipping_methods'].map((item) => ShippingMethod.fromJson(item)),
         ).where((method) {
           // 確保 sortOrder 是正數並且沒有錯誤
-          return method.sortOrder! > 0 && !method.error;
+          return !method.error;
         }).toList();
         return shippingMethods;
       }
@@ -376,7 +377,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
       final responseData = response.data['data'];
 
       // print(
-          // 'Order submitted successfully: ${responseData['order']['order_id']}');
+      // 'Order submitted successfully: ${responseData['order']['order_id']}');
 
       //TODO: 跳轉到付款頁面
       final htmlUrl =
@@ -384,11 +385,22 @@ class _ShopCartPageState extends State<ShopCartPage> {
               responseData['order']['order_id'] +
               '&api_key=${apiKey}';
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ShopPaymentPage(htmlUrl: htmlUrl)),
-      );
+      print(_selectedPaymentMethod);
+
+      if (_selectedPaymentMethod == 'bank_transfer') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ShopPaymentBankTransferPage(htmlUrl: htmlUrl)),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ShopPaymentPage(htmlUrl: htmlUrl)),
+        );
+      }
     } else {
       print('Failed to submit order: ${response.statusCode}');
     }

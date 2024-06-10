@@ -2,20 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:rc168/main.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class ShopPaymentPage extends StatefulWidget {
+class ShopPaymentBankTransferPage extends StatefulWidget {
   final String htmlUrl;
-  ShopPaymentPage({Key? key, required this.htmlUrl}) : super(key: key);
+  ShopPaymentBankTransferPage({Key? key, required this.htmlUrl})
+      : super(key: key);
 
   @override
-  _ShopPaymentPageState createState() => _ShopPaymentPageState();
+  _ShopPaymentBankTransferPageState createState() =>
+      _ShopPaymentBankTransferPageState();
 }
 
-class _ShopPaymentPageState extends State<ShopPaymentPage> {
+class _ShopPaymentBankTransferPageState
+    extends State<ShopPaymentBankTransferPage> {
   late WebViewController _controller;
 
   @override
   void initState() {
     super.initState();
+    // Initialize any necessary settings or listeners here
   }
 
   @override
@@ -23,7 +27,7 @@ class _ShopPaymentPageState extends State<ShopPaymentPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('付款頁面'),
+        title: const Text('付款頁面-銀行轉帳'),
         backgroundColor: Colors.white,
         foregroundColor: Color(0xFF4F4E4C),
         leading: IconButton(
@@ -58,6 +62,31 @@ class _ShopPaymentPageState extends State<ShopPaymentPage> {
                 await showOrderCancelledNotification();
               }
             },
+          ),
+          Positioned(
+            bottom: 20,
+            left: 20,
+            right: 20,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyApp()),
+                  (Route<dynamic> route) => false,
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Color(0xFF4F4E4C),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: const BorderSide(color: Colors.black),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                textStyle: const TextStyle(fontSize: 18),
+              ),
+              child: const Text('返回首頁'),
+            ),
           ),
         ],
       ),
