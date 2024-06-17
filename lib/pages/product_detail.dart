@@ -9,6 +9,7 @@ import 'package:rc168/responsive_text.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -22,11 +23,9 @@ class ProductDetailPage extends StatefulWidget {
 class _ProductDetailPageState extends State<ProductDetailPage> {
   late Future<dynamic> productDetail;
   Map<String, String> selectedOptionValues = {};
-  // late Future<void> productContent;
   final CarouselController _controller = CarouselController();
   int _current = 0;
   int _selectedQuantity = 1;
-  List service = [];
   int stockStatus = 0;
   String? productName;
   bool isInWishlist = false;
@@ -63,13 +62,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     try {
       var response =
           await dio.get('${demoUrl}/api/product/detail/${widget.productId}');
-      //// print{widget.productId);
       if (response.statusCode == 200) {
         var productOptions = response.data['data']['options'] as List;
         var productOptionsParsed =
             productOptions.map((json) => ProductOption.fromJson(json)).toList();
 
-        // print(response.data['data']);
         return {
           'details': response.data['data'],
           'options': productOptionsParsed,
@@ -82,23 +79,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
-  String splitByLengthAndJoin(String str, int length,
-      {String separator = ' '}) {
-    List<String> parts = [];
-    for (int i = 0; i < str.length; i += length) {
-      int end = (i + length < str.length) ? i + length : str.length;
-      parts.add(str.substring(i, end));
-    }
-    return parts.join(separator);
-  }
-
   Future<void> checkWishlistStatus() async {
     try {
       var response = await dio.get(
         '${appUri}/gws_customer_wishlist&customer_id=${customerId}&api_key=${apiKey}',
       );
-
-      print('${customerId}');
 
       if (response.statusCode == 200 &&
           response.data['message'][0]['msg_status']) {
@@ -206,8 +191,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               icon: const Icon(FontAwesomeIcons.shareNodes),
               onPressed: () {
                 displayShareDialog(context, productName!);
-                // Share.share(
-                //     "分享連接：https://social-plugins.line.me/lineit/share?url=https%3A%2F%2Focapi.remember1688.com%2F%2Findex.php%3Froute%3Dproduct%2Fproduct%26product_id%3D${widget.productId}");
               }),
         ],
       ),
@@ -239,51 +222,93 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               }
 
               List<Widget> optionWidgets = options.map((option) {
-                return ListTile(
-                  title: Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: InlineTextWidget(option.name,
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            hint: const Text('請選擇'),
-                            isExpanded: true,
-                            value: selectedOptionValues[option.id],
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                if (newValue != null) {
-                                  selectedOptionValues[option.id] = newValue;
-                                }
-                              });
-                            },
-                            items: option.values.map((OptionValue value) {
-                              return DropdownMenuItem<String>(
-                                value: value.id,
-                                child: value.price == 0
-                                    ? ResponsiveText(
-                                        "${value.name}",
-                                        baseFontSize: 34,
-                                        maxLines: 10,
-                                      )
-                                    : ResponsiveText(
-                                        "${value.name}(${value.pricePrefix}NT\$${value.price.toString()})",
-                                        baseFontSize: 34,
-                                        maxLines: 10,
-                                      ),
-                              );
-                            }).toList(),
+                if (option.type == 'select') {
+                  return ListTile(
+                    title: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: InlineTextWidget(option.name,
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              hint: const Text('請選擇'),
+                              isExpanded: true,
+                              value: selectedOptionValues[option.id],
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  if (newValue != null) {
+                                    selectedOptionValues[option.id] = newValue;
+                                  }
+                                });
+                              },
+                              items: option.values.map((OptionValue value) {
+                                return DropdownMenuItem<String>(
+                                  value: value.id,
+                                  child: value.price == 0
+                                      ? ResponsiveText(
+                                          "${value.name}",
+                                          baseFontSize: 34,
+                                          maxLines: 10,
+                                        )
+                                      : ResponsiveText(
+                                          "${value.name}(${value.pricePrefix}NT\$${value.price.toString()})",
+                                          baseFontSize: 34,
+                                          maxLines: 10,
+                                        ),
+                                );
+                              }).toList(),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
+                      ],
+                    ),
+                  );
+                } else if (option.type == 'date') {
+                  return ListTile(
+                    title: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: InlineTextWidget(option.name,
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: TextButton(
+                            onPressed: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2101),
+                              );
+                              if (pickedDate != null) {
+                                setState(() {
+                                  selectedOptionValues[option.id] =
+                                      // pickedDate.toString();
+                                      DateFormat('yyyy-MM-dd')
+                                          .format(pickedDate);
+                                });
+                              }
+                            },
+                            child: Text(
+                              selectedOptionValues[option.id] ?? '請選擇日期',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
               }).toList();
 
               return SingleChildScrollView(
@@ -500,9 +525,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           TextButton(
                             child: const Text('登入'),
                             onPressed: () {
-                              // 可以在这里添加跳转到登录页面的代码
                               Navigator.of(context).pop(); // 先关闭对话框
-                              // 假设你有一个名为LoginPage的登录页面
                               selectedIndex = 4;
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => MyApp()));
@@ -517,9 +540,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor:
-                  stockStatus == 0 ? Colors.grey : Colors.white, // 按钮背景颜色为蓝色
-              foregroundColor: Colors.white, // 文本颜色为白色
-              minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸，宽度占满
+                  stockStatus == 0 ? Colors.grey : Colors.white, // 按钮背景颜色
+              foregroundColor: Colors.white, // 文本颜色
+              minimumSize: const Size(double.infinity, 36), // 按钮最小尺寸
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
                 side: BorderSide(
@@ -545,7 +568,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  //TODO： 分享對話框
   void displayShareDialog(BuildContext context, String productName) async {
     showDialog(
       context: context,
@@ -560,8 +582,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Row(
-                  mainAxisAlignment: MainAxisAlignment
-                      .spaceEvenly, // Center the icons horizontally
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     IconButton(
                         icon: const Icon(FontAwesomeIcons.shareNodes,
@@ -584,7 +605,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         onPressed: () {
                           launchLINE(widget.productId, productName);
                         }),
-                    // if (fetchData2['status'] == '1')
                     IconButton(
                         icon: const Icon(FontAwesomeIcons.facebookMessenger,
                             color: Colors.blue, size: 40),
@@ -684,7 +704,6 @@ List<Widget> convertHtmlToWidgets(String htmlContent,
   List<Widget> widgetsList = [];
 
   document.body!.nodes.forEach((node) {
-    // print(node);
     if (node is dom.Element) {
       switch (node.localName) {
         case 'img':
@@ -714,8 +733,6 @@ List<Widget> convertHtmlToWidgets(String htmlContent,
     }
   });
 
-  // print(widgetsList);
-
   return widgetsList;
 }
 
@@ -723,25 +740,22 @@ List<Widget> convertHtml(String htmlContent, {double baseFontSize = 14}) {
   var document = html_parser.parse(htmlContent);
   List<Widget> widgets = [];
 
-  // 處理各種 HTML 標籤並轉換為 Widget
   for (var node in document.body!.nodes) {
     if (node is dom.Element) {
       switch (node.localName) {
         case 'img':
           var src = node.attributes['src'];
           if (src != null && src.isNotEmpty) {
-            // 確保這裡的 URL 被打印出來
             widgets.add(Image.network(
               src,
               fit: BoxFit.cover,
               errorBuilder: (BuildContext context, Object exception,
                   StackTrace? stackTrace) {
-                // print{'Failed to load image: $src'); // 如果圖片加載失敗，這會被打印
                 return const Text('Failed to load image');
               },
             ));
           } else {
-            print('No src found for image'); // 如果 src 屬性不存在或為空
+            print('No src found for image');
           }
           break;
         case 'h1':
@@ -880,7 +894,6 @@ class _QuantitySelectorState extends State<QuantitySelector> {
                 icon: const Icon(Icons.remove, color: Colors.black),
                 onPressed: decrementQuantity,
                 constraints: const BoxConstraints(
-                  // 限制IconButton的大小
                   minWidth: 32.0, // 最小寬度
                   minHeight: 32.0, // 最小高度
                 ),
@@ -902,7 +915,6 @@ class _QuantitySelectorState extends State<QuantitySelector> {
                 icon: const Icon(Icons.add, color: Colors.black),
                 onPressed: incrementQuantity,
                 constraints: const BoxConstraints(
-                  // 限制IconButton的大小
                   minWidth: 32.0, // 最小寬度
                   minHeight: 32.0, // 最小高度
                 ),
@@ -949,10 +961,6 @@ Future<void> addToCart(
     'option': selectedOptionValues,
   });
 
-  // print{productId);
-  // print{quantity);
-  // print{selectedOptionValues);
-
   final addCartUrl =
       '${appUri}/gws_appcustomer_cart/add&customer_id=${customerId}&api_key=${apiKey}';
   try {
@@ -961,7 +969,6 @@ Future<void> addToCart(
       data: formData,
     );
 
-    // 检查响应或进行后续操作
     if (response.data['message'][0]['msg_status'] == true) {
       // 成功添加后的操作
     }
@@ -975,9 +982,14 @@ Future<void> addToCart(
 class ProductOption {
   final String id;
   final String name;
+  final String type; // 新增這個屬性來區分選項的類型
   final List<OptionValue> values;
 
-  ProductOption({required this.id, required this.name, required this.values});
+  ProductOption(
+      {required this.id,
+      required this.name,
+      required this.type,
+      required this.values});
 
   factory ProductOption.fromJson(Map<String, dynamic> json) {
     var list = json['product_option_value'] as List;
@@ -987,6 +999,7 @@ class ProductOption {
     return ProductOption(
       id: json['product_option_id'],
       name: json['name'],
+      type: json['type'], // 從JSON中解析出類型
       values: optionValues,
     );
   }
