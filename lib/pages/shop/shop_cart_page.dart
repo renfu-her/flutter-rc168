@@ -239,17 +239,21 @@ class _ShopCartPageState extends State<ShopCartPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-            padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
-            child: ResponsiveText(
-              '物流方式',
-              baseFontSize: 34, // 字體大小
-              fontWeight: FontWeight.bold, // 字體加粗
-            )),
+          padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
+          child: ResponsiveText(
+            '物流方式',
+            baseFontSize: 34, // 字體大小
+            fontWeight: FontWeight.bold, // 字體加粗
+          ),
+        ),
         ...methods.map((method) {
+          if (methods.isNotEmpty) {
+            _selectedShippingMethodCode = methods.first.sortOrder!;
+          }
           return ListTile(
             leading: Radio<int>(
               value: method.sortOrder!,
-              groupValue: _selectedShippingMethodCode,
+              groupValue: _selectedShippingMethodCode, // 將 groupValue 設置為選中的值
               onChanged: (int? value) {
                 setState(() {
                   _selectedShippingMethodCode = value!;
