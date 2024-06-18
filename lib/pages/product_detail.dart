@@ -38,6 +38,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   Future<void> fetchProductDetails() async {
     productDetail = getProductDetail().then((data) {
+      productName = data['details']['name'];
       var options = data['options'] as List<ProductOption>;
       for (var option in options) {
         if (option.values.isNotEmpty) {
