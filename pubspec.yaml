@@ -21,6 +21,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_line_sdk: ^2.3.6
   flutter_local_notifications: ^16.3.2
+  flutter_localization: ^0.2.0
   flutter_responsive_framework: ^0.0.2
   flutter_web_browser: ^0.17.1
   font_awesome_flutter: ^10.6.0

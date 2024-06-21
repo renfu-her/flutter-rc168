@@ -61,15 +61,37 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   Future<dynamic> getProductDetail() async {
     try {
-      var response =
-          await dio.get('${demoUrl}/api/product/detail/${widget.productId}');
+      var response = await dio.get(
+          '${appUri}/gws_appproduct&product_id=${widget.productId}&customer_id=${customerId}&api_key=${apiKey}');
+
       if (response.statusCode == 200) {
-        var productOptions = response.data['data']['options'] as List;
+        var product = response.data['product'][0];
+
+        // 解析 HTML 并提取 .thumbnail 中的 href
+        List<String> images = [];
+        if (product['href'] != null) {
+          var href = product['href'].replaceAll('&amp;', '&');
+          var document = await dio.get(href);
+          var htmlDocument = html_parser.parse(document.data);
+          var thumbnails = htmlDocument.querySelectorAll('.thumbnail');
+
+          for (var element in thumbnails) {
+            var href = element.attributes['href'];
+            if (href != null) {
+              images.add(href);
+            }
+          }
+        }
+
+        // 将 images 数组添加product 中
+        product['images'] = images;
+
+        var productOptions = product['options'] as List;
         var productOptionsParsed =
             productOptions.map((json) => ProductOption.fromJson(json)).toList();
 
         return {
-          'details': response.data['data'],
+          'details': product,
           'options': productOptionsParsed,
         };
       } else {
