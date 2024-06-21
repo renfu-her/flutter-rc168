@@ -31,6 +31,8 @@ String imgUrl = '${appUrl}/image/';
 String apiKey =
     'CNQ4eX5WcbgFQVkBXFKmP9AE2AYUpU2HySz2wFhwCZ3qExG6Tep7ZCSZygwzYfsF';
 String demoUrl = 'https://demo.dev-laravel.co';
+String tracking =
+    'nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou';
 String logoImg = '';
 String categoryId = '';
 String email = '';

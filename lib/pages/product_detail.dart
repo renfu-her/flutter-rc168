@@ -10,6 +10,7 @@ import 'package:text_responsive/text_responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
+// import 'package:rc168/pages/shop/shop_payment_page.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -29,6 +30,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int stockStatus = 0;
   String? productName;
   bool isInWishlist = false;
+  String shareUrl = 'https://www.addtoany.com/add_to';
+  String shareParamUrl = '${appUrl}/index.php?route=product/product';
 
   @override
   void initState() {
@@ -614,10 +617,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           String url;
                           if (isLogin == true) {
                             url =
-                                "分享連接：https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${widget.productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou";
+                                "分享連接：${appUrl}/index.php?route=product/product&amp;product_id=${widget.productId}&tracking=${tracking}";
                           } else {
                             url =
-                                "分享連接：https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${widget.productId}";
+                                "分享連接：${appUrl}/index.php?route=product/product&amp;product_id=${widget.productId}";
                           }
 
                           Share.share(url);
@@ -654,11 +657,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     String url;
     if (isLogin == true) {
       url =
-          "https://www.addtoany.com/add_to/line?linkurl=https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou&linkname=${productName}&linknote=";
+          "${shareUrl}/line?linkurl=${shareParamUrl}&amp;product_id=${productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou&linkname=${productName}&linknote=";
     } else {
       url =
-          "https://www.addtoany.com/add_to/line?linkurl=https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${productId}&linkname=${productName}&linknote=";
+          "${shareUrl}/line?linkurl=${appUrl}/index.php?route=product/product&amp;product_id=${productId}&linkname=${productName}&linknote=";
     }
+    print(url);
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     } else {
@@ -670,10 +674,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     String url;
     if (isLogin == true) {
       url =
-          "https://www.addtoany.com/add_to/facebook?linkurl=https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou&linkname=${productName}&linknote=";
+          "${shareUrl}/facebook?linkurl=${shareParamUrl}&amp;product_id=${productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou&linkname=${productName}&linknote=";
     } else {
       url =
-          "https://www.addtoany.com/add_to/facebook?linkurl=https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${productId}&linkname=${productName}&linknote=";
+          "${shareUrl}/facebook?linkurl=${appUrl}/index.php?route=product/product&amp;product_id=${productId}&linkname=${productName}&linknote=";
     }
 
     if (await canLaunchUrl(Uri.parse(url))) {
@@ -687,10 +691,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     String url;
     if (isLogin == true) {
       url =
-          "https://www.addtoany.com/add_to/twitter?linkurl=https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou&linkname=${productName}&linknote=";
+          "${shareUrl}/twitter?linkurl=${shareParamUrl}&amp;product_id=${productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou&linkname=${productName}&linknote=";
     } else {
       url =
-          "https://www.addtoany.com/add_to/twitter?linkurl=https://ocapi.remember1688.com/index.php?route=product/product&amp;product_id=${productId}&linkname=${productName}&linknote=";
+          "${shareUrl}/twitter?linkurl=${appUrl}/index.php?route=product/product&amp;product_id=${productId}&linkname=${productName}&linknote=";
     }
 
     if (await canLaunchUrl(Uri.parse(url))) {
