@@ -8,7 +8,6 @@ import 'package:html/dom.dart' as dom;
 import 'package:rc168/responsive_text.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 // import 'package:rc168/pages/shop/shop_payment_page.dart';
 
@@ -93,6 +92,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         var productOptionsParsed =
             productOptions.map((json) => ProductOption.fromJson(json)).toList();
 
+        // 将 description_json 转换为 HTML
+        var descriptionHtml =
+            descriptionJsonToHtml(product['description_json']);
+        product['description_html'] = descriptionHtml;
+
         return {
           'details': product,
           'options': productOptionsParsed,
@@ -103,6 +107,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     } catch (e) {
       throw Exception('Failed to load product detail');
     }
+  }
+
+  String descriptionJsonToHtml(List<dynamic> descriptionJson) {
+    StringBuffer htmlBuffer = StringBuffer();
+    for (var item in descriptionJson) {
+      if (item['type'] == 'p') {
+        htmlBuffer.writeln('<p>${item['content']}</p>');
+      } else if (item['type'] == 'img') {
+        htmlBuffer
+            .writeln('<img src="${item['content']}" style="width: 100%;">');
+      }
+    }
+    return htmlBuffer.toString();
   }
 
   Future<void> checkWishlistStatus() async {
@@ -216,7 +233,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           IconButton(
               icon: const Icon(FontAwesomeIcons.shareNodes),
               onPressed: () {
-                displayShareDialog(context, productName!);
+                // displayShareDialog(context, productName!);
+                String url;
+                if (isLogin == true) {
+                  url =
+                      "${shareParamUrl}&amp;product_id=${widget.productId}&tracking=${tracking}";
+                } else {
+                  url = "${shareParamUrl}&amp;product_id=${widget.productId}";
+                }
+
+                Share.share(url);
               }),
         ],
       ),
@@ -485,7 +511,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               children: [
                                 MyHtmlWidget(
                                   htmlContent: snapshot.data['details']
-                                      ['description'],
+                                      ['description_html'],
                                   baseFontSize: 18,
                                 ),
                               ],
@@ -592,116 +618,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
       ),
     );
-  }
-
-  void displayShareDialog(BuildContext context, String productName) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0)), // Rounded corners
-          child: Container(
-            padding: const EdgeInsets.all(20.0),
-            height: 120, // Set the height of the dialog
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    IconButton(
-                        icon: const Icon(FontAwesomeIcons.shareNodes,
-                            color: Colors.blue, size: 40),
-                        onPressed: () {
-                          String url;
-                          if (isLogin == true) {
-                            url =
-                                "分享連接：${appUrl}/index.php?route=product/product&amp;product_id=${widget.productId}&tracking=${tracking}";
-                          } else {
-                            url =
-                                "分享連接：${appUrl}/index.php?route=product/product&amp;product_id=${widget.productId}";
-                          }
-
-                          Share.share(url);
-                        }),
-                    IconButton(
-                        icon: const Icon(FontAwesomeIcons.line,
-                            color: Colors.green, size: 40),
-                        onPressed: () {
-                          launchLINE(widget.productId, productName);
-                        }),
-                    IconButton(
-                        icon: const Icon(FontAwesomeIcons.facebookMessenger,
-                            color: Colors.blue, size: 40),
-                        onPressed: () {
-                          launchFacebook(widget.productId, productName);
-                        }),
-                    IconButton(
-                        icon: const Icon(FontAwesomeIcons.twitter,
-                            color: Colors.blue, size: 40),
-                        onPressed: () {
-                          launchTwitter(widget.productId, productName);
-                        }),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> launchLINE(String productId, String productName) async {
-    String url;
-    if (isLogin == true) {
-      url =
-          "${shareUrl}/line?linkurl=${shareParamUrl}&amp;product_id=${productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou&linkname=${productName}&linknote=";
-    } else {
-      url =
-          "${shareUrl}/line?linkurl=${appUrl}/index.php?route=product/product&amp;product_id=${productId}&linkname=${productName}&linknote=";
-    }
-    print(url);
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  Future<void> launchFacebook(String productId, String productName) async {
-    String url;
-    if (isLogin == true) {
-      url =
-          "${shareUrl}/facebook?linkurl=${shareParamUrl}&amp;product_id=${productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou&linkname=${productName}&linknote=";
-    } else {
-      url =
-          "${shareUrl}/facebook?linkurl=${appUrl}/index.php?route=product/product&amp;product_id=${productId}&linkname=${productName}&linknote=";
-    }
-
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  Future<void> launchTwitter(String productId, String productName) async {
-    String url;
-    if (isLogin == true) {
-      url =
-          "${shareUrl}/twitter?linkurl=${shareParamUrl}&amp;product_id=${productId}&tracking=nXnYCxN98euUt7G1yrN69jd6jNMH4gcoO80nH4505z50IkvZbeHrOpb7vrUi5kou&linkname=${productName}&linknote=";
-    } else {
-      url =
-          "${shareUrl}/twitter?linkurl=${appUrl}/index.php?route=product/product&amp;product_id=${productId}&linkname=${productName}&linknote=";
-    }
-
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 
   Widget buildIndicator(int currentIndex, int itemCount) {
@@ -881,7 +797,7 @@ class QuantitySelector extends StatefulWidget {
 }
 
 class _QuantitySelectorState extends State<QuantitySelector> {
-  int currentQuantity = 0;
+  int currentQuantity = 1;
 
   @override
   void reassemble() {

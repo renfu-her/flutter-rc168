@@ -369,7 +369,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
       'amount': totalAmount,
     };
 
-    // print(orderData['totals']);
+    print(orderData);
 
     dio.post('${demoUrl}/api/product/order/data/${customerId}',
         data: orderData);
@@ -389,7 +389,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
               responseData['order']['order_id'] +
               '&api_key=${apiKey}';
 
-      print(_selectedPaymentMethod);
+      // print(_selectedPaymentMethod);
 
       if (_selectedPaymentMethod == 'bank_transfer') {
         Navigator.push(
