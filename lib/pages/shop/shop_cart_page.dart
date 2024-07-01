@@ -112,6 +112,21 @@ class _ShopCartPageState extends State<ShopCartPage> {
                     'type': option['type'],
                     'value': optionValue['name'],
                     'name': option['name'],
+                    'option_value': option['product_option_value'].map((value) {
+                      return {
+                        'product_option_value_id':
+                            value['product_option_value_id'].toString(),
+                        'option_value_id': value['option_value_id'].toString(),
+                        'name': value['name'],
+                        'image': value['image'],
+                        'quantity': value['quantity'],
+                        'subtract': value['subtract'],
+                        'price': value['price'],
+                        'price_prefix': value['price_prefix'],
+                        'weight': value['weight'],
+                        'weight_prefix': value['weight_prefix']
+                      };
+                    }).toList()
                   });
                 }
               }
