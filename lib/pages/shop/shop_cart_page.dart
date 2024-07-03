@@ -320,6 +320,14 @@ class _ShopCartPageState extends State<ShopCartPage> {
           // 確保 sortOrder 是正數並且沒有錯誤
           return !method.error;
         }).toList();
+
+        // 設置第一個物流方式為預設選擇
+        if (shippingMethods.isNotEmpty) {
+          _selectedShippingMethodCode = shippingMethods.first.sortOrder!;
+          _selectedShippingCost = shippingMethods.first.cost.toDouble();
+          totalAmount = _tempTotalAmount + _selectedShippingCost;
+        }
+
         return shippingMethods;
       }
     }
