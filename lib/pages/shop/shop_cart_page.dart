@@ -29,8 +29,8 @@ class _ShopCartPageState extends State<ShopCartPage> {
   @override
   void initState() {
     super.initState();
-    _fetchPaymentMethods();
     fetchCartItems();
+    _fetchPaymentMethods();
     getCustomerDataAndFetchAddress(widget.addressId);
     if (widget.addressId != null) {
       String? address = widget.addressId;
@@ -250,6 +250,15 @@ class _ShopCartPageState extends State<ShopCartPage> {
   }
 
   Widget buildShippingMethodList(List<ShippingMethod> methods) {
+    if (methods.isNotEmpty) {
+      // 確保只在方法第一次被調用時設置
+      if (_selectedShippingMethodCode == null) {
+        _selectedShippingMethodCode = methods.first.sortOrder!;
+        _selectedShippingCost = methods.first.cost.toDouble();
+        totalAmount = _tempTotalAmount + _selectedShippingCost;
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -320,13 +329,6 @@ class _ShopCartPageState extends State<ShopCartPage> {
           // 確保 sortOrder 是正數並且沒有錯誤
           return !method.error;
         }).toList();
-
-        // 設置第一個物流方式為預設選擇
-        if (shippingMethods.isNotEmpty) {
-          _selectedShippingMethodCode = shippingMethods.first.sortOrder!;
-          _selectedShippingCost = shippingMethods.first.cost.toDouble();
-          totalAmount = _tempTotalAmount + _selectedShippingCost;
-        }
 
         return shippingMethods;
       }
