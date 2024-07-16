@@ -28,23 +28,24 @@ class _HomePageState extends State<HomePage> {
     PageController _controller = PageController(initialPage: 1000); // 初始頁面
 
     Widget buildBannerCarousel(List<BannerModel> banners) {
+      // 獲取屏幕寬度
+      double screenWidth = MediaQuery.of(context).size.width;
+
+      // 設置手機和平板的不同配置
+      double height = screenWidth < 600 ? 260 : 560;
+      double aspectRatio = screenWidth < 600 ? 16 / 9 : 4 / 3;
+
       return CarouselSlider(
         options: CarouselOptions(
-          height: 210.0,
-          enlargeCenterPage: false,
-          autoPlay: true,
-          autoPlayInterval: const Duration(seconds: 3),
-          autoPlayAnimationDuration: const Duration(milliseconds: 800),
-          autoPlayCurve: Curves.fastOutSlowIn,
-          pauseAutoPlayOnTouch: true,
-          aspectRatio: 2.0,
-          viewportFraction: 1.0,
-          // onPageChanged: (index, reason) {
-          //   setState(() {
-          //     _current = index; // 更新_index以使點點指示器同步
-          //   });
-          // },
-        ),
+            height: height,
+            enlargeCenterPage: false,
+            autoPlay: true,
+            autoPlayInterval: const Duration(seconds: 3),
+            autoPlayAnimationDuration: const Duration(milliseconds: 800),
+            autoPlayCurve: Curves.fastOutSlowIn,
+            pauseAutoPlayOnTouch: true,
+            aspectRatio: aspectRatio,
+            viewportFraction: 1.0),
         items: banners.map((banner) {
           // print{banner);
           return GestureDetector(
