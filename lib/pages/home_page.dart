@@ -5,6 +5,7 @@ import 'package:rc168/main.dart';
 import 'package:rc168/pages/product_detail.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:card_swiper/card_swiper.dart';
 // import 'package:rc168/pages/shop/shop_page.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:rc168/responsive_text.dart';
@@ -28,24 +29,18 @@ class _HomePageState extends State<HomePage> {
     PageController _controller = PageController(initialPage: 1000); // 初始頁面
 
     Widget buildBannerCarousel(List<BannerModel> banners) {
-      // 獲取屏幕寬度
-      double screenWidth = MediaQuery.of(context).size.width;
-
-      // 設置手機和平板的不同配置
-      double height = screenWidth < 600 ? 260 : 560;
-      double aspectRatio = screenWidth < 600 ? 16 / 9 : 4 / 3;
-
       return CarouselSlider(
         options: CarouselOptions(
-            height: height,
-            enlargeCenterPage: false,
-            autoPlay: true,
-            autoPlayInterval: const Duration(seconds: 3),
-            autoPlayAnimationDuration: const Duration(milliseconds: 800),
-            autoPlayCurve: Curves.fastOutSlowIn,
-            pauseAutoPlayOnTouch: true,
-            aspectRatio: aspectRatio,
-            viewportFraction: 1.0),
+          // height: 260.0,
+          enlargeCenterPage: true,
+          autoPlay: true,
+          autoPlayInterval: const Duration(seconds: 3),
+          autoPlayAnimationDuration: const Duration(milliseconds: 800),
+          autoPlayCurve: Curves.fastOutSlowIn,
+          pauseAutoPlayOnTouch: true,
+          aspectRatio: 16 / 8, // 直接可以是 16 / 9, 4 / 3
+          viewportFraction: 1.0,
+        ),
         items: banners.map((banner) {
           // print{banner);
           return GestureDetector(

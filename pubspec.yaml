@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   browser_launcher: ^1.1.1
+  card_swiper: ^3.0.1
+  carousel_animations: ^0.0.4
   carousel_slider: ^4.2.1
   dio: ^5.4.0
   firebase_core: ^2.25.4
