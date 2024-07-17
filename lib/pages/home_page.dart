@@ -5,8 +5,6 @@ import 'package:rc168/main.dart';
 import 'package:rc168/pages/product_detail.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:card_swiper/card_swiper.dart';
-// import 'package:rc168/pages/shop/shop_page.dart';
 import 'package:text_responsive/text_responsive.dart';
 import 'package:rc168/responsive_text.dart';
 
@@ -38,7 +36,7 @@ class _HomePageState extends State<HomePage> {
           autoPlayAnimationDuration: const Duration(milliseconds: 800),
           autoPlayCurve: Curves.fastOutSlowIn,
           pauseAutoPlayOnTouch: true,
-          aspectRatio: 16 / 8, // 直接可以是 16 / 9, 4 / 3
+          aspectRatio: 16 / 9, // 直接可以是 16 / 9, 4 / 3
           viewportFraction: 1.0,
         ),
         items: banners.map((banner) {
