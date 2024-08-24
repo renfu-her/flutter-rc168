@@ -691,6 +691,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                               'NT\$${discountedAmount.toStringAsFixed(0)}',
                               baseFontSize: 34,
                               fontWeight: FontWeight.bold,
+                              color: Colors.red,
                             ),
                           ],
                         ),
