@@ -194,7 +194,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                               child: InlineTextWidget(
                                 '加入購物車',
                                 style: const TextStyle(
-                                    fontSize: 18, color: Colors.red),
+                                    fontSize: 18, color: Color(0xFF4F4E4C)),
                               ),
                               onPressed: () async {
                                 Navigator.push(
@@ -210,7 +210,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                                 backgroundColor: Colors.white,
                                 foregroundColor: Colors.red,
                                 side: BorderSide(
-                                  color: Colors.red, // 邊框顏色設置為紅色
+                                  color: Color(0xFF4F4E4C), // 邊框顏色設置為紅色
                                   width: 2, // 邊框寬度設置為2
                                 ),
                                 shape: RoundedRectangleBorder(

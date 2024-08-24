@@ -217,7 +217,8 @@ class _HomePageState extends State<HomePage> {
                                     child: InlineTextWidget(
                                       '加入購物車',
                                       style: const TextStyle(
-                                          fontSize: 18, color: Colors.red),
+                                          fontSize: 18,
+                                          color: Color(0xFF4F4E4C)),
                                     ),
                                     onPressed: () async {
                                       Navigator.push(
@@ -236,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                                       foregroundColor:
                                           Colors.red, // 按鈕文字顏色設置為紅色
                                       side: BorderSide(
-                                        color: Colors.red, // 邊框顏色設置為紅色
+                                        color: Color(0xFF4F4E4C), // 邊框顏色設置為紅色
                                         width: 2, // 邊框寬度設置為2
                                       ),
                                       shape: RoundedRectangleBorder(
@@ -383,7 +384,8 @@ class _HomePageState extends State<HomePage> {
                                     child: InlineTextWidget(
                                       '加入購物車',
                                       style: TextStyle(
-                                          fontSize: 16, color: Colors.red),
+                                          fontSize: 16,
+                                          color: Color(0xFF4F4E4C)),
                                     ),
                                     onPressed: () async {
                                       Navigator.push(
@@ -400,7 +402,8 @@ class _HomePageState extends State<HomePage> {
                                       backgroundColor: Colors.white,
                                       foregroundColor: Colors.red,
                                       side: BorderSide(
-                                        color: Colors.red, // 邊框顏色設置為紅色
+                                        color: Color.fromARGB(
+                                            255, 200, 200, 199), // 邊框顏色設置為紅色
                                         width: 2, // 邊框寬度設置為2
                                       ),
                                       shape: RoundedRectangleBorder(
