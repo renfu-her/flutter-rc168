@@ -73,7 +73,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              title: Text('選擇折扣券'),
+              title: Text('選擇折價券'),
               content: SingleChildScrollView(
                 child: Column(
                   children: availableCoupons.map((coupon) {
@@ -125,11 +125,11 @@ class _ShopCartPageState extends State<ShopCartPage> {
     setState(() {
       if (selectedCoupon != null) {
         if (selectedCoupon!.type == 'F') {
-          // 固定金额折扣
+          // 固定金额折價
           discountedAmount =
               totalAmount - double.parse(selectedCoupon!.discount);
         } else if (selectedCoupon!.type == 'P') {
-          // 百分比折扣
+          // 百分比折價
           double discountPercentage =
               double.parse(selectedCoupon!.discount) / 100;
           discountedAmount = totalAmount * (1 - discountPercentage);
@@ -458,7 +458,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
       return;
     }
 
-    // 计算折扣金额
+    // 计算折價金额
     double couponDiscount =
         selectedCoupon != null ? totalAmount - discountedAmount : 0;
 
@@ -662,12 +662,12 @@ class _ShopCartPageState extends State<ShopCartPage> {
                       thickness: 0.5, // 線的厚度
                       height: 20, // 與其他元素的間距
                     ),
-                    // 添加折扣券按钮
+                    // 添加折價券按钮
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: ElevatedButton(
                         onPressed: showCouponDialog,
-                        child: Text('選擇折扣券'),
+                        child: Text('選擇折價券'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           foregroundColor: Color(0xFF4F4E4C),
@@ -675,7 +675,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                         ),
                       ),
                     ),
-                    // 显示折扣后金额
+                    // 显示折價后金额
                     if (selectedCoupon != null)
                       Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -683,7 +683,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ResponsiveText(
-                              '折扣後金額',
+                              '折價後金額',
                               baseFontSize: 34,
                               fontWeight: FontWeight.bold,
                             ),
