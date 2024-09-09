@@ -126,13 +126,16 @@ class _ShopCartPageState extends State<ShopCartPage> {
       if (selectedCoupon != null) {
         if (selectedCoupon!.type == 'F') {
           // 固定金额折價
-          discountedAmount =
-              totalAmount - double.parse(selectedCoupon!.discount);
+          discountedAmount = ((totalAmount - _selectedShippingCost) -
+                  double.parse(selectedCoupon!.discount)) +
+              _selectedShippingCost;
         } else if (selectedCoupon!.type == 'P') {
           // 百分比折價
           double discountPercentage =
               double.parse(selectedCoupon!.discount) / 100;
-          discountedAmount = totalAmount * (1 - discountPercentage);
+          discountedAmount = ((totalAmount - _selectedShippingCost) *
+                  (1 - discountPercentage)) +
+              _selectedShippingCost;
         }
       }
     });
@@ -459,8 +462,13 @@ class _ShopCartPageState extends State<ShopCartPage> {
     }
 
     // 计算折價金额
-    double couponDiscount =
-        selectedCoupon != null ? totalAmount - discountedAmount : 0;
+    double couponDiscount = 0.0;
+
+    if (selectedCoupon!.type == 'F') {
+      couponDiscount = double.parse(selectedCoupon!.discount);
+    } else if (selectedCoupon!.type == 'P') {
+      couponDiscount = (double.parse(selectedCoupon!.discount) / 100);
+    }
 
     // 構建請求體數據
     final orderData = {
@@ -568,7 +576,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
     }
   }
 
-  // 從產品列表中提取 totals
+  // 更新 _extractTotalsFromProducts 方法
   String _extractTotalsFromProducts(List<Product> products) {
     if (products.isEmpty) {
       return "0";
@@ -589,7 +597,7 @@ class _ShopCartPageState extends State<ShopCartPage> {
       }
     }
 
-    double total = subtotal - discount + _selectedShippingCost;
+    double total = subtotal - discount;
 
     return total.toStringAsFixed(0); // 返回不带小数点的整数字符串
   }
