@@ -1,4 +1,4 @@
-package com.rc168.app
+package com.rc168.realapp
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

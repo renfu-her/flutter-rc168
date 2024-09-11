@@ -67,7 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '820244556849',
     projectId: 'fcm-rc168',
     storageBucket: 'fcm-rc168.appspot.com',
-    iosBundleId: 'com.rc168.app',
+    iosBundleId: 'com.rc168.realapp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -76,6 +76,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '820244556849',
     projectId: 'fcm-rc168',
     storageBucket: 'fcm-rc168.appspot.com',
-    iosBundleId: 'com.rc168.app.RunnerTests',
+    iosBundleId: 'com.rc168.realapp.RunnerTests',
   );
 }
