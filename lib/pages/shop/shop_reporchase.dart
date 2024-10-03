@@ -106,7 +106,7 @@ class _ShopRepurchasePageState extends State<ShopRepurchasePage> {
                           ],
                         ),
                         trailing: Text(
-                          '\$${(product.price * product.quantity).toStringAsFixed(2)}',
+                          'NT${(product.totalPrice).toInt()}',
                           style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -197,6 +197,7 @@ class Product {
   final int price;
   final int quantity;
   final List<Map<String, String>> options;
+  final double totalPrice;
 
   Product({
     required this.name,
@@ -207,6 +208,7 @@ class Product {
     required this.price,
     required this.quantity,
     required this.options,
+    required this.totalPrice,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -229,6 +231,9 @@ class Product {
             })
         .toList();
 
+    String totalString = json['total'] as String? ?? '';
+    double totalPrice = _parsePrice(totalString);
+
     return Product(
       name: json['name'] as String? ?? '',
       model: json['model'] as String? ?? '',
@@ -238,7 +243,13 @@ class Product {
       price: price,
       quantity: quantity,
       options: options,
+      totalPrice: totalPrice,
     );
+  }
+
+  static double _parsePrice(String priceString) {
+    priceString = priceString.replaceAll(RegExp(r'[^\d.]'), '');
+    return double.tryParse(priceString) ?? 0;
   }
 }
 
