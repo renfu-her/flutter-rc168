@@ -102,10 +102,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           'options': productOptionsParsed,
         };
       } else {
-        throw Exception('Failed to load product detail');
+        throw Exception('讀取內容錯誤');
       }
     } catch (e) {
-      throw Exception('Failed to load product detail');
+      throw Exception('讀取內容錯誤');
     }
   }
 
